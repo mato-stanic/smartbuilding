@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+
+<head lang="en">
+    <meta charset="UTF-8"/>
+    <title>Smart building</title>
+</head>
+<body>
+
+<div th:fragment="content">
+
+    <div class="tray tray-center" >
+
+        <div class="mw1000 center-block">
+
+            <div class="blue-top" >
+
+                <div class="panel heading-border panel-primary">
+
+                    <div class="panel-body bg-light">
+
+                        <h2 th:text="${userDTO.fullName}" th:if="${userDTO.id}"></h2>
+                        <h2 th:unless="${userDTO.id}">Novi korisnik</h2>
+
+                        <div class="panel">
+                            <div class="panel-heading">
+                                <span class="panel-title">Uredi podatke korisnika</span>
+                            </div>
+                            <div class="panel-body">
+
+
+
+                                <form id="editZoneForm" class="form-horizontal" role="form" method="post" th:object="${userDTO}">
+
+                                    <div class="alert alert-danger alert-dismissable" th:if="${#fields.hasErrors('*')}">
+                                        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                                        <i class="fa fa-remove pr10"></i>
+                                        <strong>Molimo ispravite sljedeće greške</strong>
+                                        <ul >
+                                            <li th:each="err : ${#fields.errors('*')}" th:text="${err}">Input is incorrect</li>
+                                        </ul>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label class="col-lg-3 control-label">Korisničko ime</label>
+                                        <div class="col-lg-8">
+                                            <div class="bs-component">
+                                                <input type="text"  th:field="*{username}" class="form-control"
+                                                       data-bv-notempty=""  data-bv-notempty-message="Polje mora biti popunjeno"/>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label class="col-lg-3 control-label">Lozinka</label>
+                                        <div class="col-lg-8">
+                                            <div class="bs-component">
+                                                <input type="text" th:field="*{password}" class="form-control"
+                                                       data-bv-notempty=""  data-bv-notempty-message="Polje mora biti popunjeno"/>
+                                            </div>
+                                        </div>
+                                    </div>
+
+
+                                    <input type="hidden" th:if="${roles.size() == 1}" th:value="${roles.get(0).id}" name="role"/>
+                                    <div th:if="${roles.size() > 1}" class="form-group">
+                                        <label class="col-lg-3 control-label">Rola</label>
+                                        <div class="col-lg-8">
+                                            <div class="bs-component">
+                                                <select th:name="role" class="form-control"
+                                                        data-bv-notempty=""  data-bv-notempty-message="Polje mora biti popunjeno">
+                                                    <option th:each="role : ${roles}"
+                                                            th:value="${role.id}"
+                                                            th:text="${role.name}" th:selected="${role.id} == ${userDTO.role?.id}">Rola</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+
+
+
+                                    <div class="form-group">
+                                        <label class="col-lg-3 control-label">Ime</label>
+                                        <div class="col-lg-8">
+                                            <div class="bs-component">
+                                                <input type="text" th:field="*{firstName}" class="form-control"
+                                                       data-bv-notempty=""  data-bv-notempty-message="Polje mora biti popunjeno"/>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label class="col-lg-3 control-label">Prezime</label>
+                                        <div class="col-lg-8">
+                                            <div class="bs-component">
+                                                <input type="text" th:field="*{lastName}" class="form-control"
+                                                       data-bv-notempty=""  data-bv-notempty-message="Polje mora biti popunjeno"/>
+                                            </div>
+                                        </div>
+                                    </div>
+
+
+                                    <div class="form-group">
+                                        <label class="col-lg-3 control-label">Email</label>
+                                        <div class="col-lg-8">
+                                            <div class="bs-component">
+                                                <input type="text" th:field="*{email}" class="form-control"
+                                                       data-bv-notempty=""  data-bv-notempty-message="Polje mora biti popunjeno"/>
+                                            </div>
+                                        </div>
+                                    </div>
+
+
+                                    <div class="form-group">
+                                        <label  class="col-lg-3 control-label">Organizacija</label>
+                                        <div class="col-lg-8">
+                                            <div class="bs-component">
+                                                <select name ="company" class="form-control"
+                                                        data-bv-notempty=""  data-bv-notempty-message="Polje mora biti popunjeno">
+
+                                                    <option th:each="agency : ${agencies}"
+                                                            th:value="${agency.id}"
+                                                            th:text="${agency.name}" th:selected="${agency.id} == ${userDTO.company?.id}">Operator</option>
+
+                                                    <option th:each="og : ${userGroups}"
+                                                            th:value="${og.id}"
+                                                            th:text="${og.name}" th:selected="${og.id} == ${userDTO.company?.id}">Operator</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+
+
+                                    <div class="form-group">
+                                        <label  class="col-lg-3 control-label"></label>
+                                        <div class="col-lg-8">
+                                            <div class="bs-component">
+                                                <div class="pull-right">
+
+                                                    <button type="submit" class="btn btn-dark btn-gradient dark">Spremi</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+
+                                </form>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <aside class="tray tray-right tray290" data-tray-height="match" style="height: 2180px;">
+        <h4> Zaposlenici </h4>
+
+        <div class="tray-affix affix-top" data-spy="affix" data-offset-top="200">
+
+            <div id="nav-spy">
+                <ul class="nav tray-nav" data-smoothscroll="-90">
+
+                    <li class="active" th:each="zn : ${userList}" th:if="${zn.id == userDTO.id}">
+                        <a th:href="@{/admin/user/edit?id={znId}(znId=${zn.id})}">
+                            <span class="fa fa-edit fa-lg"></span>
+                            <span th:text="${zn.fullName}"></span>
+                        </a>
+                    </li>
+
+                    <li th:each="zn : ${userList}" th:unless="${zn.id == userDTO.id}">
+                        <a th:href="@{/admin/user/edit?id={znId}(znId=${zn.id})}">
+                            <span class="fa fa-edit fa-lg"></span>
+                            <span th:text="${zn.fullName}"></span>
+                        </a>
+                    </li>
+
+                </ul>
+            </div>
+
+        </div>
+
+    </aside>
+
+    <script th:inline="javascript">
+
+        $('#countries').select2();
+        $(document).ready(function(){
+            var validatorOptions = {excluded: [':disabled'], verbose:false};
+            $('#editZoneForm').bootstrapValidator(validatorOptions);
+        });
+
+    </script>
+
+</div>
+
+
+
+
+</body>
+</html>

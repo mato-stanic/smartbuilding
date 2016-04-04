@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+
+<head lang="en">
+    <meta charset="UTF-8"/>
+    <title>Smart building</title>
+</head>
+<body>
+
+<div th:fragment="content" class="consumption internet-consumption">
+
+
+    <form id="internet-consumption-form" class="form-horizontal" role="form" method="post" th:object="${consumption}">
+
+        <div class="row top-margin-20">
+
+            <div class="col-sm-6 col-lg-7 col-sm-offset-6 col-lg-offset-5 ">
+
+                <label style="width:100% !important; text-align: center;margin-bottom: 10px;" th:text="#{calculator.consumptionEstimation}">Procjena potrošnje</label>
+                <div class="main-slider">
+                    <div class="slider"> </div>
+                </div>
+
+                <div class="row top-margin-10">
+                    <div class="col-xs-4 " style="padding-bottom: 2px !important; text-align: center;height: 18px;font-size: 12px" th:text="#{calculator.lowConsumption}">Niska</div>
+                    <div class="col-xs-4" style="padding-bottom: 2px !important; text-align: center;height: 18px;font-size: 12px" th:text="#{calculator.mediumConsumption}">Srednja</div>
+                    <div class="col-xs-4" style="padding-bottom: 2px !important; text-align: center;height: 18px;font-size: 12px" th:text="#{calculator.highConsumption}">Visoka</div>
+                </div>
+            </div>
+        </div>
+
+        <hr/>
+
+        <div class="row  top-margin-20">
+
+            <div>
+                <label class="col-sm-6 col-lg-5 control-label" th:text="#{calculator.tariffType}">Tip tarife:</label>
+                <div class="col-sm-3 col-lg-4" >
+                    <select th:field="*{internetConsumption.userType}"  class="form-control userTypeSelect">
+                        <option th:each="ut : ${T(hr.m2stanic.smartbuilding.core.tariff.UserType).values()}"
+                                th:value="${ut.name()}"
+                                th:text="${ut.displayName}" >Tip korisnika</option>
+                    </select>
+                </div>
+                <div class="col-sm-3" >
+                    <select  th:field="*{internetConsumption.paymentType}" class="form-control">
+                        <option th:value="${T(hr.m2stanic.smartbuilding.core.tariff.PaymentType).POSTPAID}"
+                                th:text="${T(hr.m2stanic.smartbuilding.core.tariff.PaymentType).POSTPAID.name()}">Nacin placanja
+                        </option>
+                        <option th:value="${T(hr.m2stanic.smartbuilding.core.tariff.PaymentType).PREPAID}"
+                                th:text="${T(hr.m2stanic.smartbuilding.core.tariff.PaymentType).PREPAID.name()}">Nacin placanja
+                        </option>
+                    </select>
+                </div>
+            </div>
+
+        </div>
+
+
+
+        <div class="row top-margin-20">
+            <label class="col-sm-6 col-lg-5 control-label" th:text="#{calculator.technology}">Tehnologija</label>
+            <div class="col-sm-6 col-lg-7">
+                <div class="bs-component">
+                    <select th:field="*{internetConsumption.technology}" id="internet-consumption-technology" class="form-control">
+                        <option value="" th:text="#{calculator.any}">Bilo koja</option>
+                        <option th:each="ut : ${T(hr.m2stanic.smartbuilding.core.InternetTech).values()}"
+                                th:value="${ut.name()}"
+                                th:text="${ut.displayName}">DSL</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+
+
+        <div class="row top-margin-20">
+            <label class="col-sm-6 col-lg-5 control-label" th:text="#{calculator.amountOfDataMonthly}">Količina podataka mjesečno</label>
+            <div class="col-sm-3 col-lg-3">
+                <!--<input type="text"  th:field="*{internetConsumption.dataAmountInGB}" id="internetConsumption-data-amount" class="form-control"-->
+                       <!--data-bv-notempty=""  data-bv-notempty-message="Polje mora biti popunjeno"-->
+                       <!--data-bv-numeric ="" data-bv-numeric-message="Unesite brojčanu vrijednost"/>-->
+
+
+                <div class="input-group" id="internet-amount">
+                    <input type="text" th:field="*{internetConsumption.dataAmountInGB}" id="internetConsumption-data-amount" class="form-control"
+                           th:classappend="${consumption.internetConsumption.flatRate  ? 'hide' : ''}"
+                           data-bv-notempty=""  data-bv-notempty-message="Polje mora biti popunjeno"
+                           data-bv-numeric ="" data-bv-numeric-message="Unesite brojčanu vrijednost"/>
+
+                    <div class="input-group-btn">
+                        <input type="hidden" th:field="*{internetConsumption.flatRate}"/>
+                        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" th:disabled="${consumption.internetConsumption.technology == T(hr.m2stanic.smartbuilding.core.InternetTech).LL}">
+                            <span class="txt" th:text="${consumption.internetConsumption.flatRate ? 'Neograničeno' : 'GB'}">Neograničeno</span>
+                            <span class="caret" th:classappend="${consumption.internetConsumption.technology == T(hr.m2stanic.smartbuilding.core.InternetTech).LL} ? 'hide' : ''"></span>
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-right">
+                            <li><a class="limit-toggle" data-hidden-value="false" th:attr="data-input-value=${consumption.internetConsumption.dataAmountInGB}" data-input-visible="true" data-label="GB" href="#">Unesi količinu</a></li>
+                            <li><a class="limit-toggle" data-hidden-value="true"  th:attr="data-input-value=${consumption.internetConsumption.dataAmountInGB}" data-input-visible="false" data-label="Neograničeno" href="#">Neograničeno</a></li>
+                        </ul>
+                    </div>
+                </div>
+
+
+            </div>
+
+            <div class="col-sm-3 col-lg-4">
+                <input id="onlyFullSpeedDataAdv" style="margin-top: 10px;" type="checkbox" th:field="*{internetConsumption.onlyFullSpeedData}"/>
+                <label for="onlyFullSpeedDataAdv" th:text="#{calculator.perMaxSpeed}">Po maksimalnoj brzini</label>
+            </div>
+        </div>
+
+
+
+        <div class="row top-margin-20">
+            <label class="col-sm-6 col-lg-5 control-label" th:text="#{calculator.expectedTransferSpeedInMbPerSec}">Očekivana brzina prijenosa (download)</label>
+            <div class="col-sm-3 ">
+                <div class="bs-component" id="internet-speed">
+
+                    <div class="input-group">
+
+                        <div class="input-group-btn" th:classappend="*{internetConsumption.technology ==  T(hr.m2stanic.smartbuilding.core.InternetTech).MOBILE} ? '' :'hide'">
+                            <input type="hidden" name="speedType"/>
+
+                            <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <span class="txt"
+                                      th:if="*{internetConsumption.technology == T(hr.m2stanic.smartbuilding.core.InternetTech).MOBILE and internetConsumption.downSpeedInMbPerSecond &lt; 0.21}">2G</span>
+                                <span class="txt"
+                                      th:if="*{internetConsumption.technology ==  T(hr.m2stanic.smartbuilding.core.InternetTech).MOBILE and internetConsumption.downSpeedInMbPerSecond == 21}">3G</span>
+                                <span class="txt"
+                                      th:if="*{internetConsumption.technology ==  T(hr.m2stanic.smartbuilding.core.InternetTech).MOBILE and internetConsumption.downSpeedInMbPerSecond == 70}">4G</span>
+                                <span class="txt" th:if="*{internetConsumption.technology !=  T(hr.m2stanic.smartbuilding.core.InternetTech).MOBILE}">2G</span>
+                                <span class="caret"></span>
+                            </button>
+                            <ul class="dropdown-menu dropdown-menu-left">
+                                <li><a class="limit-toggle" data-hidden-value="0.2" data-input-value="0.2" data-input-visible="false" data-label="2G"
+                                       href="#">2G</a></li>
+                                <li><a class="limit-toggle" data-hidden-value="21" data-input-value="21" data-input-visible="false" data-label="3G"
+                                       href="#">3G</a></li>
+                                <li><a class="limit-toggle" data-hidden-value="70" data-input-value="70" data-input-visible="false" data-label="4G"
+                                       href="#">4G</a></li>
+                            </ul>
+                        </div>
+
+                        <input type="text" th:field="*{internetConsumption.downSpeedInMbPerSecond}"  class="form-control"
+                               th:classappend="*{internetConsumption.technology==  T(hr.m2stanic.smartbuilding.core.InternetTech).MOBILE} ? 'hide' : ''"
+                               data-bv-notempty=""  data-bv-notempty-message="Polje mora biti popunjeno"
+                               data-bv-numeric ="" data-bv-numeric-message="Unesite brojčanu vrijednost"/>
+
+                        <span class="input-group-addon" th:classappend="*{internetConsumption.technology ==  T(hr.m2stanic.smartbuilding.core.InternetTech).MOBILE} ? 'hide' :''">Mb/sec</span>
+
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+
+
+        <!--<div class="row top-margin-20">-->
+            <!--<label class="col-sm-6 col-lg-5 control-label" th:text="#{calculator.expectedTransferSpeedUpload}">Očekivana brzina prijenosa (upload)</label>-->
+            <!--<div class="col-sm-6 col-lg-7">-->
+                <!--<div class="bs-component">-->
+                    <!--<select th:field="*{internetConsumption.speedSymmetry}" class="form-control">-->
+                        <!--<option value="" th:text="#{calculator.any}">Bilo koja</option>-->
+                        <!--<option th:each="ut : ${T(hr.m2stanic.smartbuilding.core.InternetSpeedSymmetry).values()}"-->
+                                <!--th:value="${ut.name()}"-->
+                                <!--th:text="${ut.displayName}">Upload</option>-->
+                    <!--</select>-->
+                <!--</div>-->
+            <!--</div>-->
+        <!--</div>-->
+
+
+
+
+        <input type="hidden" name="internetConsumption.userProfile" th:value="-1"/>
+
+        <div class="row top-margin-20">
+            <div class="col-xs-12 form-group">
+                <span class="final-btn">
+                    <button th:unless="${consumption.hasTVTariff()}" type="button" class="consumption-submit btn btn-default pull-right" th:text="#{calculator.calculate}">Izračunaj</button>
+                </span>
+                <button th:if="${consumption.hasTVTariff()}" type="button" class="consumption-next btn btn-primary pull-right" th:text="#{calculator.nextButton}">Dalje</button>
+                <button th:if="${consumption.hasFixedTariff() or consumption.hasMobileTariff()}" type="button" class="consumption-prev btn btn-primary pull-right" th:text="#{calculator.backButton}">Nazad</button>
+            </div>
+        </div>
+
+    </form>
+
+
+</div>
+
+</body>
+</html>

@@ -1,0 +1,11 @@
+<div class="operator-call-minutes row top-margin-10">
+    <div class="col-xs-4">
+        <label th:text="#{calculator.operator}">Operator</label>
+    </div>
+    <div th:each="tp : ${T(hr.m2stanic.smartbuilding.core.TimePeriod).values()}" class="col-xs-2">
+        <label th:text="${tp.displayName}"></label>
+    </div>
+    <div class="col-xs-2 hidden-xs">
+        <label th:text="#{calculator.total}">Ukupno</label>
+    </div>
+</div>

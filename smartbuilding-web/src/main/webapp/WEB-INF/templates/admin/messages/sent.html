@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+
+<head lang="en">
+    <meta charset="UTF-8"/>
+    <title>Smart building</title>
+</head>
+<body>
+
+<!--@thymesVar id="sentMessages" type="org.springframework.data.domain.Page<hr.m2stanic.smartbuilding.core.messages.Message>"-->
+<div th:fragment="content">
+
+
+        <table class="table">
+            <thead>
+            <tr class="primary">
+                <th>Vrijeme</th>
+                <th>Prima</th>
+                <th>Naslov</th>
+                <th></th>
+            </tr>
+            </thead>
+            <tbody>
+
+            <tr th:each="msg : ${sentMessages}">
+                <td th:text="${msg.sendingTime.toString('dd.MM.yyyy HH:mm')}">Vrijeme</td>
+
+                <td>
+                    <span th:text="${msg.recipient.name}"></span>
+                </td>
+
+                <td th:text="${msg.title}">Naslov</td>
+
+                <td style="font-size: 1.5em;" width="40" align="center">
+                    <a href="#" title="Otvori" class="show-msg" th:onclick="'showMessageDetails('+${msg.id}+');return false;'">
+                        <span class="glyphicons glyphicons-eye_open"></span>
+                    </a>
+                </td>
+
+
+            </tr>
+
+            </tbody>
+        </table>
+
+        <ul th:if="${sentMessages.totalPages &gt; 1}" class="pagination">
+            <li class="paginate_button previous" th:classappend="${sentMessages.number == 0} ? 'disabled'" aria-controls="datatable" tabindex="0" id="datatable_previous">
+                <a href="#" th:onclick=" ${sentMessages.number > 0} ? 'loadSentMessages('+ ${sentMessages.number} +');return false;' : 'return false;'"><i class="glyphicons glyphicons-chevron-left"></i></a>
+            </li>
+
+            <li th:each="p : ${#numbers.sequence( 1, sentMessages.totalPages)}" class="paginate_button" th:classappend="${sentMessages.number + 1 == p} ? 'active'" aria-controls="datatable" tabindex="0">
+                <a th:href="@{/admin/messages/received(page=${p})}" th:text="${p}" th:onclick="'loadSentMessages('+ ${p} +');return false;'"></a>
+            </li>
+
+            <li class="paginate_button next" th:classappend="${sentMessages.number >= sentMessages.totalPages - 1 } ? 'disabled'" aria-controls="datatable" tabindex="0" id="datatable_next">
+                <a href="#" th:onclick="${sentMessages.number &lt; sentMessages.totalPages - 1 } ? 'loadSentMessages('+ ${sentMessages.number + 2} +');return false;':'return false;'"><i class="glyphicons glyphicons-chevron-right"></i></a>
+            </li>
+        </ul>
+
+
+        <div th:each="msg : ${sentMessages}" th:id="'msgDetails-' + ${msg.id}" class="modal fade">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title"><span th:text="${msg.sender.fullName} +' | '+ ${msg.sender.company.name} + '&nbsp; &#8594; &nbsp;' + ${msg.recipient.name}"></span></h4>
+                    </div>
+                    <div class="modal-body">
+                        <h3 class="msg-title" th:text="${msg.title}"></h3>
+                        <p class="msg-body">
+                            <pre th:text="${msg.body}"></pre>
+                        </p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal" th:text="#{admin.closeButton}">Zatvori</button>
+                    </div>
+                </div><!-- /.modal-content -->
+            </div><!-- /.modal-dialog -->
+        </div><!-- /.modal -->
+
+
+</div>
+
+
+
+
+
+
+</body>
+</html>

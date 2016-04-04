@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+
+    <base href="/" th:href="${baseUrl}"/>
+
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <meta name="description" content=""/>
+    <meta name="author" content=""/>
+    <!--<link rel="icon" href="../../favicon.ico">-->
+
+    <title th:text="#{app.title}">EKIP - Tariff calculator</title>
+
+
+    <!-- Bootstrap core CSS -->
+    <link th:href="@{/res/bootstrap-3.3.4-dist/css/bootstrap.min.css}" rel="stylesheet"/>
+
+    <link th:href="@{/res/theme/vendor/jquery/jquery_ui/jquery-ui.min.css}" rel="stylesheet"/>
+
+    <link rel="stylesheet" type="text/css" th:href="@{/res/css/default.css}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/res/css/jquery.range.css}"/>
+
+
+    <script th:src="@{/res/theme/vendor/jquery/jquery-1.11.1.min.js}"></script>
+    <script th:src="@{/res/theme/vendor/jquery/jquery_ui/jquery-ui.min.js}"></script>
+
+
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+    <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+
+</head>
+
+
+<body>
+<div class="container">
+    <div class="header clearfix">
+        <a th:href="@{/}" class="logo"><img th:src="@{res/images/logo.jpg}" alt=""/></a>
+        <a href="http://www.ekip.me/" target="_blank" class="main-link">www.ekip.me</a>
+        <ul class="main-nav">
+            <!--<li><a href="#">Home</a></li>-->
+            <!--<li><a href="#">Informacije</a></li>-->
+            <li><a th:class="${activeMainNavItem == T(hr.m2stanic.smartbuilding.web.MainNav).CALCULATION} ? 'active'" th:href="@{/}" th:text="#{user.tariffCalculatorTitle}">Tarifni kalkulator</a></li>
+            <li><a th:class="${activeMainNavItem == T(hr.m2stanic.smartbuilding.web.MainNav).TERMS} ? 'active'" th:href="@{/uslovi}">Uslovi korišćenja</a></li>
+            <li><a th:class="${activeMainNavItem == T(hr.m2stanic.smartbuilding.web.MainNav).CONTACT} ? 'active'" th:href="@{/kontakt}">Kontakt</a></li>
+        </ul>
+    </div>
+
+
+    <div class="calc-hd clearfix">
+        <div class="row">
+            <div class="col-md-4">
+                <h1 th:text="#{user.tariffCalculatorTitle}">Tarifni kalkulator</h1>
+                <p th:text="#{user.layouts.helpMessage}">Odaberite usluge koje koristite, popunite sva potrebna polja  i izaberite za sebe ono najbolje...</p>
+            </div>
+            <div class="col-md-8">
+                <ul class="calc-nav">
+                    <li class="fiksna"><a th:class="${subNavSel == 'FIXED'}? 'active' : ''" th:href="@{/(tariffType='FIXED_TEL')}">Fiksna<span>telefonija</span></a></li>
+                    <li class="mobilna"><a th:class="${subNavSel == 'MOBILE'}? 'active' : ''" th:href="@{/(tariffType='MOBILE')}">Mobilna<span>telefonija</span></a></li>
+                    <li class="internet"><a th:class="${subNavSel == 'INTERNET'}? 'active' : ''" th:href="@{/(tariffType='INTERNET')}">Internet<span>usluge</span></a></li>
+                    <li class="avm"><a th:class="${subNavSel == 'TV'}? 'active' : ''" th:href="@{/(tariffType='TV')}">AVM<span>usluge</span></a></li>
+                    <li class="pkg clearfix"><a th:class="${subNavSel == 'PAKETI'}? 'active' : ''" th:href="@{/paketi}">Paketi<span>usluga</span></a></li>
+                    <li style="clear:both"></li>
+                </ul>
+
+            </div>
+        </div>
+    </div>
+
+
+
+    <div th:replace="${view} :: content">
+        <h1>Bootstrap starter template</h1>
+        <p >bla bla</p>
+    </div>
+
+</div>
+<br /><br /><br /><br /><br />
+
+<div class="modal fade" id="messageModal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">Modal title</h4>
+            </div>
+            <div class="modal-body">
+                <p>One fine body&hellip;</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="cancel-btn btn btn-default" data-dismiss="modal" th:text="#{user.layouts.closeButton}">Zatvori</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+
+<div class="modal" id="termsModal" th:if="${termsAgreed == false}">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">Uslovi korišćenja</h3>
+            </div>
+            <div class="modal-body">
+
+                <p>
+                    Agencija za elektronske komunikacije i poštansku djelatnost je, u saradnji sa Inovativni trendovi d.o.o. iz Zagreba, razvila web aplikaciju za pomoć korisnicima prilikom izbora elektronskih komunikacionih usluga u Crnoj Gori. ,,Kalkulator" je interaktivni alat za poređenje ponuda javnih elektronskih komunikacionih usluga u Crnoj Gori, u dijelu fiksne i mobilne telefonije, usluga pristupa internetu, distribucije TV i radio programa (AVM sadržaja) i kombinovanih paketa navedenih usluga.
+                </p>
+
+                <h4>Informativni karakter</h4>
+
+                <p>
+                    ,,Kalkulator" korisniku pomaže u izboru  elektronske komunikacione usluge, koja odgovara njegovim potrebama. ,,Kalkulator" ima informativni karakter. Zasniva se  na podacima o cijenama i opisu usluga koje  unose operatori elektronskih komunikacija. ,,Kalkulator" korisniku, na osnovu podataka o željenoj elektronskoj komunikacionoj usluzi koje unosi korisnik i podataka koje su unijeli operatori elektronskih komunikacija, daje rang listu najpovoljnijih usluga iz ponude operatora, koje odgovaraju zahtjevima korisnika. Rezultati dobijeni uz pomoć ,,Kalkulatora" ne predstavljaju mjesečne račune za korištenje javnih elektronskih komunikacionih usluga.
+                </p>
+
+                <h4>Ovo nije ponuda za zaključenje ugovora</h4>
+
+                <p>
+                    Proračun dobijen korišćenjem ,,Kalkulatora" ne predstavlja ponudu za zaključenje ugovora o korištenju usluge od strane Agencije za elektronske komunikacije ili operatora elektronskih komunikacija na čije se usluge i cijene proračun odnosi i iz tog razloga nema pravno obavezujući karakter. Za stvarni proračun, dobijanje ponude i zaključenje ugovora korisnik je dužan da se obrati direktno operatoru elektronskih komunikacija koga je korisnik izabrao na osnovu preporuke/proračuna  ,,Kalkulatora".
+                </p>
+
+                <h4>Korišćenje podataka od strane medija</h4>
+
+                <p>
+                    U slučaju da se rezultati ,,Kalkulatora" koriste u svrhu pripremanja tekstova, priloga, analiza, obavještenja i drugih oblika javnog informisanja, autori takvih tekstova i priloga su dužni da u takvim tekstovima i prilozima naznače informativni karakter ,,Kalkulatora".
+                </p>
+            </div>
+            <div class="modal-footer">
+                <a href="kontakt" class="cancel-btn btn btn-danger" th:text="#{user.layouts.decline}">Decline</a>
+                <button type="button" class="btn btn-primary" onclick="acceptTerms()" th:text="#{user.layouts.accept}">Accept</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+
+<script th:src="@{/res/bootstrap-3.3.4-dist/js/bootstrap.min.js}"></script>
+<script th:src="@{/res/js/bootstrapValidator.min.js}"></script>
+<script th:src="@{/res/js/ekip.js}"></script>
+
+<script type="text/javascript" th:inline="javascript">
+    $(document).ready(function(){
+        $("a[href='#']").on("click", function(ev){
+            ev.preventDefault();
+        });
+
+        var flashMsg = [[${flashMsg}]];
+        if (flashMsg) {
+            showMessageDialog(null, flashMsg);
+        }
+
+        var termsAgreed = [[${termsAgreed}]];
+        if(termsAgreed != null) {
+            $('#termsModal').modal({
+                keyboard: false,
+                backdrop: "static"
+            });
+            if (termsAgreed != true){
+                showTermsDialog();
+            }
+        }
+
+        var pingUrl = [[@{/ping}]];
+        setInterval(function(){
+            $.ajax(pingUrl);
+        }, 10000);
+    });
+</script>
+
+</body>
+</html>

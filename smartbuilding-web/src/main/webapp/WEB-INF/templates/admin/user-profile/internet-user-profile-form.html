@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+
+<head lang="en">
+    <meta charset="UTF-8"/>
+    <title>Smart building</title>
+</head>
+<body>
+
+<div th:fragment="content">
+
+    <div class="tray tray-center user-profile" >
+
+        <div class="mw1000 center-block">
+
+            <div class="blue-top" >
+
+                <div class="panel heading-border panel-primary">
+
+                    <div class="panel-body bg-light">
+
+                        <!--@thymesVar id="profileDTO" type="hr.m2stanic.smartbuilding.web.dto.InternetUserProfileDTO"-->
+                        <h2 th:text="${profileDTO.name}" th:if="${profileDTO.id}"></h2>
+                        <h2 th:unless="${profileDTO.id}">Novi korisnički profil</h2>
+
+                        <div class="panel">
+                            <div class="panel-heading">
+                                <span class="panel-title">Uredi podatke profila</span>
+                            </div>
+                            <div class="panel-body">
+
+
+
+                                <form id="editProfileForm" class="form-horizontal" role="form" method="post" th:object="${profileDTO}">
+
+                                    <div class="alert alert-danger alert-dismissable" th:if="${#fields.hasErrors('*')}">
+                                        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                                        <i class="fa fa-remove pr10"></i>
+                                        <strong>Molimo ispravite sljedeće greške</strong>
+                                        <ul >
+                                            <li th:each="err : ${#fields.errors('*')}" th:text="${err}">Input is incorrect</li>
+                                        </ul>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label class="col-lg-4 control-label">Naziv</label>
+                                        <div class="col-lg-8">
+                                            <div class="bs-component">
+                                                <input type="text"  th:field="*{name}" class="form-control"
+                                                       data-bv-notempty=""  data-bv-notempty-message="Polje mora biti popunjeno"/>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label class="col-lg-4 control-label" th:text="#{admin.userType}">Tip korisnika</label>
+                                        <div class="col-lg-8">
+                                            <div class="bs-component">
+                                                <select th:name="userType" class="form-control"
+                                                        data-bv-notempty=""  data-bv-notempty-message="Polje mora biti popunjeno">
+                                                    <option th:each="ut : ${T(hr.m2stanic.smartbuilding.core.tariff.UserType).values()}"
+                                                            th:value="${ut.name()}"
+                                                            th:text="${ut.displayName}" th:selected="${ut} == ${profileDTO.userType}">Tip korisnika</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <h3>Brzina</h3>
+
+                                    <div class="form-group">
+                                        <label class="col-lg-4 control-label">Brzina prenosa podataka (Mb/sec)</label>
+                                        <div class="col-lg-8">
+                                            <div class="bs-component">
+                                                <input type="text"  th:field="*{speedInMbPerSecond}" class="form-control"
+                                                       data-bv-notempty=""  data-bv-notempty-message="Polje mora biti popunjeno"
+                                                       data-bv-numeric ="" data-bv-numeric-message="Unesite brojčanu vrijednost"/>
+                                            </div>
+                                        </div>
+                                    </div>
+
+
+                                    <h3>Potrošnja</h3>
+                                    <div class="form-group">
+                                        <label class="col-lg-4 control-label">Količina podataka u GB</label>
+                                        <div class="col-lg-8">
+                                            <div class="bs-component">
+                                                <input type="text"  th:field="*{dataAmountInGB}" class="form-control"
+                                                       data-bv-notempty=""  data-bv-notempty-message="Polje mora biti popunjeno"
+                                                       data-bv-numeric ="" data-bv-numeric-message="Unesite brojčanu vrijednost"/>
+                                            </div>
+                                        </div>
+                                    </div>
+
+
+
+
+
+
+                                    <div class="form-group">
+                                        <label  class="col-lg-3 control-label"></label>
+                                        <div class="col-lg-8">
+                                            <div class="bs-component">
+                                                <div class="pull-right">
+
+                                                    <button type="submit" class="btn btn-dark btn-gradient dark">Spremi</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+
+                                </form>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <aside class="tray tray-right tray290" data-tray-height="match" style="height: 2180px;" th:replace="admin/user-profile/edit-form-right-column :: content"></aside>
+
+    <script th:inline="javascript">
+        var roleScope = [[${loggedInUser.role.scope.name()}]];
+    </script>
+    <script th:src="@{/res/js/editUserProfile.js}"></script>
+
+</div>
+
+
+</body>
+</html>

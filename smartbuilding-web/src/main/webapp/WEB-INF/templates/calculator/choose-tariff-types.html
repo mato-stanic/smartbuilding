@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+
+<head lang="en">
+    <meta charset="UTF-8"/>
+    <title>Smart building</title>
+</head>
+<body>
+
+<div th:fragment="content" class="widget">
+
+
+    <div class="container-fluid">
+
+        <div>
+            <input type="radio" name="main-switch" id="tariffs-switch" class="tariffs-switch" checked="checked" />
+            <label for="tariffs-switch"><h3>Tarife &nbsp;&nbsp;&nbsp;&nbsp;</h3></label>
+
+            <input type="radio" name="main-switch" id="packets-switch" class="packets-switch" />
+            <label for="packets-switch"><h3>Paketi</h3></label>
+        </div>
+
+        <hr/>
+
+
+        <div id="tariffs">
+
+
+            <form class="form-horizontal" th:object="${consumption}" th:action="@{/admin/calculate/}" method="get">
+
+
+                <div class="form-group">
+                    <label class="col-sm-3 control-label" th:text="#{calculator.userType}">Tip korisnika</label>
+                    <div class="col-sm-8">
+                        <div class="bs-component">
+                            <select name="userType" class="form-control"
+                                    data-bv-notempty=""  data-bv-notempty-message="Polje mora biti popunjeno">
+                                <option th:each="ut : ${T(hr.m2stanic.smartbuilding.core.tariff.UserType).values()}"
+                                        th:value="${ut.name()}"
+                                        th:text="${ut.displayName}" >Tip korisnika</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">Vrsta tarife</label>
+                    <div class="col-sm-8">
+                        <div class="top-margin-10">
+                            <input type="radio" name="tariffType" th:value="${T(hr.m2stanic.smartbuilding.core.tariff.TariffType).MOBILE}" id="mobileTariffRB" checked="checked"/>
+                            <label for="mobileTariffRB" th:text="#{calculator.mobileTelephone}">Mobilna telefonija</label>
+                        </div>
+
+                        <div>
+                            <input type="radio"  name="tariffType" th:value="${T(hr.m2stanic.smartbuilding.core.tariff.TariffType).FIXED_TEL}" id="fixedTariffRB"/>
+                            <label for="fixedTariffRB" th:text="#{calculator.fixedTelephone}">Fiksna telefonija</label>
+                        </div>
+
+                        <div>
+                            <input type="radio"  name="tariffType" th:value="${T(hr.m2stanic.smartbuilding.core.tariff.TariffType).INTERNET}" id="internetTariffRB"/>
+                            <label for="internetTariffRB" >Internet</label>
+                        </div>
+
+                        <div>
+                            <input type="radio"  name="tariffType" th:value="${T(hr.m2stanic.smartbuilding.core.tariff.TariffType).TV}" id="tvTariffRB"/>
+                            <label for="tvTariffRB" th:text="#{calculator.audioAndVideoTv}">AVM usluge (TV)</label>
+                        </div>
+                    </div>
+                </div>
+
+
+
+                <div class="form-group">
+                    <label class="col-sm-3 control-label"></label>
+                    <div class="col-sm-8">
+                        <div>
+                            <button type="submit" class="btn btn-primary pull-right" th:text="#{calculator.nextButton}">Dalje</button>
+                        </div>
+                    </div>
+                </div>
+
+            </form>
+
+        </div>
+
+
+        <div id="packets" class="hide">
+
+
+
+            <form class="form-horizontal" th:object="${consumption}" method="get" th:action="@{/admin/calculate/}">
+
+
+                <div class="form-group">
+                    <label class="col-sm-3 control-label" th:text="#{calculator.userType}">Tip korisnika</label>
+                    <div class="col-sm-8">
+                        <div class="bs-component">
+                            <select name="userType" class="form-control"
+                                    data-bv-notempty=""  data-bv-notempty-message="Polje mora biti popunjeno">
+                                <option th:each="ut : ${T(hr.m2stanic.smartbuilding.core.tariff.UserType).values()}"
+                                        th:value="${ut.name()}"
+                                        th:text="${ut.displayName}" >Tip korisnika</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="form-group">
+                    <label class="col-sm-3 control-label" th:text="#{calculator.combinationOfServices}">Kombinacija usluga</label>
+                    <div class="col-sm-8">
+                        <div class="top-margin-10">
+                            <input type="checkbox"  name="fixedTariff" id="fixedTariffCB"/>
+                            <label for="fixedTariffCB" th:text="#{calculator.fixedTelephone}">Fiksni telefon</label>
+                        </div>
+
+                        <div>
+                            <input type="checkbox"  name="internetTariff" id="internetTariffCB"/>
+                            <label for="internetTariffCB">Internet</label>
+                        </div>
+
+                        <div>
+                            <input type="checkbox"  name="tvTariff" id="tvTariffCB"/>
+                            <label for="tvTariffCB" th:text="#{calculator.audioAndVideoTv}">AVM usluge (TV)</label>
+                        </div>
+
+                        <div>
+                            <input type="checkbox"  name="mobileTariff" id="mobileTariff"/>
+                            <label for="mobileTariff" th:text="#{calculator.mobileTelephone}">Mobilni telefon</label>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="form-group">
+                    <label class="col-sm-3 control-label"></label>
+                    <div class="col-sm-8">
+                        <div>
+                            <button type="submit" class="btn btn-primary pull-right" th:text="#{calculator.nextButton}">Dalje</button>
+                        </div>
+                    </div>
+                </div>
+
+                <input type="hidden" name="packets" value="true"/>
+
+            </form>
+
+        </div>
+    </div>
+
+
+    <script type="text/javascript" th:inline="javascript">
+
+        //<![CDATA[
+
+        $(function(){
+            $(".tariffs-switch, .packets-switch").on("change", function(ev){
+
+                var tariffModeSelected = ($(this).hasClass('tariffs-switch') && $(this).is(':checked'))  || ($(this).hasClass('packets-switch') && !$(this).is(':checked'));
+
+                if(tariffModeSelected){
+                    $("#tariffs").removeClass("hide");
+                    $("#packets").addClass("hide");
+                }
+                else {
+                    $("#packets").removeClass("hide");
+                    $("#tariffs").addClass("hide");
+                }
+            });
+        });
+
+
+        //]]>
+
+
+    </script>
+
+
+
+
+
+</div>
+
+</body>
+</html>

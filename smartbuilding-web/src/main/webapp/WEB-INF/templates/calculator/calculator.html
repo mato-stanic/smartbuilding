@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+
+<head lang="en">
+    <meta charset="UTF-8"/>
+    <title>Smart building</title>
+</head>
+<body>
+
+<div th:fragment="content">
+
+    <div th:if="${step == 1}">
+        <div th:replace="calculator/choose-tariff-types :: content"></div>
+    </div>
+
+    <div th:unless="${step == 1}">
+        <div th:replace="calculator/edit-consumption :: content"></div>
+    </div>
+
+</div>
+
+</body>
+</html>

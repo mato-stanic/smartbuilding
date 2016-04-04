@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+
+<head lang="en">
+    <meta charset="UTF-8"/>
+    <title>Smart building</title>
+</head>
+<body>
+
+<div th:fragment="content">
+
+    <div>
+
+        <h2>Operatori</h2>
+
+        <div class="panel">
+
+            <div class="panel-body">
+
+                <table class="table">
+                    <thead>
+                    <tr class="primary">
+                        <th>Naziv</th>
+                        <th>Prefiks</th>
+                        <th>Tip mreže</th>
+                        <th></th>
+                        <th></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="operator : ${operators}">
+                            <td th:text="${operator.name}">Operator</td>
+                            <td th:text="${operator.shortName}">000</td>
+                            <td th:text="${operator.networkType.displayName}">000</td>
+                            <td style="font-size: 1.5em;" width="40" align="center">
+                                <a th:href="@{/admin/operator/edit(id=${operator.id})}" title="Uredi">
+                                    <span class="fa fa-edit"></span>
+                                </a>
+                            </td>
+                            <td style="font-size: 1.5em;" width="40" align="center">
+                                <a href="#" title="Obriši" class="delete-operator" th:attr="data-operator-id = ${operator.id}">
+                                    <span class="fa fa-trash-o"></span>
+                                </a>
+                            </td>
+                        </tr>
+
+                    </tbody>
+                </table>
+
+                <hr/>
+                <div>
+                    <a th:href="@{/admin/operator/edit}">
+                        <button type="button" class="btn btn-dark btn-gradient dark pull-right">Dodaj</button>
+                    </a>
+                </div>
+
+            </div>
+        </div>
+
+
+
+        <script th:inline="javascript">
+            //<![CDATA[
+            $(document).ready(function (){
+                $(".delete-operator").on("click", function(ev){
+                    ev.preventDefault();
+                    var opId = $(this).attr("data-operator-id");
+                    var targetUrl = [[@{/admin/operator/delete}]] + "?id=" + opId;
+                    var onConfirm = function(){
+                        window.location = targetUrl;
+                    };
+                    showConfirmDialog(onConfirm, "Potvrda brisanja", "Jeste li sigurni da želite obrisati ovog operatera?");
+                });
+            });
+            //]]>
+        </script>
+    </div>
+</div>
+
+
+
+
+
+
+</body>
+</html>

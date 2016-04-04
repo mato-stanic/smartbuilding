@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+
+<head lang="en">
+    <meta charset="UTF-8"/>
+    <title>Smart building</title>
+</head>
+<body>
+
+
+<div th:fragment="content" class="widget panel panel-default">
+
+
+    <div class="panel-heading">
+            <h2 class="panel-title"> Kontakt </h2>
+        </div>
+
+    <div class="panel-body">
+
+
+        <p>
+            Agencija za elektronske komunikacije i
+            poštansku djelatnost<br/>
+            Bulevar Džordža Vašingtona 56<br/>
+            81000 Podgorica<br/>
+            Crna Gora<br/>
+            tel: +382 20 406 700<br/>
+            fax: +382 20 406 702<br/>
+            e-mail: ekip@ekip.me<br/>
+            website: www.ekip.me<br/>
+        </p>
+
+
+        <h3>Pitanje</h3>
+        <div class="panel panel-ekip col-sm-8" style="padding-left: 0px !important;padding-right: 0px !important;">
+
+            <div class="panel-heading"
+                 style="border-top-left-radius: 2px !important;border-top-right-radius: 2px !important;">
+                <h2 class="panel-title"> Polja označena sa * moraju biti popunjena </h2>
+            </div>
+
+
+            <div class="panel-body">
+
+                <form method="post" th:object="${questionForm}">
+
+                    <div class="form-group">
+                        <label for="fullName">Ime i prezime</label>
+                        <div class="input-group">
+                            <span class="input-group-addon" id="basic-addon1"><i
+                                    class="glyphicon glyphicon-user"></i></span>
+                            <input th:field="*{fullName}" id="fullName" type="text" class="form-control"
+                                   placeholder="Vaše ime i prezime" aria-describedby="basic-addon1"/>
+                        </div>
+                    </div>
+
+
+                    <div class="form-group">
+                        <label for="phoneNo">Telefon</label>
+                        <div class="input-group">
+                            <span class="input-group-addon" id="basic-addon2"><i class="glyphicon glyphicon-phone"></i></span>
+                            <input th:field="*{phoneNo}" id="phoneNo" type="text" class="form-control"
+                                   aria-describedby="basic-addon2" placeholder="Vaš broj telefona"/>
+                        </div>
+                    </div>
+
+
+                    <div class="form-group">
+                        <label for="email">Email *</label>
+                        <div class="input-group">
+                            <span class="input-group-addon" id="basic-addon3"><i
+                                    class="glyphicon glyphicon-envelope"></i></span>
+                            <input th:field="*{email}" id="email" type="email" class="form-control"
+                                   placeholder="Vaša email adresa" aria-describedby="basic-addon3"/>
+                        </div>
+                        <p class="error" th:if="${#fields.hasErrors('email')}" th:errors="*{email}">Invalid input</p>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="question">Pitanje *</label>
+                        <textarea class="form-control" th:field="*{question}" id="question"
+                                  placeholder="Unesite pitanje"></textarea>
+                        <p class="error" th:if="${#fields.hasErrors('question')}" th:errors="*{question}">Invalid
+                            input</p>
+
+                    </div>
+
+
+                    <div class="form-group">
+                        <label for="question"></label>
+                        <div style="padding: 0px 0px !important;" class="kill-padding-left">
+                            <img th:src="@{/captcha}" height="35"/>
+                            <div class="col-sm-6 kill-padding-left">
+                                <input id="captchaAnswer" type="text" class="form-control"
+                                       placeholder="Unesite kod sa slike desno" th:field="*{captchaAnswer}"
+                                       data-bv-notempty="" data-bv-notempty-message="Morate unijeti kod sa slike"/>
+                            </div>
+                            <p class="error" th:if="${#fields.hasErrors('captchaAnswer')}" th:errors="*{captchaAnswer}">
+                                Invalid input</p>
+                        </div>
+
+                    </div>
+
+                    <div class="form-group">
+                        <span class="final-btn">
+                            <button  type="submit" class="btn btn-default" style="width: 100% !important;" th:text="#{contact.send}">Pošalji</button>
+                        </span>
+                    </div>
+
+                </form>
+            </div>
+        </div>
+
+        </div>
+    </div>
+
+
+
+
+</body>
+</html>

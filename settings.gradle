@@ -1,0 +1,4 @@
+rootProject.name = 'smartbuilding'
+include 'smartbuilding-core'
+include 'smartbuilding-web'
+

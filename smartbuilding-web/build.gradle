@@ -1,0 +1,63 @@
+apply plugin: 'war'
+
+archivesBaseName = 'smartbuilding'
+
+
+def deployConfig = rootProject.deployConfig;
+try {
+    deployConfig = "${defualt_config}"
+}catch (Exception e){}
+
+try{
+    deployConfig = getProperty("spring.profiles.active")
+}catch (Exception e){}
+
+
+sourceSets.main.resources.srcDirs = [ 'src/main/resources/common', 'src/main/resources/' + deployConfig]
+
+
+war {
+
+    archiveName = "${archivesBaseName}.${extension}"
+
+    manifest {
+        attributes 'Implementation-Title': 'Smart building', 'Implementation-Version': rootProject.version, 'Build-Date': buildDate
+    }
+}
+
+
+
+dependencies {
+
+    compile project(':smartbuilding-core')
+
+    compile(
+
+            ["org.springframework:spring-web:${springVersion}"],
+            ["org.springframework:spring-webmvc:${springVersion}"],
+
+            ["org.thymeleaf:thymeleaf:${thymeleafVersion}"],
+            ["org.thymeleaf:thymeleaf-spring4:${thymeleafVersion}"],
+            ['org.thymeleaf.extras:thymeleaf-extras-conditionalcomments:2.1.1.RELEASE'],
+
+
+            ['net.coobird:thumbnailator:0.4.5'],
+
+            ['commons-fileupload:commons-fileupload:1.2.2'],
+
+            ['com.fasterxml.jackson.core:jackson-core:2.4.4'],
+            ['com.fasterxml.jackson.core:jackson-databind:2.4.4'],
+            ['com.fasterxml.jackson.datatype:jackson-datatype-joda:2.4.4'],
+
+            ['nl:captcha:1.2.1'],
+    )
+
+    providedCompile(
+            // this should not be in war
+            ["javax.servlet:javax.servlet-api:3.+"]
+    )
+
+}
+
+
+

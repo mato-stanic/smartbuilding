@@ -1,0 +1,1148 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+
+<head lang="en">
+    <meta charset="UTF-8"/>
+    <title>Smart building</title>
+</head>
+<body>
+
+<div th:fragment="content" class="widget panel panel-default">
+
+    <div class="panel-heading">
+        <h3 th:if="${consumption.getServiceCount() == 1 and consumption.hasMobileTariff()}" class="panel-title" th:text="#{calculator.mobileTelephone}"> Mobilna telefonija </h3>
+        <h3 th:if="${consumption.getServiceCount() == 1 and consumption.hasFixedTariff()}" th:text="#{calculator.fixedTelephone}" class="panel-title">Fiksna telefonija</h3>
+        <h3 th:if="${consumption.getServiceCount() == 1 and consumption.hasInternetTariff()}" class="panel-title" th:text="#{calculator.internetServices}"> Internet usluge </h3>
+        <h3 th:if="${consumption.getServiceCount() == 1 and consumption.hasTVTariff()}" class="panel-title" th:text="#{calculator.AVMservices}"> AVM usluge </h3>
+        <h3 th:if="${consumption.getServiceCount() > 1}" class="panel-title" th:text="#{calculator.packages}"> Paketi </h3>
+    </div>
+
+
+    <div class="panel-body">
+
+        <div th:if="${consumption.getServiceCount() > 1}" id="tabs" role="tabpanel">
+
+            <!-- Nav tabs -->
+            <ul class="nav nav-tabs" role="tablist">
+                <li th:if="${consumption.hasFixedTariff()}" th:text="#{templates.calculator.fixedTelephone}" role="presentation"><a href="#fixed" aria-controls="home" role="tab" data-toggle="tab">Fiksna telefonija Maybe</a></li>
+                <li th:if="${consumption.hasMobileTariff()}" role="presentation"><a href="#mobile" aria-controls="profile" role="tab" data-toggle="tab" th:text="#{calculator.mobileTelephone}">Mobilna telefonija</a></li>
+                <li th:if="${consumption.hasInternetTariff()}" role="presentation"><a href="#internet" aria-controls="messages" role="tab" data-toggle="tab">Internet</a></li>
+                <li th:if="${consumption.hasTVTariff()}" role="presentation"><a href="#tv" aria-controls="settings" role="tab" data-toggle="tab">Audio i video</a></li>
+            </ul>
+
+            <!-- Tab panes -->
+            <div class="tab-content">
+
+                <div th:if="${consumption.hasFixedTariff()}" role="tabpanel" class="tab-pane" id="fixed">
+                    <div th:replace="calculator/edit-fixed-consumption::content"></div>
+                </div>
+
+                <div th:if="${consumption.hasMobileTariff()}" role="tabpanel" class="tab-pane" id="mobile">
+                    <div th:replace="calculator/edit-mobile-consumption::content"></div>
+                </div>
+
+                <div th:if="${consumption.hasInternetTariff()}" role="tabpanel" class="tab-pane" id="internet">
+                    <div th:replace="calculator/edit-internet-consumption::content"></div>
+                </div>
+
+                <div th:if="${consumption.hasTVTariff()}" role="tabpanel" class="tab-pane" id="tv">
+                    <div th:replace="calculator/edit-tv-consumption::content"></div>
+                </div>
+            </div>
+
+        </div>
+
+
+        <div th:if="${consumption.getServiceCount() == 1 and consumption.hasMobileTariff()}">
+            <div th:replace="calculator/edit-mobile-consumption::content"></div>
+        </div>
+
+        <div th:if="${consumption.getServiceCount() == 1 and consumption.hasFixedTariff()}">
+            <div th:replace="calculator/edit-fixed-consumption::content"></div>
+        </div>
+
+        <div th:if="${consumption.getServiceCount() == 1 and consumption.hasInternetTariff()}">
+            <div th:replace="calculator/edit-internet-consumption::content"></div>
+        </div>
+
+        <div th:if="${consumption.getServiceCount() == 1 and consumption.hasTVTariff()}">
+            <div th:replace="calculator/edit-tv-consumption::content"></div>
+        </div>
+
+    </div>
+
+
+    <div class="modal fade" id="progressModal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <!--<div class="modal-header">-->
+                    <!--<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>-->
+                    <!--<h4 class="modal-title">Modal title</h4>-->
+                <!--</div>-->
+                <div class="modal-body">
+                    <p>Izračun je u toku, molimo pričekajte...</p>
+                    <div class="progress">
+                        <div class="progress-bar progress-bar-striped active" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%">
+                            <span class="sr-only"></span>
+                        </div>
+                    </div>
+                </div>
+
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+
+
+
+
+
+
+    <script type="text/javascript" th:inline="javascript">
+        /*<![CDATA[*/
+
+
+        var fixedPhoneUserProfiles = [[${fixedPhoneUserProfiles} ? ${fixedPhoneUserProfiles} : [] ]];
+        var currentFixedPhoneUserProfile = fixedPhoneUserProfiles ? fixedPhoneUserProfiles[0] : null;
+
+        var mobileUserProfiles = [[${mobileUserProfiles} ? ${mobileUserProfiles} : [] ]];
+        var currentMobileUserProfile = null; //will be set during initiation (from initMobileMainSlider function)
+
+        var internetUserProfiles = [[${internetUserProfiles} ? ${internetUserProfiles} : [] ]];
+        var currentInternetUserProfile = null; //will be set during initiation (from initInternetMainSlider function)
+
+        var tvUserProfiles = [[${tvUserProfiles} ? ${tvUserProfiles} : [] ]];
+        var currentTVUserProfile = null; //will be set during initiation (from initTVMainSlider function)
+
+
+
+        function setupValidation() {
+            var validatorOptions =  {excluded: [':disabled', '.tab-pane:not(.active) :hidden'], verbose:false};
+            $('form').bootstrapValidator(validatorOptions);
+            $('form').data('bootstrapValidator').validate();
+        }
+
+        function gotoNextTab(){
+
+            var nextTab =  $('#tabs li.active').next().find("a");
+            if(nextTab){
+                nextTab.tab('show');
+            }
+        }
+
+        function gotoPrevTab(){
+            var prevTab =  $('#tabs li.active').prev().find("a");
+            if(prevTab){
+                prevTab.tab('show');
+            }
+        }
+
+
+        function onSliderChange(rootDiv, sliderValue) {
+            var label = rootDiv.find(".slider-label");
+            var valueInput = rootDiv.find(".slider-value");
+            label.html(sliderValue + " %");
+            if (valueInput)
+                valueInput.val(sliderValue);
+
+        }
+
+
+        function updateSibilings(slider, newValue, totalMin, totalMax){
+
+            var rootDiv = slider.parent().closest(".slider-group");
+
+            var total = 0;
+            var childSliders = [];
+
+            rootDiv.find(".slider-child").each( function(index) {
+                var child = $(this);
+                var disabled = child.slider("option", "disabled");
+                if(!slider.is(child) && !disabled) {
+                    childSliders.push(child);
+                    total += child.slider("value");
+                }
+            });
+
+
+            if(total + newValue > totalMax || total + newValue < totalMin) {
+                var diff = (total + newValue) - totalMax;
+                var diffStep = diff > 0 ? -1 : 1;
+                while (diff != 0) {
+                    $.each(childSliders, function (index) {
+                        var child = $(this);
+                        var currChildValue = child.slider("value");
+                        var currChildMax = child.slider("option", "max");
+                        var currChildMin = child.slider("option", "min");
+
+                        if (diffStep > 0 && currChildValue < currChildMax)
+                            child.slider("value", currChildValue + diffStep);
+                        else if (diffStep < 0 && currChildValue > currChildMin)
+                            child.slider("value", currChildValue + diffStep);
+                    });
+                    diff = diff + diffStep;
+                }
+
+                $.each(childSliders, function (index) {
+                    var child = $(this);
+                    var currChildValue = child.slider("value");
+                    var childRoot = child.parent().closest(".row");
+                    onSliderChange(childRoot, currChildValue);
+                });
+            }
+        }
+
+
+
+        function initSlider(rootDiv, maxVal, totalMin, totalMax){
+
+            var label = rootDiv.find(".slider-label");
+            var valueInput = rootDiv.find(".slider-value");
+            var slider = rootDiv.find(".slider");
+
+            var disabled = slider.attr("disabled") != undefined;
+            var initValue = valueInput.val();
+            var initMax = maxVal;
+
+            slider.slider({
+                range: "min",
+                min: 0,
+                step:1,
+                disabled: disabled,
+                max: initMax,
+                value: initValue,
+                slide: function(event, ui) {
+                    onSliderChange(rootDiv, ui.value);
+                    updateSibilings(slider, ui.value, totalMin, totalMax);
+                }
+            });
+
+            rootDiv.find(".enable-switch").on("change", function(ev){
+
+                var one = $(this);
+                var value = parseInt(one.val());
+                var masterDiv = $(this).parent().closest(".row").parent();
+
+                var alreadySelected = false;
+                masterDiv.find("select").each(function(index){
+                    var other = $(this);
+                    if( value > 0 && !one.is(other) && other.val() == value){
+                        alreadySelected = true;
+                    }
+                });
+
+                if(alreadySelected) {
+                    var oldValue = one.attr("data-value");
+                    one.find("option[value=" + oldValue + "]").attr("selected", "selected");
+                    alert("Ova opcija je već odabrana");
+                    ev.preventDefault();
+                    return false;
+                }
+                else
+                    one.attr("data-value", value);
+
+
+                if(value >= 0) {
+                    slider.slider("enable");
+                    rootDiv.next().show();
+                }
+                else {
+                    slider.slider("value", 0);
+                    slider.slider("disable");
+                    onSliderChange(rootDiv, 0);
+                    rootDiv.nextAll().each(function(index){
+                        var nextRow = $(this);
+                        var nextSlider = nextRow.find(".slider");
+                        var nextSelect = nextRow.find("select");
+                        nextSelect.find("option[value='-1']").attr("selected", "selected");
+                        nextSlider.slider("disable");
+                        nextSlider.slider("value", 0);
+                        onSliderChange(nextRow, 0);
+                        nextRow.hide();
+                    });
+                }
+            });
+
+            onSliderChange(rootDiv, initValue);
+        }
+
+
+        function distributeFixedConsumptionTotalCalls() {
+
+            var totalValue = $('.fixed-consumption .content-simple .main-slider .slider').slider("option", "value");
+
+            var fixed = Math.round(totalValue * currentFixedPhoneUserProfile.callPercentFixed / 100);
+            var mobile = Math.round(totalValue * currentFixedPhoneUserProfile.callPercentMobile / 100);
+            var international = Math.round(totalValue * currentFixedPhoneUserProfile.callPercentInternational / 100);
+
+            var finalTotal = fixed + mobile + international;
+
+            $("#fixedPhoneConsumption-fixed-calls-total").val(fixed);
+            $("#fixedPhoneConsumption-mobile-calls-total").val(mobile);
+            $("#fixedPhoneConsumption-international-calls-total").val(international);
+            $("#fixedPhoneConsumption-total").val(finalTotal);
+        }
+
+        function distributeMobileConsumptionTotalCalls() {
+
+            var totalValue = $('.mobile-consumption .content-simple .main-slider .slider').slider("option", "value");
+
+            var ffMinutes = 0;
+            try {
+                ffMinutes = parseInt($(".mobileConsumption-ff-minutes").val());
+            } catch (e) {}
+
+
+            var callsWithoutFriendNos = totalValue - ffMinutes;
+            callsWithoutFriendNos = callsWithoutFriendNos < 0 ? 0 : callsWithoutFriendNos;
+
+            console.log("totalValue: ", totalValue, "ffMinutes", ffMinutes, "callsWithoutFriendNos", callsWithoutFriendNos, "currentMobileUserProfile", currentMobileUserProfile);
+
+            var internationalCalls = Math.round(callsWithoutFriendNos * currentMobileUserProfile.callPercentInternational/100);
+            var countryCalls = callsWithoutFriendNos - internationalCalls;
+
+            $("#mobileConsumption-countryCalls").val(countryCalls);
+            $("#mobileConsumption-internationalCalls").val(internationalCalls);
+
+
+        }
+
+        function distributeInternetConsumptionTotalCalls() {
+            var totalValue = $('.internet-consumption .main-slider .slider').slider("option", "value");
+
+            $("#internetConsumption-data-amount").val(Math.round(totalValue));
+            $("[data-label='GB']").attr("data-input-value", Math.round(totalValue));
+            var speed = Math.round(totalValue / 5);
+            speed = speed == 0 ? 1 : speed;
+            $("#internetConsumption-speed").val(Math.round(speed));
+        }
+
+        function distributeTVConsumptionTotalCalls(totalValue) {
+            $("#tvConsumption-channels-number").val(Math.round(totalValue));
+            var videoStore = totalValue > 30;
+            var recording = totalValue > 50;
+            var moreScreens = totalValue > 70;
+
+            $("#tvConsumption-channels-number").val(totalValue);
+            $("#tvConsumption-video-store").prop('checked', videoStore);
+            $("#tvConsumption-video-recording").prop('checked', recording);
+            $("#tvConsumption-more-screens").prop('checked', moreScreens);
+        }
+
+
+        function updateCurrentFixedPhoneUserProfile() {
+            var callMinutes = $('.fixed-consumption .content-simple .main-slider .slider').slider("option", "value");
+            var userType = $(".fixed-consumption .content-simple .userTypeSelect").val();
+
+            var diff = 1000000000;
+            var selectedProfile = null;
+
+            var atLeastOneExists = userTypeProfilesExist(fixedPhoneUserProfiles, userType);
+
+            for(var i = 0 ; i < fixedPhoneUserProfiles.length; i++){
+                var userProfileUserType = fixedPhoneUserProfiles[i].userType['$name'];
+                if(!atLeastOneExists || userProfileUserType == userType) {
+                    var currDiff = Math.abs(callMinutes - fixedPhoneUserProfiles[i].callMinutes);
+                    if (currDiff < diff) {
+                        diff = currDiff;
+                        selectedProfile = fixedPhoneUserProfiles[i];
+                    }
+                }
+            }
+            currentFixedPhoneUserProfile = selectedProfile;
+            if(currentFixedPhoneUserProfile)
+                $("input[name='fixedPhoneConsumption.userProfile']").val(currentFixedPhoneUserProfile.id);
+        }
+
+        function updateCurrentMobileUserProfile() {
+
+            var callMinutes = $('.mobile-consumption .content-simple .main-slider .slider').slider("option", "value");
+            var userType = $(".mobile-consumption .content-simple .userTypeSelect").val();
+
+            var diff = 1000000000;
+            var selectedProfile = null;
+
+            var atLeastOneExists = userTypeProfilesExist(mobileUserProfiles, userType);
+
+            for(var i = 0 ; i < mobileUserProfiles.length; i++){
+                var userProfileUserType = mobileUserProfiles[i].userType['$name'];
+                if(!atLeastOneExists || userProfileUserType == userType) {
+                    var currDiff = Math.abs(callMinutes - mobileUserProfiles[i].callMinutes);
+                    if (currDiff < diff) {
+                        diff = currDiff;
+                        selectedProfile = mobileUserProfiles[i];
+                    }
+                }
+            }
+            currentMobileUserProfile = selectedProfile;
+            if(currentMobileUserProfile)
+                $("input[name='mobileConsumption.userProfile']").val(currentMobileUserProfile.id);
+        }
+
+
+        function updateCurrentInternetUserProfile(){
+
+            var dataAmount = $('.internet-consumption  .main-slider .slider').slider("option", "value");
+            var userType = $(".internet-consumption  .userTypeSelect").val();
+
+            var diff = 1000000000;
+            var selectedProfile = null;
+
+            var atLeastOneExists = userTypeProfilesExist(internetUserProfiles, userType);
+
+            for(var i = 0 ; i < internetUserProfiles.length; i++){
+                var userProfileUserType = internetUserProfiles[i].userType['$name'];
+                if(!atLeastOneExists || userProfileUserType == userType) {
+                    var currDiff = Math.abs(dataAmount - internetUserProfiles[i].dataAmountInGB);
+                    if (currDiff < diff) {
+                        diff = currDiff;
+                        selectedProfile = internetUserProfiles[i];
+                    }
+                }
+            }
+            currentInternetUserProfile = selectedProfile;
+            if(currentInternetUserProfile)
+                $("input[name='internetConsumption.userProfile']").val(currentInternetUserProfile.id);
+        }
+
+        function updateCurrentTVUserProfile(numberOfChannels){
+            var diff = 1000000000;
+            var selectedProfile = null;
+            for(var i = 0 ; i < tvUserProfiles.length; i++){
+                var currDiff = Math.abs(numberOfChannels - tvUserProfiles[i].numberOfChannels);
+                if(currDiff < diff ){
+                    diff = currDiff;
+                    selectedProfile = tvUserProfiles[i];
+                }
+            }
+            currentTVUserProfile = selectedProfile;
+            if(currentTVUserProfile)
+                $("input[name='tvConsumption.userProfile']").val(currentTVUserProfile.id);
+        }
+
+        function userTypeProfilesExist(userProfiles, userType) {
+            for (var i = 0; i < userProfiles.length; i++) {
+                var userProfileUserType = userProfiles[i].userType['$name'];
+                if (userProfileUserType == userType)
+                    return true;
+            }
+            return false;
+        }
+
+
+        function initFixedConsumptionMainSlider(){
+
+
+            if($(".fixed-consumption .content-simple .main-slider .slider").length) {
+                var min = 10;
+                var initValue = [[${consumption.fixedPhoneConsumption} ? ${consumption.fixedPhoneConsumption.callMinutes} : 0]];
+                var max = 0;
+
+                for (var i = 0; i < fixedPhoneUserProfiles.length; i++) {
+                    if (fixedPhoneUserProfiles[i].callMinutes > max)
+                        max = fixedPhoneUserProfiles[i].callMinutes;
+                }
+                if(max == 0)
+                    max = 300;
+
+                $(".fixed-consumption .content-simple .main-slider .slider").slider({
+                    range: "min",
+                    min: min,
+                    max: max,
+                    value: initValue,
+                    slide: function (event, ui) {
+                        updateCurrentFixedPhoneUserProfile();
+                        distributeFixedConsumptionTotalCalls();
+                    },
+                    stop: function (event, ui) {
+                        var sliderValue = ui.value;
+                        if (sliderValue < max)
+                            $(this).slider("option", "max", max);
+                        distributeFixedConsumptionTotalCalls();
+                        updateFixedConsumptionTimeDistribution();
+                    },
+                });
+
+                updateCurrentFixedPhoneUserProfile();
+            }
+
+        }
+
+
+
+
+        function initMobileConsumptionMainSlider(){
+
+            var min = 10;
+            var initValue = [[${consumption.mobileConsumption} ? ${consumption.mobileConsumption.countryCallMinutes + consumption.mobileConsumption.internationalCallMinutes} : 0]];
+            var max = 0;
+
+
+            for(var i = 0 ; i < mobileUserProfiles.length; i++){
+                if(mobileUserProfiles[i].callMinutes > max)
+                    max = mobileUserProfiles[i].callMinutes;
+            }
+
+            if(max == 0)
+                max = 100;
+
+            $(".mobile-consumption .content-simple .main-slider .slider").slider({
+                range: "min",
+                min: min,
+                max: max,
+                value: initValue,
+                slide: function(event, ui) {
+                    updateCurrentMobileUserProfile();
+                    distributeMobileConsumptionTotalCalls();
+                },
+                stop : function(event, ui) {
+                    if(ui.value < max)
+                        $(this).slider("option", "max", max);
+                    distributeMobileConsumptionTotalCalls();
+                },
+            });
+            updateCurrentMobileUserProfile();
+        }
+
+
+        function initInternetConsumptionMainSlider() {
+            var min = 1;
+            var initValue = [[${consumption.internetConsumption} ? ${consumption.internetConsumption.dataAmountInGB} : 0]];
+            var max = 0;
+
+            for(var i = 0 ; i < internetUserProfiles.length; i++){
+                if(internetUserProfiles[i].dataAmountInGB  > max)
+                    max = internetUserProfiles[i].dataAmountInGB;
+            }
+            if(max == 0)
+                max = 100;
+
+            $(".internet-consumption  .main-slider .slider").slider({
+                range: "min",
+                min: min,
+                max: max,
+                value: initValue,
+                slide: function(event, ui) {
+                    updateCurrentInternetUserProfile();
+                    distributeInternetConsumptionTotalCalls();
+                },
+                stop : function(event, ui) {
+                    var sliderValue = ui.value;
+                    if(sliderValue < max)
+                        $(this).slider("option", "max", max);
+                    distributeInternetConsumptionTotalCalls();
+                },
+            });
+            updateCurrentInternetUserProfile();
+        }
+
+
+
+        function sumTotal(rootSelector) {
+            var total = 0;
+            $(rootSelector + " .total-part").each(function (index) {
+                var inputBox = $(this);
+                try {
+                    var val = parseInt(inputBox.val());
+                    if(val > 0)
+                        total += val;
+                } catch (e) { }
+            });
+            $(rootSelector + " .total").val(total);
+            return total;
+        }
+
+        function sumFixedAdvancedTotal(){
+            return sumTotal(".fixed-consumption .content-advanced");
+        }
+
+        function sumMobileAdvancedTotal(){
+            return sumTotal(".mobile-consumption .content-advanced");
+        }
+
+        function sumFixedSimpleTotal(){
+            var total = sumTotal(".fixed-consumption .content-simple");
+            var mainSlider = $(".fixed-consumption .main-slider .slider");
+            if(mainSlider.slider("value") != total) {
+                if(mainSlider.slider("option", "max") < total)
+                    mainSlider.slider("option", "max", total);
+                mainSlider.slider("value", total);
+            }
+            return total;
+        }
+
+        function sumMobileSimpleTotal(){
+
+            var mainSlider = $(".mobile-consumption .main-slider .slider");
+
+            var total = sumTotal(".mobile-consumption .content-simple");
+
+            var userType = $(".mobile-consumption .content-simple .userTypeSelect").val();
+
+            if(userType == "PHISICAL_PERSON") {
+                var ffMinutes = 0;
+                try { ffMinutes = parseInt($(".mobileConsumption-ff-minutes").val()); } catch (e) {}
+                total += ffMinutes;
+                mainSlider.slider("option", "min", ffMinutes);
+            }
+
+            if(userType == "LEGAL_PERSON") {
+                var cugMinutesFixed = 0;
+                try { cugMinutesFixed = parseInt($(".mobileConsumption-cug-minutes-fixed").val()); } catch (e) {}
+                var cugMinutesMobile = 0;
+                try { cugMinutesMobile = parseInt($(".mobileConsumption-cug-minutes-mobile").val()); } catch (e) {}
+                total += (cugMinutesFixed + cugMinutesMobile);
+                mainSlider.slider("option", "min", (cugMinutesFixed + cugMinutesMobile));
+            }
+
+            if(mainSlider.slider("value") != total) {
+                if(mainSlider.slider("option", "max") < total)
+                    mainSlider.slider("option", "max", total);
+                mainSlider.slider("value", total);
+            }
+            return total;
+        }
+
+
+        function sumOperatorRowMinutes(parentDiv) {
+            var total = 0;
+            parentDiv.find("input").each(function (index) {
+                var inputBox = $(this);
+                if (!inputBox.attr("readonly"))
+                    var val = parseInt(inputBox.val());
+                if (val > 0)
+                    total += val;
+            });
+
+            parentDiv.find("input[readonly='readonly']").val(total);
+        }
+
+        var timePeriods = [[${T(hr.m2stanic.smartbuilding.core.TimePeriod).values()}]];
+
+        function updateFixedConsumptionTimeDistribution(selectedPeriodValue){
+
+            if(!selectedPeriodValue)
+                selectedPeriodValue = parseInt($("#fixed-consumption-form-simple .time-dist").first().val());
+
+
+            var currentPeriod = $(".fixedPhoneConsumption-timePeriod select").val();
+
+            if(currentPeriod != ""){
+
+                var selectedPeriodInputName = "fixedPhoneConsumption.timePeriodDistribution[" + currentPeriod + "]";
+                $("input[name='" + selectedPeriodInputName + "']").val(selectedPeriodValue);
+
+                var otherTotalBefore = 0;
+                for(var i = 0; i < timePeriods.length ; i++){
+                    var otherPeriod = timePeriods[i]["$name"];
+                    if(currentPeriod != otherPeriod) {
+                        otherTotalBefore += currentFixedPhoneUserProfile.timePeriodDistribution[otherPeriod];
+                    }
+                }
+                var valueReminder = 100 - selectedPeriodValue;
+
+                for(var i = 0; i < timePeriods.length ; i++){
+                    var otherPeriod = timePeriods[i]["$name"];
+                    if(currentPeriod != otherPeriod) {
+                        var otherName = "fixedPhoneConsumption.timePeriodDistribution[" + otherPeriod + "]";
+                        var newPercent =  currentFixedPhoneUserProfile.timePeriodDistribution[otherPeriod] / otherTotalBefore;
+                        var newValue = Math.round(newPercent * valueReminder);
+                        $("input[name='" + otherName + "']").val(newValue);
+                    }
+                }
+            }
+            else {
+                for (var i = 0; i < timePeriods.length; i++) {
+                    var period = timePeriods[i]["$name"];
+                    var timePeriodValue = currentFixedPhoneUserProfile.timePeriodDistribution[period];
+                        var periodInputName = "fixedPhoneConsumption.timePeriodDistribution[" + period + "]";
+                        $("input[name='" + periodInputName + "']").val(timePeriodValue);
+                }
+            }
+        }
+
+        function handleTargetOperatorSelection(selectBox) {
+            var value = parseInt(selectBox.val());
+            var operatorRow = selectBox.parent().closest(".row");
+
+            if(selectBox.val() > 0) {
+                operatorRow.find(".disabable").removeAttr("disabled");
+            }
+            else {
+                operatorRow.find(".disabable").attr("disabled", "disabled");
+            }
+
+            if(value >= 0) {
+                operatorRow.next().show();
+            }
+            else {
+                operatorRow.nextAll().each(function(index){
+                    var nextRow = $(this);
+                    var nextSelect = nextRow.find("select");
+                    nextSelect.find("option[value='-1']").attr("selected", "selected");
+                    nextRow.find(".disabable").attr("disabled", "disabled");
+                    nextRow.hide();
+                });
+            }
+        }
+
+        function userTypeChanged(selectEl) {
+
+            var personType = selectEl ? selectEl.val() : [[${consumption.getRelevantUserType().name()}]];
+            if (personType == 'PHISICAL_PERSON') {
+                $(".fnPhysical").removeClass("hide");
+                $(".fnLegal").addClass("hide");
+            }
+            else {
+                $(".fnPhysical").addClass("hide");
+                $(".fnLegal").removeClass("hide");
+            }
+            $(".userTypeSelect").val(personType);
+
+            if (selectEl) {
+
+                if ($(".mobile-consumption").length) {
+                    updateCurrentMobileUserProfile();
+                    distributeMobileConsumptionTotalCalls();
+                }
+
+                if ($(".fixed-consumption").length) {
+                    updateCurrentFixedPhoneUserProfile();
+                    distributeFixedConsumptionTotalCalls();
+                }
+
+                if ($(".internet-consumption").length) {
+                    updateCurrentInternetUserProfile();
+                    distributeInternetConsumptionTotalCalls();
+                }
+
+                if ($(".tv-consumption").length) {
+                    updateCurrentTVUserProfile();
+                    distributeTVConsumptionTotalCalls();
+                }
+            }
+        }
+
+
+
+        $(document).ready(function () {
+
+            $('#tabs a:first').tab('show');
+
+            setupValidation();
+
+            $(".limit-toggle").each(function() {
+
+                var valueToggle = $(this);
+                var inputGroup = valueToggle.closest(".input-group");
+                var inputField = inputGroup.find("input[type=text]");
+                var inputFieldVisible = valueToggle.attr("data-input-visible") == 'true';
+                var limitValueField = inputGroup.find("input[type=hidden]");
+
+                valueToggle.on("click", function(ev) {
+                    ev.preventDefault();
+                    if (!valueToggle.prop('disabled')) {
+                        var btnText = inputGroup.find(".btn span.txt");
+                        btnText.text(valueToggle.attr("data-label"));
+                        if (inputFieldVisible)
+                            inputField.removeClass("hide");
+                        else
+                            inputField.addClass("hide");
+
+                        limitValueField.val(valueToggle.attr("data-hidden-value"));
+                        inputField.val(valueToggle.attr("data-input-value"));
+                    }
+                });
+            });
+
+
+            function regulateMaxSpeedSwitch() {
+
+                var selectedTech = $("#internet-consumption-technology").val();
+
+                console.log("selected technology: ", selectedTech);
+
+                //full speed toggle
+                if(selectedTech == 'MOBILE' || selectedTech == 'SATELITE'){
+                    $("#onlyFullSpeedDataAdv").prop('disabled', false);
+                    $("#onlyFullSpeedDataAdv").off("click");
+                }
+                else {
+                    $("#onlyFullSpeedDataAdv").prop('checked', true);
+                    $("#onlyFullSpeedDataAdv").on("click", function (ev) {
+                        showMessageDialog(null, "Brzina je uvijek maksimalna osim kod tehnologija Mobilni i Satelitski internet")
+                        return false;
+                    });
+                }
+            }
+
+            function regulateInternetDataAmount(){
+
+                var selectedTech = $("#internet-consumption-technology").val();
+                if(selectedTech == 'LL'){
+                    console.log("handling internet amount for LL");
+                    $("#internet-amount .input-group-btn").removeClass("hide");
+                    $("#internet-amount .input-group-btn span.caret").addClass("hide");
+                    $("#internet-amount input[type=text]").addClass("hide");
+                    $("#internet-amount input[type=hidden]").val("true");
+                    $("#internet-amount .input-group-btn button span.txt").text("Neograničeno");
+                    $("#internet-amount .input-group-btn .dropdown-toggle").prop('disabled', true);
+                    console.log("done handling internet amount for LL");
+                }
+                else {
+
+                    if(selectedTech != 'MOBILE' && selectedTech != 'SATELITE') {
+                        $("#internet-amount input[type=hidden]").val("true");
+                        $("#internet-amount .input-group-btn button span.txt").text("Neograničeno");
+                    }
+                    else {
+                        $("#internet-amount input[type=hidden]").val("false");
+                        $("#internet-amount .input-group-btn button span.txt").text("GB");
+                        $("#internet-amount input[type=text]").val(currentInternetUserProfile.dataAmountInGB/10);
+                    }
+
+                    $("#internet-amount .input-group-btn span.caret").removeClass("hide");
+
+                    if( $("#internet-amount input[type=hidden]").val() == "false")
+                        $("#internet-amount input[type=text]").removeClass("hide");
+                    else
+                        $("#internet-amount input[type=text]").addClass("hide");
+
+                    $("#internet-amount .input-group-btn .dropdown-toggle").prop('disabled', false);
+                }
+
+            }
+
+
+            function regulateInternetDownSpeed(){
+
+                var selectedTech = $("#internet-consumption-technology").val();
+
+                if(selectedTech == 'MOBILE'){
+                    $("#internet-speed .input-group-btn").removeClass("hide");
+                    $("#internet-speed .input-group-btn span.caret").removeClass("hide");
+                    $("#internet-speed .input-group-addon").addClass("hide");
+                    $("#internet-speed input[type=text]").addClass("hide");
+                    $("#internet-speed input[type=text]").val(0.2);
+                    $("#internet-speed .input-group-btn button span.txt").text("2G");
+
+                }
+                else {
+                    $("#internet-speed .input-group-btn").addClass("hide");
+                    $("#internet-speed .input-group-addon").removeClass("hide");
+                    $("#internet-speed input[type=text]").removeClass("hide");
+//                    $("#internet-speed input[type=text]").val( currentInternetUserProfile.speedInMbPerSecond);
+                }
+            }
+
+
+
+            $("#internet-consumption-technology").on("change", function(ev){
+                regulateMaxSpeedSwitch();
+                regulateInternetDataAmount();
+                regulateInternetDownSpeed();
+            });
+
+
+            $(".fixed-consumption input:radio, .mobile-consumption input:radio").on("change", function(ev){
+
+                var simpleModeSelected = ($(this).hasClass('simple-mode-radio') && $(this).is(':checked'))  || ($(this).hasClass('advances-mode-radio') && !$(this).is(':checked'));
+                var parentDiv = $(this).parent().closest(".consumption");
+
+                console.log("parentDiv", parentDiv);
+                if(simpleModeSelected){
+                    parentDiv.find(".content-simple").removeClass("hide");
+                    parentDiv.find(".content-advanced").addClass("hide");
+                    $("#simpleModeDisclaimer").removeClass("hide");
+                }
+                else {
+                    parentDiv.find(".content-advanced").removeClass("hide");
+                    parentDiv.find(".content-simple").addClass("hide");
+                    $("#simpleModeDisclaimer").addClass("hide");
+                }
+            });
+
+            $(".fixedPhoneConsumption-timePeriod .slider").slider({
+                range: "min",
+                min: 0,
+                max: 100,
+                value: 60,
+                slide: function(event, ui) {
+                    var rootDiv = $(ui.handle).parent().closest(".fixedPhoneConsumption-timePeriod-slider");
+                    var label = rootDiv.find(".slider-label");
+                    label.html(ui.value + " %");
+                    updateFixedConsumptionTimeDistribution(ui.value);
+                }
+            });
+
+
+            $("#useTariffOptionsCB").on("change", function(ev){
+                var checked = $(this).is(':checked')
+                $("input[name='mobileConsumption.useTariffOptions']").val(checked);
+            });
+
+
+            $(".fixedPhoneConsumption-timePeriod select").on("change", function(ev){
+                setUpFixedPhoneConsumptionTimeDistribution();
+            });
+
+            function setUpFixedPhoneConsumptionTimeDistribution(){
+                var timePeriod = $(".fixedPhoneConsumption-timePeriod select").val();
+                if(timePeriod == "") {
+                    $(".fixedPhoneConsumption-timePeriod-slider").addClass("hide");
+                    updateFixedConsumptionTimeDistribution();
+                }
+                else {
+                    var selectedPeriodInputName = "fixedPhoneConsumption.timePeriodDistribution[" + timePeriod + "]";
+                    $(".fixedPhoneConsumption-timePeriod-slider").removeClass("hide");
+                    var selectedPeriodValue = $("input[name='" + selectedPeriodInputName + "']").val();
+                    var sliderRootDiv = $(".fixedPhoneConsumption-timePeriod-slider");
+                    $(".fixedPhoneConsumption-timePeriod .slider").slider("value", selectedPeriodValue);
+                    onSliderChange(sliderRootDiv, selectedPeriodValue);
+                }
+            }
+
+
+            if ($(".fixed-consumption").length) {
+                setUpFixedPhoneConsumptionTimeDistribution();
+                initFixedConsumptionMainSlider();
+            }
+
+            if ($(".mobile-consumption").length)
+                initMobileConsumptionMainSlider();
+
+            if ($(".internet-consumption").length) {
+                initInternetConsumptionMainSlider();
+                regulateMaxSpeedSwitch();
+            }
+
+
+            $(".fixed-calls-distribution, .mobile-calls-distribution, .international-calls-minutes").each(function( index ) {
+                var rootDiv = $(this);
+                initSlider(rootDiv, 100, 100, 100);
+            });
+
+
+
+            $(".operator-distribution-toggle, .fixed-calls-distribution-toggle, .mobile-calls-distribution-toggle").on("click", function (ev){
+                var targetClass = $(this).attr("data-target-class");
+                $("." + targetClass).toggle();
+                var prev = $(this).prev();
+                if(prev.hasClass("glyphicon-triangle-right")) {
+                    prev.removeClass("glyphicon-triangle-right");
+                    prev.addClass("glyphicon-triangle-bottom");
+                }
+                else {
+                    prev.addClass("glyphicon-triangle-right");
+                    prev.removeClass("glyphicon-triangle-bottom");
+                }
+            });
+
+
+            $(".operator-call-minutes select, .operator-sms-count select").on("change", function(ev){
+
+                var selectBox = $(this);
+                var value = parseInt(selectBox.val());
+                var rowDiv = selectBox.parent().closest(".row");
+                var masterDiv = selectBox.parent().closest(".row").parent();
+
+                var alreadySelected = false;
+                masterDiv.find("select").each(function(index){
+                    var other = $(this);
+                    if( value > 0 && !selectBox.is(other) && other.val() == value){
+                        alreadySelected = true;
+                    }
+                });
+
+
+                if(alreadySelected) {
+                    var oldValue = selectBox.attr("data-value");
+                    selectBox.find("option[value=" + oldValue + "]").attr("selected", "selected");
+                    alert("Ova opcija je već odabrana");
+                    ev.preventDefault();
+                    return false;
+                }
+                else
+                    selectBox.attr("data-value", value);
+
+                handleTargetOperatorSelection(selectBox);
+            });
+
+            $(".operator-call-minutes select, .operator-sms-count select").each(function(index){
+                var selectBox = $(this);
+                if(selectBox.val() > 0)
+                    handleTargetOperatorSelection(selectBox);
+            });
+
+
+            $(".fixed-consumption .operator-call-minutes input").on("input", function(ev){
+                var parentDiv = $(this).parent().closest(".row");
+                sumOperatorRowMinutes(parentDiv);
+                sumFixedAdvancedTotal();
+            });
+
+            $(".mobile-consumption .operator-call-minutes input").on("input", function(ev){
+                var parentDiv = $(this).parent().closest(".row");
+                sumOperatorRowMinutes(parentDiv);
+                sumMobileAdvancedTotal();
+            });
+
+            $(".mobile-consumption .operator-sms-count input").on("input", function(ev){
+                var parentDiv = $(this).parent().closest(".row");
+                sumOperatorRowMinutes(parentDiv);
+            });
+
+
+            sumFixedAdvancedTotal();
+            sumMobileAdvancedTotal();
+
+            $(".fixed-consumption .content-simple  .total-part").on("input", function(ev){
+                sumFixedSimpleTotal();
+            });
+
+
+            $(".mobile-consumption .content-simple")
+                    .find(".total-part, .mobileConsumption-ff-minutes, .mobileConsumption-cug-minutes-fixed, .mobileConsumption-cug-minutes-mobile")
+                    .on("input", function (ev) {
+                        sumMobileSimpleTotal();
+                    });
+
+            $("#mobileConsumption-countryCalls").on("input", function(ev){
+
+                var total = parseInt($("#mobileConsumption-countryCalls").val()) + parseInt($("#mobileConsumption-internationalCalls").val());
+
+                var mainSlider = $(".mobile-consumption .main-slider .slider");
+                if(mainSlider.slider("value") != total) {
+                    if(mainSlider.slider("option", "max") < total)
+                        mainSlider.slider("option", "max", total);
+                    mainSlider.slider("value", total);
+                }
+                return total;
+            });
+
+
+
+            $(".fixed-consumption .content-advanced  .total-part").on("input", function(ev){
+                sumFixedAdvancedTotal();
+            });
+
+            $(".mobile-consumption .content-advanced  .total-part").on("input", function(ev){
+                sumMobileAdvancedTotal();
+            });
+
+            $(".consumption-next").on("click", function(ev){
+                gotoNextTab();
+            });
+
+            $(".consumption-prev").on("click", function(ev){
+                gotoPrevTab();
+            });
+
+            $(".userTypeSelect").on("change", function(ev){
+                userTypeChanged($(this));
+            });
+
+            userTypeChanged();
+
+
+            $(".consumption-submit").on("click", function(ev){
+                var submitData = "";
+
+                if($(".fixed-consumption").length) {
+                    console.log("mobile consumption present");
+                    var fixedPhoneConsumptionData = null;
+                    if( $("#fixed-consumption-simple-mode").is(':checked')) {
+
+                        $('#fixed-consumption-form-simple').data('bootstrapValidator').validate();
+                        if( !$('#fixed-consumption-form-simple').data('bootstrapValidator').isValid())
+                            return false;
+
+                        fixedPhoneConsumptionData = $("#fixed-consumption-form-simple").serialize();
+                        fixedPhoneConsumptionData += "&fixedPhoneConsumption.inputMode=SIMPLE";
+                        console.log("simple fixed consumption data", fixedPhoneConsumptionData);
+                    }
+                    else {
+                        $('#fixed-consumption-form-advanced').data('bootstrapValidator').validate();
+                        if( !$('#fixed-consumption-form-advanced').data('bootstrapValidator').isValid())
+                            return false;
+
+                        fixedPhoneConsumptionData = $("#fixed-consumption-form-advanced").serialize();
+                        fixedPhoneConsumptionData += "&fixedPhoneConsumption.inputMode=ADVANCED";
+                        console.log("advanced fixed consumption data", fixedPhoneConsumptionData);
+                    }
+
+                    submitData += fixedPhoneConsumptionData;
+                }
+
+                if($(".mobile-consumption").length){
+                    console.log("mobile consumption present");
+                    var mobileConsumptionData = null;
+                    if( $("#mobile-consumption-simple-mode").is(':checked')) {
+
+                        $('#mobile-consumption-form-simple').data('bootstrapValidator').validate();
+                        if( !$('#mobile-consumption-form-simple').data('bootstrapValidator').isValid())
+                            return false;
+
+                        mobileConsumptionData = $("#mobile-consumption-form-simple").serialize();
+                        mobileConsumptionData += "&mobileConsumption.inputMode=SIMPLE";
+                        console.log("simple mobile consumption data", mobileConsumptionData);
+                    }
+                    else {
+
+                        $('#mobile-consumption-form-advanced').data('bootstrapValidator').validate();
+                        if( !$('#mobile-consumption-form-advanced').data('bootstrapValidator').isValid())
+                            return false;
+                        mobileConsumptionData = $("#mobile-consumption-form-advanced").serialize();
+                        mobileConsumptionData += "&mobileConsumption.inputMode=ADVANCED";
+                        console.log("advanced mobile consumption data", mobileConsumptionData);
+                    }
+
+                    submitData += mobileConsumptionData;
+                }
+
+                if($(".internet-consumption").length){
+                    $('#internet-consumption-form').data('bootstrapValidator').validate()
+                    if( !$('#internet-consumption-form').data('bootstrapValidator').isValid())
+                        return false;
+                    var internetConsumptionData = $("#internet-consumption-form").serialize();
+                    submitData += ( submitData.length > 0) ? "&" :"";
+                    submitData += internetConsumptionData;
+                }
+
+                if($(".tv-consumption").length){
+
+                    $('#tv-consumption-form').data('bootstrapValidator').validate();
+                    if( !$('#tv-consumption-form').data('bootstrapValidator').isValid())
+                        return false;
+                    var tvConsumptionData = $("#tv-consumption-form").serialize();
+                    submitData += ( submitData.length > 0) ? "&" :"";
+                    submitData += tvConsumptionData;
+                }
+
+                console.log("submiting", submitData);
+                $("#progressModal").modal("show");
+
+                var submitUrl = [[${submitUrl}]];
+                $.post(submitUrl, submitData)
+                        .done(function( data ) {
+//                            $("#progressModal").modal("hide");
+                            if(data != "FAILED")
+                                window.location = data;
+                            else {
+                                $("#progressModal").modal("hide");
+                                showMessageDialog(null, "Greška prilikom izračuna!");
+                            }
+                });
+
+
+
+            });
+
+        });
+        /*]]>*/
+    </script>
+
+
+</div>
+
+</body>
+</html>

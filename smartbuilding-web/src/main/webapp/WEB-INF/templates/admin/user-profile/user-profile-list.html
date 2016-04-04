@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+
+<head lang="en">
+    <meta charset="UTF-8"/>
+    <title>Smart building</title>
+</head>
+<body>
+
+<div th:fragment="content">
+
+    <div>
+
+        <!--@thymesVar id="type" type="hr.m2stanic.smartbuilding.core.tariff.TariffType"-->
+        <h2 th:if="${type}" th:text="|Korisnički profili za ${type.displayNamePlural.toLowerCase()}|">Korisnici operatera</h2>
+        <h2 th:unless="${type}">Svi korisnički profili</h2>
+
+        <div class="panel">
+
+
+            <div class="panel-body">
+
+                <table class="table">
+                    <thead>
+                    <tr class="primary">
+                        <th>Naziv</th>
+                        <th>Tip tarife</th>
+                        <th th:text="#{admin.userType}">Tip korisnika</th>
+                        <th></th>
+                        <th></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                        <!--@thymesVar id="profileList" type="java.util.List<hr.m2stanic.smartbuilding.core.user.UserProfile>"-->
+                        <tr th:each="profile : ${profileList}">
+                            <td th:text="${profile.name}">Naziv</td>
+                            <td th:text="${profile.tariffType.displayNamePlural}">Tariff type</td>
+                            <td th:text="${profile.userType.displayName}">User type</td>
+
+                            <td style="font-size: 1.5em;" width="40" align="center">
+                                <a th:if="${type}" th:href="@{/admin/user-profile/edit(id=${profile.id}, type=${type.name()})}" title="Uredi">
+                                    <span class="fa fa-edit"></span>
+                                </a>
+                                <a  th:unless="${type}" th:href="@{/admin/user-profile/edit(id=${profile.id})}" title="Uredi">
+                                    <span class="fa fa-edit"></span>
+                                </a>
+                            </td>
+                            <td style="font-size: 1.5em;" width="40" align="center">
+                                <a  href="#" title="Obriši" class="delete-profile" th:attr="data-profile-id = ${profile.id}">
+                                    <span class="fa fa-trash-o"></span>
+                                </a>
+                            </td>
+                        </tr>
+
+                    </tbody>
+                </table>
+
+                <hr/>
+                <div>
+                    <a th:if="${type}" th:href="@{/admin/user-profile/edit(type=${type.name()})}">
+                        <button type="button" class="btn btn-dark btn-gradient dark pull-right">Dodaj</button>
+                    </a>
+
+
+                    <div th:unless="${type}" class="btn-group pull-right" style="margin-top: 9px !important;">
+                        <button type="button" class="btn btn-dark btn-gradient dark dropdown-toggle" data-toggle="dropdown" aria-expanded="false" style="margin-left: 9px !important;">
+                            Dodaj <span class="caret"></span>
+                        </button>
+
+                        <ul class="dropdown-menu" role="menu" th:unless="${type}">
+                            <li>
+                                <a th:href="@{/admin/user-profile/edit(type=${T(hr.m2stanic.smartbuilding.core.tariff.TariffType).MOBILE})}">Profil korisnika Mobilne tarife</a>
+                            </li>
+                            <li>
+                                <a th:href="@{/admin/user-profile/edit(type=${T(hr.m2stanic.smartbuilding.core.tariff.TariffType).FIXED_TEL})}">Profil korisnika Fiksne tarife</a>
+                            </li>
+                            <li>
+                                <a th:href="@{/admin/user-profile/edit(type=${T(hr.m2stanic.smartbuilding.core.tariff.TariffType).INTERNET})}">Profil korisnika Internet tarife</a>
+                            </li>
+                            <li>
+                                <a th:href="@{/admin/user-profile/edit(type=${T(hr.m2stanic.smartbuilding.core.tariff.TariffType).TV})}">Profil korisnika Audio-video tarifu</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+
+
+        <script th:inline="javascript">
+            //<![CDATA[
+            var type = [[${type != null ? type.name() : false}]];
+            $(document).ready(function (){
+                $(".delete-profile").on("click", function(ev){
+                    ev.preventDefault();
+                    var pId = $(this).attr("data-profile-id");
+                    var targetUrl = [[@{/admin/user-profile/delete}]] + "?id=" + pId;
+                    if(type)
+                        targetUrl += "&type=" + type;
+                    var onConfirm = function(){
+                        window.location = targetUrl;
+                    };
+                    showConfirmDialog(onConfirm, "Potvrda brisanja", "Jeste li sigurni da želite obrisati ovaj profil korisnika?");
+                });
+            });
+
+
+            //]]>
+        </script>
+    </div>
+</div>
+
+
+
+
+
+
+</body>
+</html>

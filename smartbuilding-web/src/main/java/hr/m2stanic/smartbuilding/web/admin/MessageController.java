@@ -1,0 +1,133 @@
+package hr.m2stanic.smartbuilding.web.admin;
+
+
+import hr.m2stanic.smartbuilding.core.company.Admin;
+import lombok.extern.slf4j.Slf4j;
+import org.joda.time.LocalDateTime;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import hr.m2stanic.smartbuilding.core.appuser.AppUser;
+import hr.m2stanic.smartbuilding.core.appuser.AppUserManager;
+import hr.m2stanic.smartbuilding.core.company.Company;
+import hr.m2stanic.smartbuilding.core.company.CompanyManager;
+import hr.m2stanic.smartbuilding.core.messages.Message;
+import hr.m2stanic.smartbuilding.core.messages.MessageManager;
+import hr.m2stanic.smartbuilding.web.thymeleaf.Layout;
+
+import java.util.List;
+
+
+@Slf4j
+@Controller
+@RequestMapping("/admin/messages")
+public class MessageController {
+
+    @Autowired
+    private MessageManager messageManager;
+
+    @Autowired
+    private AppUserManager appUserManager;
+
+    @Autowired
+    private CompanyManager companyManager;
+
+
+    @RequestMapping("/list")
+    public String showMessages(Model model, @PageableDefault(size = 20) Pageable pageable) {
+
+        AppUser loggedInUser = appUserManager.getLoggedInUser();
+
+        List<? extends Company> recipients = loggedInUser.getCompany() instanceof Admin ? companyManager.getAllOperatorGroups() : companyManager.getAllAgencies();
+        model.addAttribute("recipients", recipients);
+
+        Page<Message> receivedMessages = messageManager.getReceivedMessages(loggedInUser.getCompany(), pageable);
+        model.addAttribute("receivedMessages", receivedMessages);
+
+        Page<Message> sentMessages = messageManager.getSentMessages(loggedInUser.getCompany(), pageable);
+        model.addAttribute("sentMessages", sentMessages);
+
+        return "admin/messages/message-list";
+    }
+
+
+    @RequestMapping("/received")
+    @Layout("admin/layouts/empty-content")
+    public String getReceivedMessages(Model model, @PageableDefault(size = 20) Pageable pageable) {
+
+        AppUser loggedInUser = appUserManager.getLoggedInUser();
+        Page<Message> receivedMessages = messageManager.getReceivedMessages(loggedInUser.getCompany(), pageable);
+        model.addAttribute("receivedMessages", receivedMessages);
+        return "admin/messages/received";
+    }
+
+
+    @RequestMapping("/sent")
+    @Layout("admin/layouts/empty-content")
+    public String getSentMessages(Model model, @PageableDefault(size = 20) Pageable pageable) {
+
+        AppUser loggedInUser = appUserManager.getLoggedInUser();
+        Page<Message> sentMessages = messageManager.getSentMessages(loggedInUser.getCompany(), pageable);
+        model.addAttribute("sentMessages", sentMessages);
+        return "admin/messages/sent";
+    }
+
+
+    @RequestMapping("/send")
+    @ResponseBody
+    public String sendMessage(@RequestParam String title, @RequestParam String body, @RequestParam Long recipientId) {
+
+//        try {
+//            title = new String(title.getBytes("ISO-8859-1"));
+//            body = new String(body.getBytes("ISO-8859-1"));
+//        } catch (UnsupportedEncodingException e) {
+//            e.printStackTrace();
+//        }
+
+        AppUser loggedInUser = appUserManager.getLoggedInUser();
+        try {
+            Company recipient = companyManager.getCompany(recipientId);
+            Message message = new Message(null, LocalDateTime.now(), title, body, recipient, loggedInUser, false);
+            messageManager.save(message);
+            return "SUCCESS";
+        } catch (Exception e) {
+            log.error("Failed to save message", e);
+            return e.getMessage();
+        }
+    }
+
+    @RequestMapping("/mark-read")
+    @ResponseBody
+    public String markMessageRead(@RequestParam Long msgId) {
+
+        try {
+            AppUser loggedInUser = appUserManager.getLoggedInUser();
+            Message message = messageManager.getMessage(msgId);
+            if (loggedInUser.getCompany().getId().equals(message.getRecipient().getId())) {
+                if (!message.isRead()) {
+                    message.setRead(true);
+                    messageManager.save(message);
+                }
+            }
+            return "SUCCESS";
+        } catch (Exception e) {
+            log.error("Failed to mark message read", e);
+            return e.getMessage();
+        }
+    }
+
+
+    @ModelAttribute("mainNavSel")
+    public MainNavigationItem getMainNavigationSelection() {
+        return MainNavigationItem.MESSAGES;
+    }
+
+}

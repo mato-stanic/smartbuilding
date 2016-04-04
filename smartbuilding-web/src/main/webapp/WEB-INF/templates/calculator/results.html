@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+
+<head lang="en">
+    <meta charset="UTF-8"/>
+    <title>Smart building</title>
+</head>
+
+<body>
+<div th:fragment="content" class="widget panel panel-default results">
+
+    <div class="panel-heading" th:if="${consumption.isPacket()}">
+        <h3 class="panel-title" th:text="#{calculator.packages}"> Paketi </h3>
+    </div>
+
+    <div class="panel-heading" th:unless="${consumption.isPacket()}">
+        <h3 th:if="${consumption.getServiceCount() == 1 and consumption.hasMobileTariff()}" class="panel-title" th:text="#{calculator.mobileTelephone}"> Mobilna telefonija </h3>
+        <h3 th:if="${consumption.getServiceCount() == 1 and consumption.hasFixedTariff()}" th:text="#{calculator.fixedTelephone}" class="panel-title"> Fiksna telefonija </h3>
+        <h3 th:if="${consumption.getServiceCount() == 1 and consumption.hasInternetTariff()}" class="panel-title" th:text="#{calculator.internetServices}"> Internet usluge </h3>
+        <h3 th:if="${consumption.getServiceCount() == 1 and consumption.hasTVTariff()}" class="panel-title" th:text="#{calculator.AVMservices}"> AVM usluge </h3>
+    </div>
+
+
+    <div class="panel-body">
+
+
+        <!--/*@thymesVar id="result" type="hr.m2stanic.smartbuilding.web.CalculationController.CalculationResultWrapper"*/-->
+
+        <div th:if="${result.packets}">
+
+            <div th:if="${result.packets.size() > 0}">
+                <h3 th:text="#{calculator.packetSuggestion}">Za vas predlažemo sljedeće pakete</h3>
+
+                <table class="table table-hover">
+                    <tr>
+                        <th>Tarifa</th>
+                        <th width="200" style="text-align: center">Operator</th>
+                        <th width="200">Pretplata</th>
+                        <th width="200" th:text="#{calculator.total}">Ukupno</th>
+                        <th width="150"></th>
+                    </tr>
+                </table>
+
+                <table class="table table-hover" th:each="pck : ${result.packets.entrySet()}">
+                    <tr>
+                        <td th:text="${pck.key.name}">Paket</td>
+                        <td align="center" width="200">
+                            <a target="_blank" th:href="${pck.key.operator.getOperatorGroup().getWebsiteUrl()}">
+                                <img th:if="${pck.key.operator.operatorGroup.logoFileName}"
+                                     th:src="@{/res/images/operator/{ln}(ln=${pck.key.operator.operatorGroup.logoFileName})}"
+                                     height="50"/>
+
+                                <!---->
+                                <!---->
+                                <!--<img th:if="${pck.key.operator.shortName.toLowerCase().contains('telenor')}" th:src="@{/res/images/operator/telenor.png}" height="50"/>-->
+                                <!--<img th:if="${pck.key.operator.shortName.toLowerCase().contains('telekom') or pck.key.operator.shortName.toLowerCase().contains('ct -')}" th:src="@{/res/images/operator/ct.png}" height="50"/>-->
+                                <!--<img th:if="${pck.key.operator.shortName.toLowerCase().contains('mtel')}" th:src="@{/res/images/operator/mtel.png}" height="50"/>-->
+                                <!--<img th:if="${pck.key.operator.shortName.toLowerCase().contains('total')}" th:src="@{/res/images/operator/totaltv.png}" height="50"/>-->
+                                <!--<img th:if="${pck.key.operator.shortName.toLowerCase().contains('telemach')}" th:src="@{/res/images/operator/telemach.png}" height="50"/>-->
+                                <!--<img th:if="${pck.key.operator.shortName.toLowerCase().contains('mkabl')}" th:src="@{/res/images/operator/mkabl.png}" height="50"/>-->
+                                <!--<img th:if="${pck.key.operator.shortName.toLowerCase().contains('sbs')}"-->
+                                <!--th:src="@{/res/images/operator/sbs.png}" height="50"/>-->
+
+                                <!--<img th:if="${pck.key.operator.shortName.toLowerCase().contains('orion')}" th:src="@{/res/images/operator/orion.png}" height="50"/>-->
+                                <!--<img th:if="${pck.key.operator.shortName.toLowerCase().contains('wimax')}" th:src="@{/res/images/operator/wimax.png}" height="50"/>-->
+                            </a>
+                        </td>
+                        <td width="200" th:text="|${pck.value.monthlyFee} €|">Pretplata</td>
+                        <td width="200" th:text="|${pck.value.price} €|">Cijena</td>
+                        <td width="150" align="right" >
+                            <a th:if="${pck.value.promoOn}" class="btn btn-danger promo-trigger" data-toggle="tooltip" data-placement="top"
+                               title="Promocija" th:attr="data-target=${'#pck-promo-' + pck.key.id}"><i class="glyphicon glyphicon-bullhorn "></i></a>
+                            <a th:if="${pck.key.priceListPath}" class="btn btn-primary pck-pricemap"
+                               th:href="${priceListDownloadUrl} + '/packet/' + ${pck.key.id}" data-toggle="tooltip" data-placement="top"
+                               title="Cjenovnik"><i
+                                    class="glyphicon glyphicon-list-alt"></i></a>
+
+
+                        </td>
+
+                    </tr>
+                    <tr>
+                        <td style="border: none !important; color:#999999 !important; line-height: 14px !important; font-weight: normal !important; font-size: 12px !important; height: auto !important;" colspan="5" th:text="${pck.key.additionalNotes}"></td>
+                    </tr>
+                </table>
+            </div>
+
+            <div th:unless="${result.packets.size() > 0}">
+                <h3>Nije pronađen niti jedan paket sa traženim uslugama</h3>
+            </div>
+
+
+            <div th:each="pck : ${result.packets.entrySet()}">
+                <div th:if="${pck.value.promoOn}" th:id="|pck-promo-${pck.key.id}|" class="modal fade ">
+                    <div class="modal-dialog modal-lg">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                <h4 class="modal-title" th:text="${pck.key.name} + ' - promocija'">Promocija</h4>
+                            </div>
+                            <div class="modal-body">
+                                <p th:text="${pck.value.promoText}">Tekst promocije</p>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-default" data-dismiss="modal" th:text="#{calculator.closeButton}">Zatvori</button>
+                            </div>
+                        </div><!-- /.modal-content -->
+                    </div><!-- /.modal-dialog -->
+                </div><!-- /.modal -->
+            </div>
+
+
+        </div>
+
+
+
+        <!--@thymesVar id="tariffs" type="java.util.Map<hr.m2stanic.smartbuilding.core.tariff.Tariff, java.math.BigDecimal>"-->
+        <div th:if="${result.tariffs}">
+
+            <div th:if="${result.tariffs.size() > 0}">
+                <h3 th:text="#{calculator.forGivenConsumptionSuggestion}">Za danu potrošnju predlažemo sljedeće tarife</h3>
+
+                <table class="table table-hover">
+                    <tr>
+                        <th>Tarifa</th>
+                        <th width="150" style="text-align: center">Operator</th>
+                        <th width="150">Pretplata</th>
+                        <th width="150" th:if="${result.isApplyOptions()}" style="color: red">Opcije</th>
+                        <th width="150" th:text="#{calculator.total}">Ukupno</th>
+                        <th width="150"></th>
+                    </tr>
+                </table>
+
+                <table class="table table-hover" th:each="trf : ${result.tariffs.entrySet()}">
+                    <tr valign="middle">
+                        <td th:text="${trf.key.publicName}">Tarifa</td>
+                        <td width="150" align="center">
+                            <a target="_blank" th:href="${trf.key.operator.getOperatorGroup().getWebsiteUrl()}">
+
+                                <img th:if="${trf.key.operator.operatorGroup.logoFileName}"
+                                     th:src="@{/res/images/operator/{ln}(ln=${trf.key.operator.operatorGroup.logoFileName})}"
+                                     height="50"/>
+
+
+                                <!--<img th:if="${trf.key.operator.shortName.toLowerCase().contains('telenor')}" th:src="@{/res/images/operator/telenor.png}" height="50"/>-->
+                                <!--<img th:if="${trf.key.operator.shortName.toLowerCase().contains('telekom') or trf.key.operator.shortName.toLowerCase().contains('ct -')}" th:src="@{/res/images/operator/ct.png}" height="50"/>-->
+                                <!--<img th:if="${trf.key.operator.shortName.toLowerCase().contains('mtel')}" th:src="@{/res/images/operator/mtel.png}" height="50"/>-->
+                                <!--<img th:if="${trf.key.operator.shortName.toLowerCase().contains('total')}" th:src="@{/res/images/operator/totaltv.png}" height="50"/>-->
+                                <!--<img th:if="${trf.key.operator.shortName.toLowerCase().contains('telemach')}" th:src="@{/res/images/operator/telemach.png}" height="50"/>-->
+                                <!--<img th:if="${trf.key.operator.shortName.toLowerCase().contains('mkabl')}" th:src="@{/res/images/operator/mkabl.png}" height="50"/>-->
+                                <!--<img th:if="${trf.key.operator.shortName.toLowerCase().contains('sbs')}" th:src="@{/res/images/operator/sbs.png}" height="50"/>-->
+                                <!--<img th:if="${trf.key.operator.shortName.toLowerCase().contains('orion')}" th:src="@{/res/images/operator/orion.png}" height="50"/>-->
+                                <!--<img th:if="${trf.key.operator.shortName.toLowerCase().contains('wimax')}" th:src="@{/res/images/operator/wimax.png}" height="50"/>-->
+
+                            </a>
+                        </td>
+                        <td width="150"
+                            th:text="${trf.value.monthlyFee != null} ? (${trf.value.monthlyFee} + ' €') : '0.00 €'">
+                            Pretplata
+                        </td>
+                        <td width="150" style="color: red" th:if="${result.isApplyOptions()}"
+                            th:text="|${trf.value.optionsCost} €|">Opcije
+                        </td>
+                        <td width="150" th:with="tariffClass=${trf.key.getClass().getSimpleName()}">
+                            <span th:text="|${trf.value.price} €|">Ukupno</span> &nbsp;&nbsp;
+                            <span th:if="${tariffClass != 'MobileTariff' and trf.key.networkAccessFee > 0} " type="button" class="text-danger"
+                                  data-toggle="popover" data-placement="left" data-trigger="hover"
+                                  th:attr="data-content='Plaća se i mjesečna naknada za pristup mreži u iznosu od ' + ${trf.key.networkAccessFee.setScale(2)} + ' €,  ako se ista ne plaća po osnovu korišćenja drugog servisa.'">
+                                <i class="glyphicon glyphicon-exclamation-sign" style="font-size: 20px"></i>
+                            </span>
+                        </td>
+
+                        <td width="150" align="right">
+                            <a th:if="${trf.value.promoOn}" class="btn btn-danger promo-trigger " title="Promocija" data-toggle="tooltip"
+                               data-placement="top"
+                               th:attr="data-target=${'#trf-promo-' + trf.key.id}"><i class="glyphicon glyphicon-bullhorn"></i></a>
+
+                            <a th:if="${trf.key.priceListPath}" class="btn btn-primary trf-pricemap"
+                               th:href="${priceListDownloadUrl} + '/tariff/' + ${trf.key.id}"
+                               data-toggle="tooltip" data-placement="top" title="Cjenovnik"><i class="glyphicon glyphicon-list-alt"></i></a>
+
+                            <a class="btn btn-primary trf-calc" href="#" th:attr="data-trf-id=${trf.key.id}" data-toggle="tooltip"
+                               data-placement="top" title="Izračun"><i class="glyphicon glyphicon-th"></i></a>
+                        </td>
+
+                    </tr>
+                    <tr>
+                        <td style="border: none !important; color:#999999 !important; line-height: 14px !important; font-weight: normal !important; font-size: 12px !important; height: auto !important;" colspan="5" th:text="${trf.key.additionalNotes}"></td>
+                    </tr>
+                </table>
+            </div>
+
+            <div th:unless="${result.tariffs.size() > 0}">
+                <h3>Nije pronađena niti jedna tarifa koja odgovara danoj potrošnji</h3>
+            </div>
+
+
+            <div th:each="trf : ${result.tariffs.entrySet()}">
+
+                <div  th:id="|calc-${trf.key.id}|" class="modal fade ">
+                    <div class="modal-dialog modal-lg">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                <h4 class="modal-title" th:text="|Izračun za tarifu: ${trf.key.name}|">Izračun</h4>
+                            </div>
+                            <div class="modal-body calc-detail" style="max-height: 600px; overflow: auto">
+
+                                <div>
+
+                                    <!-- Nav tabs -->
+                                    <ul th:if="${trf.key.type == T(hr.m2stanic.smartbuilding.core.tariff.TariffType).MOBILE or trf.key.type == T(hr.m2stanic.smartbuilding.core.tariff.TariffType).INTERNET}" class="nav nav-tabs" role="tablist">
+                                        <li role="presentation" class="active"><a th:href="${'#result-basic-' + trf.key.id}" aria-controls="home" role="tab" data-toggle="tab">Izračun</a></li>
+                                        <li role="presentation"><a th:href="${'#result-options-' + trf.key.id}" aria-controls="profile" role="tab" data-toggle="tab">
+                                            <span th:text="|Opcije (${trf.value.appliedOptions.size()} / ${trf.value.notAppliedOptions.size() + trf.value.appliedOptions.size()})|"></span>
+                                        </a></li>
+
+                                    </ul>
+
+                                    <!-- Tab panes -->
+                                    <div class="tab-content" style="padding: 15px !important;">
+
+                                        <div role="tabpanel" class="tab-pane active" th:id="${'result-basic-' + trf.key.id}">
+
+                                            <div th:if="${trf.key.type == T(hr.m2stanic.smartbuilding.core.tariff.TariffType).MOBILE or trf.key.type == T(hr.m2stanic.smartbuilding.core.tariff.TariffType).FIXED_TEL}">
+
+                                                <div th:if="${!trf.value.callsConsumption.isEmpty()}" th:each="cg : ${trf.value.callsConsumption.getDestinationGroups()}">
+                                                    <div th:replace="calculator/dest-group-result :: content(${'calls-' + trf.key.id + '-' + cgStat.index}, ${cg}, ${trf.value.callsResults}, 1, 1)"></div>
+                                                </div>
+
+                                                <div th:if="${!trf.value.smsConsumption.isEmpty()}" th:each="cg : ${trf.value.smsConsumption}">
+                                                    <div th:replace="calculator/dest-group-result :: content(${'sms-' + trf.key.id + '-' + cgStat.index}, ${cg}, ${trf.value.smsResults}, 1, 0)"></div>
+                                                </div>
+
+                                                <div th:if="${!trf.value.mmsConsumption.isEmpty()}">
+                                                    <div  th:replace="calculator/dest-group-result :: content(${'mms-' + trf.key.id + '-' + 1}, ${trf.value.mmsConsumption}, ${trf.value.mmsResults}, 1, 0)"></div>
+                                                </div>
+
+                                                <div th:if="${!trf.value.dataConsumption.isEmpty()}">
+                                                    <div  th:replace="calculator/dest-group-result :: content(${'data-' + trf.key.id + '-' + 1}, ${trf.value.dataConsumption}, ${trf.value.dataResults}, 1, 0)"></div>
+                                                </div>
+
+
+                                                <div th:if="${trf.value.appliedOptions.size() > 0}" class="panel panel-default consumption-dest-group">
+                                                    <div class="panel-heading">
+                                                        <table class="table">
+                                                            <tr>
+                                                                <td>Primjenjene opcije</td>
+                                                                <td width="100" th:text="|${trf.value.appliedOptionsCount}  ${trf.value.appliedOptionsCount % 10 == 1 ? 'opcija' : 'opcije'}| "></td>
+                                                                <td width="100" th:text="${trf.value.optionsCost + ' €'}"> cost</td>
+                                                                <td width="100" align="right"></td>
+                                                            </tr>
+                                                        </table>
+                                                    </div>
+
+                                                    <div class="panel-body" >
+                                                        <div class="result-overview" >
+                                                            <table class="table">
+                                                                <tr th:each="opEntry : ${trf.value.appliedOptions.entrySet()} ">
+                                                                    <td th:text="|${opEntry.value} x ${'&quot;' + opEntry.key.name + '&quot;'} = ${opEntry.key.price.doubleValue() * opEntry.value} €|"></td>
+                                                                </tr>
+                                                            </table>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div th:if="${trf.value.monthlyFee != null}" class="panel panel-default consumption-dest-group">
+                                                    <div class="panel-heading">
+                                                        <table class="table">
+                                                            <tr>
+                                                                <td>Mjesečna pretplata</td>
+                                                                <td width="100"></td>
+                                                                <td width="100" th:text="${trf.value.monthlyFee + ' €'}"> cost</td>
+                                                                <td width="100" align="right"></td>
+                                                            </tr>
+                                                        </table>
+                                                    </div>
+
+                                                </div>
+
+                                                <div class="panel panel-default consumption-dest-group">
+                                                    <div class="panel-heading">
+                                                        <table class="table">
+                                                            <tr>
+                                                                <td>UKUPNO</td>
+                                                                <td width="100"></td>
+                                                                <td width="100" th:text="${trf.value.price + ' €'}"> cost</td>
+                                                                <td width="100" align="right"></td>
+                                                            </tr>
+                                                        </table>
+                                                    </div>
+
+                                                </div>
+
+
+                                            </div>
+
+                                            <p th:unless="${trf.key.type == T(hr.m2stanic.smartbuilding.core.tariff.TariffType).MOBILE or trf.key.type == T(hr.m2stanic.smartbuilding.core.tariff.TariffType).FIXED_TEL}"
+                                               th:utext="${#strings.replace(trf.value.logToString(),T(java.lang.System).getProperty('line.separator'),'&lt;br /&gt;')}" ></p>
+
+                                        </div>
+
+                                        <div th:if="${trf.key.type == T(hr.m2stanic.smartbuilding.core.tariff.TariffType).MOBILE or trf.key.type == T(hr.m2stanic.smartbuilding.core.tariff.TariffType).INTERNET}" role="tabpanel" class="tab-pane" th:id="${'result-options-' + trf.key.id}">
+
+                                             <table class="table table-striped">
+                                                 <tr th:each="entry : ${trf.value.appliedOptions.entrySet()}" >
+                                                     <td th:text="${entry.key.name}" style="font-weight:bold !important"></td>
+                                                     <td th:text="|${entry.value} puta|" style="font-weight:bold !important"></td>
+                                                 </tr>
+                                                 <tr th:each="entry : ${trf.value.notAppliedOptions.entrySet()}" >
+                                                     <td th:text="${entry.key.name}" style="font-weight: normal !important"></td>
+                                                     <td th:text="|${entry.value} puta|" style="font-weight: normal !important"></td>
+                                                 </tr>
+                                             </table>
+
+                                        </div>
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-default" data-dismiss="modal" th:text="#{calculator.closeButton}">Zatvori</button>
+                            </div>
+                        </div><!-- /.modal-content -->
+                    </div><!-- /.modal-dialog -->
+                </div><!-- /.modal -->
+
+
+                <div th:if="${trf.value.promoOn}" th:id="|trf-promo-${trf.key.id}|" class="modal fade ">
+                    <div class="modal-dialog modal-lg">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                <h4 class="modal-title" th:text="${trf.key.name} + ' - promocija'">Promocija</h4>
+                            </div>
+                            <div class="modal-body">
+                                <p th:text="${trf.value.promoText}">Tekst promocije</p>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-default" data-dismiss="modal" th:text="#{calculator.closeButton}">Zatvori</button>
+                            </div>
+                        </div><!-- /.modal-content -->
+                    </div><!-- /.modal-dialog -->
+                </div><!-- /.modal -->
+
+            </div>
+
+
+        </div>
+
+
+        <hr/>
+        <div class="row top-margin-20">
+            <div class="col-xs-12 form-group final-btn">
+                <a th:href="${backUrl}" class="btn btn-default pull-right" th:text="#{calculator.backButton}">Nazad</a>
+            </div>
+        </div>
+
+    </div>
+
+
+    <script type="text/javascript" inline="javascript">
+
+        $(document).ready(function(){
+            $(".trf-calc").on("click", function(ev){
+                var tariffId = $(this).attr("data-trf-id");
+                $("#calc-" + tariffId).modal("show");
+            });
+
+            $(".trf-pricemap").on("click", function(ev){
+                var tariffId = $(this).attr("data-trf-id");
+                $("#pricemap-" + tariffId).modal("show");
+            });
+
+            $(".pck-calc").on("click", function(ev){
+                var tariffId = $(this).attr("data-pck-id");
+                $("#pck-calc-" + tariffId).modal("show");
+            });
+
+            $(".pck-pricemap").on("click", function(ev){
+                var tariffId = $(this).attr("data-pck-id");
+                $("#pck-pricemap-" + tariffId).modal("show");
+            });
+
+            $('[data-toggle="tooltip"]').tooltip();
+            $('[data-toggle="popover"]').popover();
+
+            $('.promo-trigger').on("click", function (ev) {
+                var elIdSelector = $(this).attr("data-target");
+                $(elIdSelector).modal("show");
+            });
+        });
+
+
+
+    </script>
+
+
+
+
+
+</div>
+
+
+
+</body>
+</html>

@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+
+<head lang="en">
+    <meta charset="UTF-8"/>
+    <title>Smart building</title>
+</head>
+<body>
+
+<div th:fragment="content">
+
+    <div>
+
+        <h2>Pregled aktivnost</h2>
+
+        <div class="panel">
+
+            <div class="panel-body">
+
+                <form id="actionFilterForm"  th:action="@{/admin/}">
+
+                    <!--<div class="form-group" th:if="${loggedInUser.company instanceof T(hr.m2stanic.smartbuilding.core.company.Agency)}">-->
+                        <!--<div class="row">-->
+                            <!--<div class="col-sm-12">-->
+                                <!--<label class="control-label">Organizacija:</label>-->
+                                <!--<select name="companyId" class="form-control" style="width: auto !important;display: inline-block;">-->
+                                    <!--<option value="-1">Sve</option>-->
+                                    <!--<option th:each="ag : ${agencies}" th:value="${ag.id}" th:text="${ag.name}" th:selected="${ag.id == company?.id}"></option>-->
+                                    <!--<option th:each="op : ${userGroups}" th:value="${op.id}" th:text="${op.name}" th:selected="${op.id == company?.id}"></option>-->
+                                <!--</select>-->
+
+                                <!--&nbsp;&nbsp;&nbsp;&nbsp;-->
+                                <!--<input type="checkbox" name="onlyApprovalRequests" id="onlyApprovalRequests" th:checked="${onlyApprovalRequests}"/>-->
+                                <!--<label for="onlyApprovalRequests" class="control-label">Samo aktivni zahtjevi za odobrenje</label>-->
+
+                            <!--</div>-->
+
+                            <!--<br/><br/>-->
+                        <!--</div>-->
+                    <!--</div>-->
+
+                    <input type="hidden" name="page" value="1"/>
+
+                </form>
+
+                <table class="table">
+                    <thead>
+                    <tr class="primary">
+                        <th>Vrijeme</th>
+                        <th>Organizacija</th>
+                        <th>Korisnik</th>
+                        <th>Tip akcije</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                        <!--@thymesVar id="userActions" type="org.springframework.data.domain.Page<hr.m2stanic.smartbuilding.core.action.UserAction>"-->
+                        <tr th:each="act : ${userActions}">
+                            <td th:text="${act.time.toString('dd.MM.yyyy HH:mm')}">Company name</td>
+                            <td th:text="${act.userCompanyName}">Company name</td>
+                            <td th:text="${act.userName}">User name</td>
+                            <td>
+                                <span th:replace="admin/user-actions/action-detail :: content(${act})">Opis akcije</span>
+                            </td>
+                        </tr>
+
+                    </tbody>
+                </table>
+
+                <!--<ul th:if="${userActions.totalPages &gt; 1}" class="pagination">-->
+                    <!--<li class="paginate_button previous" th:classappend="${userActions.number == 0} ? 'disabled'" aria-controls="datatable" tabindex="0" id="datatable_previous">-->
+                        <!--<a th:href="'javascript:refreshPage(__${userActions.number}__)'"><i class="glyphicons glyphicons-chevron-left"></i></a>-->
+                    <!--</li>-->
+
+                    <!--<li class="disabled" aria-controls="datatable" tabindex="0">-->
+                        <!--<a href="#" th:text="${userActions.number + 1} + ' / ' + ${userActions.totalPages}"></a>-->
+                    <!--</li>-->
+
+                    <!--<li class="paginate_button next" th:classappend="${userActions.number >= userActions.totalPages - 1 } ? 'disabled'" aria-controls="datatable" tabindex="0" id="datatable_next">-->
+                        <!--<a th:href="'javascript:refreshPage(__${userActions.number + 2}__)'" ><i class="glyphicons glyphicons-chevron-right"></i></a>-->
+                    <!--</li>-->
+                <!--</ul>-->
+
+            </div>
+        </div>
+
+        <script th:inline="javascript">
+
+            function refreshPage(pageNo){
+                $("#actionFilterForm input[name='page']").val(pageNo);
+                var data = $("#actionFilterForm").serialize();
+                var url = url = [[@{/admin/}]];
+                document.location = url + "?" + data;
+            }
+
+            $(document).ready(function() {
+
+                $("#actionFilterForm select, #actionFilterForm input").on("change", function(ev){
+                    ev.preventDefault();
+                    refreshPage(1);
+                });
+
+
+
+                $("li.disabled a").on("click", function(ev){
+                    ev.preventDefault();
+                });
+            });
+        </script>
+
+
+    </div>
+</div>
+
+
+
+
+
+
+</body>
+</html>

@@ -1,0 +1,13 @@
+tmp
+.gradle/
+idea
+.idea
+/build
+classes
+build
+out
+*.iml
+*.ipr
+*.iws
+*.ids
+.DS_Store

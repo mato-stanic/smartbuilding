@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+
+<head lang="en">
+    <meta charset="UTF-8"/>
+    <title>Smart building</title>
+</head>
+<body>
+
+<div th:fragment="content">
+
+    <div>
+
+        <h2 th:if="${apartment}" th:text="|${apartment.name} korisnici|">Korisnici operatera</h2>
+        <h2 th:unless="${apartment}">Svi korisnici</h2>
+
+        <div class="panel">
+
+
+            <div class="panel-body">
+
+                <table class="table">
+                    <thead>
+                    <tr class="primary">
+                        <th>Login</th>
+                        <th>Ime i prezime</th>
+                        <th>Organizacija</th>
+                        <th></th>
+                        <th></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <!--@thymesVar id="userList" type="java.util.List<hr.m2stanic.smartbuilding.web.dto.UserDTO>"-->
+                        <tr th:each="user : ${userList}">
+                            <td th:text="${user.username}">User</td>
+                            <td th:text="${user.fullName}">Ime i prezime</td>
+                            <td th:text="${user.company.name}">Organizacija</td>
+
+                            <td style="font-size: 1.5em;" width="40" align="center">
+                                <a th:if="${apartment}" th:href="@{/admin/user/edit(id=${user.id}, apartmentId=${apartment.id})}" title="Uredi">
+                                    <span class="fa fa-edit"></span>
+                                </a>
+                                <a  th:unless="${apartment}" th:href="@{/admin/user/edit(id=${user.id})}" title="Uredi">
+                                    <span class="fa fa-edit"></span>
+                                </a>
+                            </td>
+                            <td style="font-size: 1.5em;" width="40" align="center">
+                                <a  href="#" title="Obriši" class="delete-user" th:attr="data-user-id = ${user.id}">
+                                    <span class="fa fa-trash-o"></span>
+                                </a>
+                            </td>
+                        </tr>
+
+                    </tbody>
+                </table>
+
+                <hr/>
+                <div>
+                    <a th:if="${apartment}" th:href="@{/admin/user/edit(apartmentId=${apartment.id})}">
+                        <button type="button" class="btn btn-dark btn-gradient dark pull-right">Dodaj</button>
+                    </a>
+                    <a th:unless="${apartment}" th:href="@{/admin/user/edit}">
+                        <button type="button" class="btn btn-dark btn-gradient dark pull-right">Dodaj</button>
+                    </a>
+                </div>
+
+            </div>
+        </div>
+
+
+
+        <script th:inline="javascript">
+            //<![CDATA[
+            var apartmentId = [[${apartment != null ? apartment.id : false}]];
+            $(document).ready(function (){
+                $(".delete-user").on("click", function(ev){
+                    ev.preventDefault();
+                    var uId = $(this).attr("data-user-id");
+                    var targetUrl = [[@{/admin/user/delete}]] + "?id=" + uId;
+                    if(operatorId)
+                        targetUrl += "&apartmentId=" + apartmentId;
+                    var onConfirm = function(){
+                        window.location = targetUrl;
+                    };
+                    showConfirmDialog(onConfirm, "Potvrda brisanja", "Jeste li sigurni da želite obrisati ovog korisnika?");
+                });
+            });
+            //]]>
+        </script>
+    </div>
+</div>
+
+
+
+
+
+
+</body>
+</html>

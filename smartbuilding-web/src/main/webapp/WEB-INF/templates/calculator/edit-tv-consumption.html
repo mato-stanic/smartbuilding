@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+
+<head lang="en">
+    <meta charset="UTF-8"/>
+    <title>Smart building</title>
+</head>
+<body>
+
+
+
+<div th:fragment="content" class="consumption tv-consumption">
+
+
+    <form id="tv-consumption-form" class="form-horizontal" role="form" method="post" th:object="${consumption}">
+
+
+
+
+        <!--<div class="row top-margin-20">-->
+            <!--<div class="col-sm-6 col-lg-7 col-sm-offset-6 col-lg-offset-5 ">-->
+                <!--<label style="width:100% !important; text-align: center;margin-bottom: 10px;">Procjena broja praćenih kanala </label>-->
+                <!--<div class="main-slider">-->
+                    <!--<div class="slider"> </div>-->
+                <!--</div>-->
+
+                <!--<div class="row top-margin-10">-->
+                    <!--<div class="col-xs-4 " style="padding-bottom: 2px !important; text-align: center;height: 18px;font-size: 12px">Malo</div>-->
+                    <!--<div class="col-xs-4" style="padding-bottom: 2px !important; text-align: center;height: 18px;font-size: 12px">Srednje</div>-->
+                    <!--<div class="col-xs-4" style="padding-bottom: 2px !important; text-align: center;height: 18px;font-size: 12px">Mnogo</div>-->
+                <!--</div>-->
+            <!--</div>-->
+        <!--</div>-->
+        <!--<hr/>-->
+
+
+        <div th:unless="${consumption.isPacket()}" class="row top-margin-20">
+            <label class="col-sm-6 col-lg-5 control-label" th:text="#{calculator.userType}">Tip korisnika</label>
+            <div class="col-sm-6 col-lg-7">
+                <div class="bs-component">
+                    <select th:field="*{tvConsumption.userType}"  class="form-control userTypeSelect">
+                        <option th:each="ut : ${T(hr.m2stanic.smartbuilding.core.tariff.UserType).values()}"
+                                th:value="${ut.name()}"
+                                th:text="${ut.displayName}" >Tip korisnika</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+
+
+        <hr/>
+        <div th:unless="${consumption.isPacket()}" class="row top-margin-20">
+            <label class="col-sm-6 col-lg-5 control-label" th:text="#{calculator.technology}">Tehnologija</label>
+            <div class="col-sm-6 col-lg-7">
+                <div class="bs-component">
+                    <select th:field="*{tvConsumption.technology}"  class="form-control">
+                        <option value="" th:text="#{calculator.any}">Bilo koja</option>
+                        <option th:each="ut : ${T(hr.m2stanic.smartbuilding.core.AudioVideoTech).values()}"
+                                th:value="${ut.name()}"
+                                th:text="${ut.displayName}" >Tehnologija</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <!--<div class="row top-margin-20">-->
+            <!--<label class="col-sm-6 col-lg-5 control-label">Broj kanala</label>-->
+            <!--<div class="col-sm-6 col-lg-7">-->
+                <!--<div class="bs-component">-->
+                    <!--<input type="text"  th:field="*{tvConsumption.numberOfChannels}" class="form-control" id="tvConsumption-channels-number"-->
+                           <!--data-bv-notempty=""  data-bv-notempty-message="Polje mora biti popunjeno"-->
+                           <!--data-bv-numeric ="" data-bv-numeric-message="Unesite brojčanu vrijednost"/>-->
+                <!--</div>-->
+            <!--</div>-->
+        <!--</div>-->
+
+
+
+        <div class="row top-margin-20">
+            <label class="col-sm-6 col-lg-5 control-label" th:text="#{calculator.recordingSupported}">Snimalica</label>
+            <div class="col-sm-6 col-lg-7">
+                <div class="bs-component">
+                    <span class="form-control">
+                        <input type="checkbox"  th:field="*{tvConsumption.usingVideoRecording}" id="tvConsumption-video-recording" />
+                    </span>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="row top-margin-20">
+            <label class="col-sm-6 col-lg-5 control-label" th:text="#{calculator.videoLibrary}">Videoteka</label>
+            <div class="col-sm-6 col-lg-7">
+                <div class="bs-component">
+                    <span class="form-control" ><input type="checkbox"  th:field="*{tvConsumption.usingVideoStore}" id="tvConsumption-video-store" /></span>
+                </div>
+            </div>
+        </div>
+
+        <div class="row top-margin-20">
+            <label class="col-sm-6 col-lg-5 control-label" th:text="#{calculator.watchingOnComputerOrPhone}">Gledanje na računalu ili telefonu</label>
+            <div class="col-sm-6 col-lg-7">
+                <div class="bs-component">
+                    <span class="form-control" ><input type="checkbox"  th:field="*{tvConsumption.usingMoreScreens}" id="tvConsumption-more-screens" /></span>
+                </div>
+            </div>
+        </div>
+
+        <input type="hidden" name="tvConsumption.userProfile" th:value="-1"/>
+
+        <div class="row top-margin-20">
+            <div class="col-xs-12 form-group">
+                <span class="final-btn">
+                    <button type="button" class="consumption-submit btn btn-default pull-right" th:text="#{calculator.calculate}">Izračunaj</button>
+                </span>
+                <button th:if="${consumption.hasFixedTariff() or consumption.hasMobileTariff() or consumption.hasInternetTariff()}" type="button" class="consumption-prev btn btn-primary pull-right" th:text="#{userAndAdmin.common.backButton}">Nazad</button>
+
+            </div>
+        </div>
+
+    </form>
+
+    
+</div>
+
+
+
+</body>
+</html>

@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+
+
+<head th:replace="admin/fragments/head :: head">
+    <meta charset="UTF-8"/>
+    <title></title>
+</head>
+
+
+<body class="admin-elements-page" data-spy="scroll" data-target="#nav-spy" data-offset="300">
+
+
+<!-- Start: Main -->
+<div id="main">
+
+    <!-- Start: Header -->
+    <header class="navbar navbar-fixed-top">
+        <div class="navbar-branding dark">
+            <a class="navbar-brand" th:href="@{/admin/}">
+                <b>Smart building </b>Administracija
+            </a>
+            <span id="toggle_sidemenu_l" class="ad ad-lines"></span>
+        </div>
+
+
+        <ul class="nav navbar-nav navbar-right">
+
+            <!--<li class="dropdown">-->
+                <!--<a class="dropdown-toggle" data-toggle="dropdown" href="#">-->
+                    <!--<span class="ad ad-radio-tower fs18"></span>-->
+                <!--</a>-->
+                <!--<ul class="dropdown-menu media-list w350 animated animated-shorter fadeIn" role="menu">-->
+                    <!--<li class="dropdown-header">-->
+                        <!--<span class="dropdown-title"> Notifications</span>-->
+                        <!--<span class="label label-warning">12</span>-->
+                    <!--</li>-->
+                    <!--<li class="media">-->
+                        <!--<a class="media-left" href="#"> <img src="assets/img/avatars/5.jpg" class="mw40" alt="avatar"/> </a>-->
+                        <!--<div class="media-body">-->
+                            <!--<h5 class="media-heading">Article-->
+                                <!--<small class="text-muted">- 08/16/22</small>-->
+                            <!--</h5> Last Updated 36 days ago by-->
+                            <!--<a class="text-system" href="#"> Max </a>-->
+                        <!--</div>-->
+                    <!--</li>-->
+                    <!--<li class="media">-->
+                        <!--<a class="media-left" href="#"> <img src="assets/img/avatars/2.jpg" class="mw40" alt="avatar"/> </a>-->
+                        <!--<div class="media-body">-->
+                            <!--<h5 class="media-heading mv5">Article-->
+                                <!--<small> - 08/16/22</small>-->
+                            <!--</h5>-->
+                            <!--Last Updated 36 days ago by-->
+                            <!--<a class="text-system" href="#"> Max </a>-->
+                        <!--</div>-->
+                    <!--</li>-->
+                    <!--<li class="media">-->
+                        <!--<a class="media-left" href="#"> <img src="assets/img/avatars/3.jpg" class="mw40" alt="avatar"/> </a>-->
+                        <!--<div class="media-body">-->
+                            <!--<h5 class="media-heading">Article-->
+                                <!--<small class="text-muted">- 08/16/22</small>-->
+                            <!--</h5> Last Updated 36 days ago by-->
+                            <!--<a class="text-system" href="#"> Max </a>-->
+                        <!--</div>-->
+                    <!--</li>-->
+                    <!--<li class="media">-->
+                        <!--<a class="media-left" href="#"> <img src="assets/img/avatars/4.jpg" class="mw40" alt="avatar"/> </a>-->
+                        <!--<div class="media-body">-->
+                            <!--<h5 class="media-heading mv5">Article-->
+                                <!--<small class="text-muted">- 08/16/22</small>-->
+                            <!--</h5> Last Updated 36 days ago by-->
+                            <!--<a class="text-system" href="#"> Max </a>-->
+                        <!--</div>-->
+                    <!--</li>-->
+                <!--</ul>-->
+            <!--</li>-->
+
+            <!--<li class="dropdown">-->
+                <!--<a class="dropdown-toggle" data-toggle="dropdown" href="#">-->
+                    <!--<span class="flag-xs flag-us"></span> US-->
+                <!--</a>-->
+                <!--<ul class="dropdown-menu pv5 animated animated-short flipInX" role="menu">-->
+                    <!--<li>-->
+                        <!--<a href="javascript:void(0);">-->
+                            <!--<span class="flag-xs flag-uk mr10"></span> English </a>-->
+                    <!--</li>-->
+                    <!--<li>-->
+                        <!--<a href="javascript:void(0);">-->
+                            <!--<span class="flag-xs flag-sr mr10"></span> Srpski </a>-->
+                    <!--</li>-->
+
+                <!--</ul>-->
+            <!--</li>-->
+
+            <li class="dropdown">
+                <a href="#" class="dropdown-toggle fw600 p15" data-toggle="dropdown" th:inline="text">  [[${loggedInUser.fullName}]]
+                    <span class="caret caret-tp hidden-xs"></span>
+                </a>
+                <ul class="dropdown-menu list-group dropdown-persist w250" role="menu">
+
+
+                    <li class="list-group-item">
+                        <a href="#" onclick="showAccSettingsModal();" class="animated animated-short fadeIn">
+                            <span class="glyphicons glyphicons-settings"></span> Postavke korisničkog računa </a>
+                    </li>
+
+                    <li class="list-group-item">
+                        <a th:href="@{/admin/logout}" class="animated animated-short fadeIn">
+                            <span class="fa fa-power-off"></span> Odjava </a>
+                    </li>
+                </ul>
+            </li>
+        </ul>
+
+    </header>
+    <!-- End: Header -->
+
+    <!-- Start: Sidebar -->
+    <aside id="sidebar_left" class="nano nano-primary affix">
+
+        <!-- Start: Sidebar Left Content -->
+        <div th:replace="admin/fragments/navigation :: navigation"></div>
+        <!-- End: Sidebar Left Content -->
+
+    </aside>
+
+    <!-- Start: Content-Wrapper -->
+    <section id="content_wrapper" th:unless="${mainNavSel == T(hr.m2stanic.smartbuilding.web.admin.MainNavigationItem).CALCULATION}">
+
+        <!-- Begin: Content -->
+        <section id="content" class="animated fadeIn table-layout" th:include="${view} :: content">
+
+            <div>Page Content</div>
+
+        </section>
+
+        <footer>
+            Smart building
+        </footer>
+
+    </section>
+
+    <section id="content_wrapper" th:if="${mainNavSel == T(hr.m2stanic.smartbuilding.web.admin.MainNavigationItem).CALCULATION}">
+
+        <!-- Begin: Content -->
+        <section id="content" class="animated fadeIn" >
+
+            <div class="tray tray-center">
+
+                <div class="mw1000 center-block">
+
+                    <div class="blue-top panel" th:include="${view} :: content">
+
+
+                    </div>
+                </div>
+            </div>
+
+        </section>
+        <footer>
+            Smart building
+        </footer>
+
+    </section>
+
+
+
+
+
+    <div class="modal fade" id="confirmDeleteModal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">Modal title</h4>
+                </div>
+                <div class="modal-body">
+                    <p>One fine body&hellip;</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="cancel-btn btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="button" class="ok-btn btn btn-primary" onclick="confirmCallback();">OK</button>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+
+
+    <div class="modal fade" id="messageModal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">Modal title</h4>
+                </div>
+                <div class="modal-body">
+                    <p>One fine body&hellip;</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="cancel-btn btn btn-default" data-dismiss="modal" th:text="#{admin.closeButton}">Zatvori</button>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+
+    <div class="modal fade" id="deactivateModal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">Modal title</h4>
+                </div>
+                <div class="modal-body">
+                    <form id="deactivateForm" class="form-horizontal" onsubmit="return false;">
+
+                        <div class="form-group">
+                            <label class="col-sm-5 control-label">Vrijeme deaktivacije</label>
+                            <div class="col-sm-7">
+                                <div class="bs-component">
+                                    <div class='input-group date' id="deactivateTime" >
+                                        <input type='text' class="form-control" name="toDateTime" />
+                                        <span class="input-group-addon">
+                                            <span class="glyphicon glyphicon-calendar"></span>
+                                        </span>
+                                    </div>
+                                </div>
+                                <script th:inline="javascript">
+                                    $(function () {
+                                        var today = new Date();
+                                        today.setHours(0,0,0,0);
+                                        $('#deactivateTime').datetimepicker({format:'DD.MM.YYYY HH:mm', sideBySide:true, defaultDate:today});
+                                    });
+                                </script>
+                            </div>
+                        </div>
+
+                        <input type="hidden" name="id" value="0"/>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="cancel-btn btn btn-default" data-dismiss="modal">Odustani</button>
+                    <button type="button" class="cancel-btn btn btn-primary deactivate-tariff hide" th:onclick="'deactivateTariff(__${operator?.id}__);'">Arhiviraj tarifu</button>
+                    <button type="button" class="cancel-btn btn btn-primary deactivate-packet hide" th:onclick="'deactivatePacket(__${operator?.id}__);'">Arhiviraj paket</button>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+
+
+    <div class="modal fade" id="accSettingsModal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">Postavke korisničkog računa</h4>
+                </div>
+                <div class="modal-body">
+                    <form id="accountSettingsForm" class="form-horizontal" onsubmit="saveAccSettings(); return false;">
+
+                        <div class="form-group">
+                            <label class="col-sm-5 control-label">Email:</label>
+                            <div class="col-sm-7">
+                                <div class="bs-component">
+                                    <input type='text' class="form-control" name="email" th:value="${loggedInUser.email}"
+                                           data-bv-notempty=""  data-bv-notempty-message="Polje mora biti popunjeno"/>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-sm-5 control-label">Lozinka:</label>
+                            <div class="col-sm-7">
+                                <div class="bs-component">
+                                    <input type='password' class="form-control" name="password" id="password" th:value="${loggedInUser.password}"
+                                           data-bv-notempty=""  data-bv-notempty-message="Polje mora biti popunjeno"
+                                           data-bv-stringlength="" data-bv-stringLength-min="4" data-bv-stringLength-max="12" data-bv-stringLength-message="Lozinka mora sadržavati najmanje 4 a najviže 12 znakova"
+                                           data-bv-identical="" data-bv-identical-field="passwordConfirm" data-bv-identical-message="Lozinka se ne slaže sa potvrdom lozinke" />
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-sm-5 control-label">Potvrda lozinke:</label>
+                            <div class="col-sm-7">
+                                <div class="bs-component">
+                                    <input type='password' class="form-control" name="passwordConfirm" id="passwordConfirm" th:value="${loggedInUser.password}"
+                                           data-bv-notempty=""  data-bv-notempty-message="Polje mora biti popunjeno"
+                                           data-bv-identical="" data-bv-identical-field="password" data-bv-identical-message="Potvrda lozinke se ne slaže sa lozinkom"/>
+                                </div>
+                            </div>
+                        </div>
+
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="cancel-btn btn btn-default" data-dismiss="modal">Odustani</button>
+                    <button type="button" class="cancel-btn btn btn-primary" onclick="saveAccSettings();">Spremi</button>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+
+
+    <div th:if="${tariffDTO}">
+        <div  th:replace="admin/tariff/add-price-modal"></div>
+        <div th:replace="admin/tariff/add-free-stuff-modal"></div>
+    </div>
+
+
+
+</div>
+<!-- End: Main -->
+
+
+
+
+<!-- BEGIN: PAGE SCRIPTS -->
+
+
+
+<!-- Theme Javascript -->
+<script th:src="@{/res/theme/assets/js/utility/utility.js}"></script>
+<!--<script th:src="@{/res/theme/assets/js/demo/demo.js}"></script>-->
+<script th:src="@{/res/js/ekip.js}"></script>
+<script th:src="@{/res/theme/assets/js/main.js}"></script>
+<script th:src="@{/res/js/bootstrapValidator.min.js}"></script>
+
+
+
+<script th:inline="javascript">
+
+
+    $(document).ready(function() {
+
+        "use strict";
+
+        // Init Theme Core
+        Core.init();
+
+        var flashMsg = [[${flashMsg}]];
+        if(flashMsg){
+            showMessageDialog(null, flashMsg);
+        }
+
+        $('#accountSettingsForm').bootstrapValidator({excluded: [':disabled'], verbose:false});
+
+
+        $("a[href='#']").on("click", function(ev){
+            ev.preventDefault();
+        });
+
+        var pingUrl = [[@{/ping}]];
+        setInterval(function(){
+            $.ajax(pingUrl);
+        }, 10000);
+
+    });
+
+    function showAccSettingsModal(){
+        $("#accSettingsModal").modal("show");
+    }
+
+    function saveAccSettings(){
+        $('#accountSettingsForm').data('bootstrapValidator').validate();
+        var settingsValid = $('#accountSettingsForm').data('bootstrapValidator').isValid();
+
+        if(settingsValid) {
+            var url = "admin/user/update-acc";
+            var data = $("#accountSettingsForm").serialize();
+            $.ajax(url, {
+                data: data,
+                error: function () {
+                    $("#accSettingsModal").modal("hide");
+                    showMessageDialog("Greška", "Promjena emaila i/ili passworda nije uspjela!");
+                },
+                success: function (data, textStatus, jqXHR) {
+                    $("#accSettingsModal").modal("hide");
+                    showMessageDialog(null, "Email i/ili password uspješno promjenjeni!")
+                }
+            });
+        }
+
+    }
+
+
+</script>
+
+
+</body>
+
+</html>

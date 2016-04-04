@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+
+<head lang="en">
+    <meta charset="UTF-8"/>
+    <title>Smart building</title>
+</head>
+<body>
+
+
+
+<span th:fragment="content(action)" th:switch="${action.class.simpleName}">
+
+    <span th:case="'TariffAddedAction'">Nova tarifa dodata: <a th:href="@{/admin/tariff/edit(id=${action.referenceId})}"
+                                                               th:text="${action.referenceName}"></a></span>
+
+    <span th:case="'TariffUpdatedAction'">Tarifa ažurirana: <a th:href="@{/admin/tariff/edit(id=${action.referenceId})}" th:text="${action.referenceName}"></a></span>
+
+    <span th:case="'TariffDeletedAction'">Tarifa izbrisana: <strong th:text="${action.referenceName}"></strong></span>
+
+
+    <span th:case="'TariffApprovalRequestedAction'">Poslan zahtjev za odobrenje tarife: <a th:href="@{/admin/tariff/edit(id=${action.referenceId})}" th:text="${action.referenceName}"></a></span>
+
+    <span th:case="'TariffApprovedAction'">Tarifa odobrena: <a th:href="@{/admin/tariff/edit(id=${action.referenceId})}" th:text="${action.referenceName}"></a></span>
+
+    <span th:case="'TariffDisapprovedAction'">Odbijen zahtev za odobrenje tarife: <a th:href="@{/admin/tariff/edit(id=${action.referenceId})}" th:text="${action.referenceName}"></a></span>
+
+
+    <span th:case="'PacketAddedAction'">Novi paket dodan: <a th:href="@{/admin/packet/edit(id=${action.referenceId})}" th:text="${action.referenceName}"></a></span>
+
+    <span th:case="'PacketUpdatedAction'">Paket ažuriran: <a th:href="@{/admin/packet/edit(id=${action.referenceId})}" th:text="${action.referenceName}"></a></span>
+
+    <span th:case="'PacketDeletedAction'">Paket izbrisan: <strong th:text="${action.referenceName}"></strong></span>
+
+
+    <span th:case="'PacketApprovalRequestedAction'">Poslan zahtjev za odobrenje paketa: <a th:href="@{/admin/packet/edit(id=${action.referenceId})}" th:text="${action.referenceName}"></a></span>
+
+    <span th:case="'PacketApprovedAction'">Paket odobren: <a th:href="@{/admin/packet/edit(id=${action.referenceId})}" th:text="${action.referenceName}"></a></span>
+
+    <span th:case="'PacketDisapprovedAction'">Odbijen zahtev za odobrenje paketa: <a th:href="@{/admin/packet/edit(id=${action.referenceId})}" th:text="${action.referenceName}"></a></span>
+
+
+    <span th:case="'TariffOptionAddedAction'">Dodata nova tarifna opcija: <a
+            th:href="@{/admin/tariff-option/edit(id=${action.referenceId})}"
+            th:text="${action.referenceName}"></a></span>
+
+    <span th:case="'TariffOptionUpdatedAction'">Ažurirana tarifna opcija: <a th:href="@{/admin/tariff-option/edit(id=${action.referenceId})}" th:text="${action.referenceName}"></a></span>
+
+    <span th:case="'TariffOptionDeletedAction'">Izbrisana tarifna opcija: <strong th:text="${action.referenceName}"></strong></span>
+
+    <span th:case="'TariffOptionApprovalRequestedAction'">Poslan zahtjev za odobrenje tarifne opcije: <a th:href="@{/admin/tariff-option/edit(id=${action.referenceId})}" th:text="${action.referenceName}"></a></span>
+
+    <span th:case="'TariffOptionApprovedAction'">Tarifna opcija odobrena: <a th:href="@{/admin/tariff-option/edit(id=${action.referenceId})}" th:text="${action.referenceName}"></a></span>
+
+    <span th:case="'TariffOptionDisapprovedAction'">Odbijen zahtev za odobrenje tarifne opcije: <a th:href="@{/admin/tariff-option/edit(id=${action.referenceId})}" th:text="${action.referenceName}"></a></span>
+
+
+    <span th:case="*" th:text="${action.description}"></span>
+</span>
+
+
+
+</body>
+</html>

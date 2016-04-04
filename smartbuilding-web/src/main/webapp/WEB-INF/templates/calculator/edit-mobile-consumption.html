@@ -1,0 +1,676 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+
+<head lang="en">
+    <meta charset="UTF-8"/>
+    <title>Smart building</title>
+</head>
+<body>
+
+<div th:fragment="content" class="consumption mobile-consumption">
+
+
+    <div style="border-bottom: solid 1px #999; padding: 10px; margin: 20px 0px">
+        <input class="simple-mode-radio" id="mobile-consumption-simple-mode" th:type="radio" name="mobile-consumption-mode"
+               th:checked="${consumption.mobileConsumption.inputMode.name() == 'SIMPLE'}"/>
+        <label for="mobile-consumption-simple-mode" th:text="#{calculator.simpleMode}">Jednostavni unos</label> (Za jednostavan unos raspodjela
+        saobraćaja je usklađena s ponašanjem karakterističnog korisnika u Crnoj Gori.)
+
+        <br/>
+
+        <input class="advanced-mode-radio" id="mobile-consumption-advanced-mode" th:type="radio" name="mobile-consumption-mode"
+               th:checked="${consumption.mobileConsumption.inputMode.name() == 'ADVANCED'}"/>
+        <label for="mobile-consumption-advanced-mode" th:text="#{calculator.advancedMode}">Detaljni unos</label> (Za definisanje raspodjele saobraćaja
+        prema konkretnim destinacijama, koristite detaljan unos potrošnje.)
+
+    </div>
+
+
+    <div class="container-fluid content-simple" th:classappend="${consumption.mobileConsumption.inputMode.name() == 'ADVANCED'} ? 'hide' : ''">
+
+        <form id="mobile-consumption-form-simple" class="form-horizontal" role="form" method="post" th:object="${consumption}">
+
+
+
+
+            <div class="row">
+                <div class="col-sm-6 col-lg-7 col-sm-offset-6 col-lg-offset-5 ">
+
+                    <label style="width:100% !important; text-align: center;margin-bottom: 10px;" th:text="#{calculator.consumptionEstimation}">Procjena potrošnje</label>
+                    <div class="main-slider">
+                        <div class="slider"> </div>
+                    </div>
+
+                    <div class="row top-margin-10">
+                        <div class="col-xs-4 " style="padding-bottom: 2px !important; text-align: center;height: 18px;font-size: 12px" th:text="#{calculator.lowConsumption}">Niska</div>
+                        <div class="col-xs-4" style="padding-bottom: 2px !important; text-align: center;height: 18px;font-size: 12px" th:text="#{calculator.mediumConsumption}">Srednja</div>
+                        <div class="col-xs-4" style="padding-bottom: 2px !important; text-align: center;height: 18px;font-size: 12px" th:text="#{calculator.highConsumption}">Visoka</div>
+                    </div>
+                </div>
+            </div>
+
+            <hr/>
+
+            <div th:unless="${consumption.isPacket()}" class="row">
+
+                <div class="col-sm-12 top-margin-20">
+
+                    <div class="row">
+
+                        <label class="col-sm-4 control-label" th:text="#{calculator.tariffType}">Tip tarife:</label>
+
+                        <div class="col-sm-4" >
+                            <select th:field="*{mobileConsumption.userType}"  class="form-control userTypeSelect">
+                                <option th:each="ut : ${T(hr.m2stanic.smartbuilding.core.tariff.UserType).values()}"
+                                        th:value="${ut}"
+                                        th:text="${ut.displayName}" >Tip korisnika</option>
+                            </select>
+                        </div>
+                        <div class="col-sm-4" >
+                            <select  th:field="*{mobileConsumption.paymentType}" class="form-control">
+                                <option th:each="paymentType : ${T(hr.m2stanic.smartbuilding.core.tariff.PaymentType).values()}"
+                                        th:value="${paymentType}"
+                                        th:text="${paymentType.name()}">Nacin placanja</option>
+                            </select>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+
+            <hr/>
+
+            <div class="row">
+
+                <div class="col-sm-12 top-margin-20">
+
+                    <div class="row">
+                        <label class="col-sm-4 control-label" th:text="#{calculator.callsToOperatorsInCrnaGora}">Pozivi prema operatorima u Crnoj Gori</label>
+                        <div class="col-sm-8">
+                            <div class="input-group">
+                                <input type="text" th:field="*{mobileConsumption.countryCallMinutes}" id="mobileConsumption-countryCalls" class="form-control total-part"
+                                       data-bv-notempty="" data-bv-notempty-message="Morate unijeti cijeli broj jednak ili veći od 0"  data-bv-integer="" data-bv-integer-message="Morate unijeti cijeli broj jednak ili veći od 0"
+                                       data-bv-greaterthan="" data-bv-greaterthan-inclusive="true" data-bv-greaterthan-value="0" data-bv-greaterthan-message="Morate unijeti cijeli broj jednak ili veći od 0" />
+                                <span class="input-group-addon">min</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <hr/>
+
+            <div class="row">
+
+                <div class="col-xs-12">
+
+                    <div class="row">
+                        <label class="col-sm-4 control-label" th:text="#{calculator.callsToForeignCountries}">Pozivi prema inozemstvu</label>
+                        <div class="col-sm-8">
+                            <div class="input-group">
+                                <input type="text" th:field="*{mobileConsumption.internationalCallMinutes}" id="mobileConsumption-internationalCalls" class="form-control total-part"
+                                       data-bv-notempty="" data-bv-notempty-message="Morate unijeti cijeli broj jednak ili veći od 0"  data-bv-integer="" data-bv-integer-message="Morate unijeti cijeli broj jednak ili veći od 0"
+                                       data-bv-greaterthan="" data-bv-greaterthan-inclusive="true" data-bv-greaterthan-value="0" data-bv-greaterthan-message="Morate unijeti cijeli broj jednak ili veći od 0" />
+                                <span class="input-group-addon">min</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <hr/>
+                    <div class="row">
+                        <div class="col-sm-8 col-sm-offset-4 ">
+                            <span class="glyphicon glyphicon-triangle-right"></span>
+                            <a href="#" class="mobile-calls-distribution-toggle" data-target-class="mobile-calls-distribution" th:text="#{calculator.distributionFixedMobile}">Raspodjela fiksne - mobilne</a>
+                        </div>
+                    </div>
+
+                    <div class="row" >
+                        <div class="col-sm-8  col-sm-offset-4  slider-group" >
+
+                            <div class="mobile-calls-distribution row top-margin-10" style="display: none">
+                                <label class="control-label col-xs-6" th:text="#{calculator.fixedNet}">Fiksne mreže</label>
+                                <div class="col-xs-6" >
+                                    <div class="slider-label" style="padding-bottom: 2px !important; text-align: center;height: 18px;font-size: 12px">0 min</div>
+                                    <div class="slider slider-child" data-total-value-holder-id="mobileConsumption-fixed-calls-total" id="mobileConsumption-calls-fixed"> </div>
+                                    <input class="slider-value" type="hidden" th:field="*{mobileConsumption.callPercentFixedNetworks}"  />
+                                </div>
+                            </div>
+
+                            <div class="mobile-calls-distribution row top-margin-10" style="display: none">
+                                <label class="col-xs-6 control-label" th:text="#{calculator.mobileNet}">Mobilne mreže</label>
+                                <div class="col-xs-6" >
+                                    <div class="slider-label" style="padding-bottom: 2px !important; text-align: center;height: 18px;font-size: 12px">0 min</div>
+                                    <div class="slider slider-child" data-total-value-holder-id="mobileConsumption-mobile-calls-total" id="mobileConsumption-calls-mobile"> </div>
+                                    <input class="slider-value" type="hidden" th:field="*{mobileConsumption.callPercentMobileNetworks}"  />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <hr/>
+
+            <div class="fnPhysical row" >
+
+                <label class="col-sm-4 control-label" th:text="#{calculator.trafficToPrefferedNumber}">Promet prema preferiranom broju</label>
+
+                <div class="col-sm-8">
+
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <select th:field="*{mobileConsumption.friendNoOperator}"  class="form-control enable-switch">
+                                <option value="-1">-- Odaberite operatera --</option>
+                                <option th:each="op : ${operators}" th:if="${op.networkType == T(hr.m2stanic.smartbuilding.core.NetworkType).MOBILE || op.networkType == T(hr.m2stanic.smartbuilding.core.NetworkType).FIXED}"
+                                        th:value="${op.id}" th:text="${op.name}"></option>
+                            </select>
+                        </div>
+
+                        <div class="col-sm-3">
+                            <div class="input-group input-group-sm">
+                                <input th:field="*{mobileConsumption.friendNoCallMinutes}" type="text" class="form-control mobileConsumption-ff-minutes"
+                                       data-bv-notempty="" data-bv-notempty-message="Morate unijeti cijeli broj jednak ili veći od 0"  data-bv-integer="" data-bv-integer-message="Morate unijeti cijeli broj jednak ili veći od 0"
+                                       data-bv-greaterthan="" data-bv-greaterthan-inclusive="true" data-bv-greaterthan-value="0" data-bv-greaterthan-message="Morate unijeti cijeli broj jednak ili veći od 0" />
+                                <span class="input-group-addon" style="min-width: 40px; text-align: left"
+                                      th:text="#{calculator.minutesOfCall}">min. poziva</span>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-3">
+                            <div class="input-group input-group-sm">
+                                <input th:field="*{mobileConsumption.friendNoSMS}" type="text" class="form-control mobileConsumption-ff-sms"
+                                       data-bv-notempty="" data-bv-notempty-message="Morate unijeti cijeli broj jednak ili veći od 0"  data-bv-integer="" data-bv-integer-message="Morate unijeti cijeli broj jednak ili veći od 0"
+                                       data-bv-greaterthan="" data-bv-greaterthan-inclusive="true" data-bv-greaterthan-value="0" data-bv-greaterthan-message="Morate unijeti cijeli broj jednak ili veći od 0" />
+                                <span class="input-group-addon" style="min-width: 40px; text-align: left"
+                                      th:text="#{calculator.smsMessage}">SMS poruka</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+
+
+            <div class="fnLegal row hide" >
+
+                <label  class="col-sm-4 control-label" th:text="#{calculator.trafficToPrefferedNumber}">Promet prema preferiranom broju</label>
+                <div class="col-sm-8">
+                    <div class="row">
+
+                        <div class="col-lg-6">
+                            <div class="input-group input-group-sm">
+                                <span class="input-group-addon" style="min-width: 70px; text-align: left">fiksna</span>
+                                <input th:field="*{mobileConsumption.groupNoCallMinutesFixed}"  type="text" class="form-control mobileConsumption-cug-minutes-fixed"
+                                       data-bv-notempty="" data-bv-notempty-message="Morate unijeti cijeli broj jednak ili veći od 0"  data-bv-integer="" data-bv-integer-message="Morate unijeti cijeli broj jednak ili veći od 0"
+                                       data-bv-greaterthan="" data-bv-greaterthan-inclusive="true" data-bv-greaterthan-value="0" data-bv-greaterthan-message="Morate unijeti cijeli broj jednak ili veći od 0" />
+                                <span class="input-group-addon" style="min-width: 45px; text-align: left">min</span>
+
+                            </div>
+                        </div>
+
+
+                        <div class="col-lg-6">
+                            <div class="input-group input-group-sm">
+                                <span class="input-group-addon" style="min-width: 70px; text-align: left">mobilna</span>
+                                <input th:field="*{mobileConsumption.groupNoCallMinutesMobile}"  type="text" class="form-control mobileConsumption-cug-minutes-mobile"
+                                       data-bv-notempty="" data-bv-notempty-message="Morate unijeti cijeli broj jednak ili veći od 0"  data-bv-integer="" data-bv-integer-message="Morate unijeti cijeli broj jednak ili veći od 0"
+                                       data-bv-greaterthan="" data-bv-greaterthan-inclusive="true" data-bv-greaterthan-value="0" data-bv-greaterthan-message="Morate unijeti cijeli broj jednak ili veći od 0" />
+                                <span class="input-group-addon" style="min-width: 45px; text-align: left">min</span>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <hr/>
+
+
+            <div class="row">
+                <label class="col-sm-4 control-label" th:text="#{calculator.numOfsmsMessages}">Broj SMS poruka</label>
+                <div class="col-sm-4">
+                    <div class="input-group">
+                        <input type="text"  th:field="*{mobileConsumption.nationalSMSCount}" id="mobileConsumption-sms-count" class="form-control"
+                               data-bv-notempty="" data-bv-notempty-message="Morate unijeti cijeli broj jednak ili veći od 0"  data-bv-integer="" data-bv-integer-message="Morate unijeti cijeli broj jednak ili veći od 0"
+                               data-bv-greaterthan="" data-bv-greaterthan-inclusive="true" data-bv-greaterthan-value="0" data-bv-greaterthan-message="Morate unijeti cijeli broj jednak ili veći od 0" />
+                        <span class="input-group-addon" style="min-width: 70px; text-align: left" th:text="#{calculator.insideCrnaGora}">unutar Crne Gore</span>
+                    </div>
+                </div>
+
+                <div class="col-sm-4">
+                    <div class="input-group">
+                        <input type="text"  th:field="*{mobileConsumption.internationalSmsCount}" id="mobileConsumption-sms-count" class="form-control"
+                               data-bv-notempty="" data-bv-notempty-message="Morate unijeti cijeli broj jednak ili veći od 0"  data-bv-integer="" data-bv-integer-message="Morate unijeti cijeli broj jednak ili veći od 0"
+                               data-bv-greaterthan="" data-bv-greaterthan-inclusive="true" data-bv-greaterthan-value="0" data-bv-greaterthan-message="Morate unijeti cijeli broj jednak ili veći od 0" />
+                        <span class="input-group-addon" style="min-width: 70px; text-align: left" th:text="#{calculator.towardsForeignCountries}">prema inozemstvu</span>
+                    </div>
+                </div>
+            </div>
+
+            <!--<hr/>-->
+
+            <!--<div class="row">-->
+                <!--<label class="col-sm-4 control-label">Broj MMS poruka</label>-->
+                <!--<div class="col-sm-8">-->
+                    <!--<div class="bs-component">-->
+                        <!--<input type="text"  th:field="*{mobileConsumption.mmsCount}" id="mobileConsumption-mms-count" class="form-control"-->
+                               <!--data-bv-notempty=""  data-bv-notempty-message="Polje mora biti popunjeno"-->
+                               <!--data-bv-numeric ="" data-bv-numeric-message="Unesite brojčanu vrijednost"/>-->
+                    <!--</div>-->
+                <!--</div>-->
+            <!--</div>-->
+
+            <hr/>
+
+            <div class="row">
+                <label class="col-sm-4 control-label" th:text="#{calculator.amountOfDataTraffic}">Količina DATA prometa (MB)</label>
+                <div class="col-sm-8">
+                    <div class="input-group">
+                        <input type="text"  th:field="*{mobileConsumption.dataAmountMB}" id="mobileConsumption-data-amount" class="form-control"
+                               data-bv-notempty="" data-bv-notempty-message="Morate unijeti cijeli broj jednak ili veći od 0"  data-bv-integer="" data-bv-integer-message="Morate unijeti cijeli broj jednak ili veći od 0"
+                               data-bv-greaterthan="" data-bv-greaterthan-inclusive="true" data-bv-greaterthan-value="0" data-bv-greaterthan-message="Morate unijeti cijeli broj jednak ili veći od 0" />
+                        <span class="input-group-addon"><input id="max-speed-simple" type="checkbox" th:field="*{mobileConsumption.onlyFullSpeedData}"/> <label for="max-speed-simple">Po maksimalnoj brzini</label></span>
+
+                    </div>
+                </div>
+            </div>
+
+            <input type="hidden" name="mobileConsumption.userProfile" th:value="-1"/>
+
+            <input type="hidden" name="mobileConsumption.useTariffOptions" th:value="*{mobileConsumption.useTariffOptions}"/>
+
+        </form>
+
+    </div>
+
+
+
+
+
+    <div class="container-fluid content-advanced" th:classappend="${consumption.mobileConsumption.inputMode.name() == 'SIMPLE'} ? 'hide' : ''">
+
+        <form id="mobile-consumption-form-advanced"  class="form-horizontal" role="form" method="post" th:object="${consumption}">
+
+
+            <div th:unless="${consumption.isPacket()}" class="row">
+
+                <div class="col-sm-12 top-margin-20">
+
+                    <div class="row">
+                        <label class="col-sm-3 col-lg-2 control-label" th:text="#{calculator.tariffType}">Tip tarife:</label>
+                        <div class="col-sm-4 col-lg-5" >
+                            <select th:field="*{mobileConsumption.userType}"  class="form-control userTypeSelect" id="userType2">
+                                <option th:each="ut : ${T(hr.m2stanic.smartbuilding.core.tariff.UserType).values()}"
+                                        th:value="${ut}" th:selected="${ut == consumption.mobileConsumption.userType}"
+                                        th:text="${ut.displayName}" >Tip korisnika</option>
+                            </select>
+                        </div>
+                        <div class="col-sm-4 col-lg-5" >
+                            <select id="paymentType2" th:field="*{mobileConsumption.paymentType}" class="form-control">
+                                <option th:each="paymentType : ${T(hr.m2stanic.smartbuilding.core.tariff.PaymentType).values()}"
+                                        th:value="${paymentType}"
+                                        th:text="${paymentType.name()}">Nacin placanja</option>
+                            </select>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <hr/>
+            <h4 style="margin-top: 20px" th:text="#{calculator.towardsFixedNets}">Pozivi prema fiksnim mrežama </h4>
+            <div th:replace="calculator/advanced-modeconsumption-header"></div>
+
+            <div>
+                <div class="operator-call-minutes row top-margin-10" th:each="otc : ${consumption.mobileConsumption.operatorFixedCallMinutes}" th:styleappend="${otcStat.index &gt; 0} ? 'display:none;' : ''">
+                    <div class="col-xs-4">
+                        <select th:name="'mobileConsumption.operatorFixedCallMinutes[__${otcStat.index}__].operator'" class="form-control enable-switch" data-value="" onfocus="this.setAttribute('data-value', this.value);" >
+                            <option value="-1">-- Odaberite operatera --</option>
+                            <option th:each="op : ${operators}" th:if="${op.networkType == T(hr.m2stanic.smartbuilding.core.NetworkType).FIXED}" th:value="${op.id}" th:text="${op.name}"
+                                    th:selected="${otc.operator?.id == op.id}"></option>
+                        </select>
+                    </div>
+
+                    <div th:each="tp : ${T(hr.m2stanic.smartbuilding.core.TimePeriod).values()}" class="col-xs-2">
+
+                        <div class="input-group">
+                            <input type="text" class="form-control disabable" th:disabled="${otc.operator == null}"
+                                   th:field="*{mobileConsumption.operatorFixedCallMinutes[__${otcStat.index}__].timePeriodCallMinutes[__${tp}__]}"
+                                   data-bv-notempty="" data-bv-notempty-message="Morate unijeti cijeli broj jednak ili veći od 0"  data-bv-integer="" data-bv-integer-message="Morate unijeti cijeli broj jednak ili veći od 0"
+                                   data-bv-greaterthan="" data-bv-greaterthan-inclusive="true" data-bv-greaterthan-value="0" data-bv-greaterthan-message="Morate unijeti cijeli broj jednak ili veći od 0" />
+                            <span class="input-group-addon">min</span>
+                        </div>
+                    </div>
+
+                    <div class="col-xs-2 hidden-xs">
+                        <div class="input-group">
+                            <input type="text" class="form-control total-part" th:value="${consumption.mobileConsumption.operatorFixedCallMinutes[__${otcStat.index}__].totalMinutes}"  readonly="readonly"/>
+                            <span class="input-group-addon">min</span>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+
+
+            <hr/>
+            <h4 style="margin-top: 20px" th:text="#{calculator.callsToMobileNetworks}">Pozivi prema mobilnim mrežama</h4>
+            <div th:replace="calculator/advanced-modeconsumption-header"></div>
+
+            <div>
+                <div class="operator-call-minutes row top-margin-10" th:each="otc : ${consumption.mobileConsumption.operatorMobileCallMinutes}" th:styleappend="${otcStat.index &gt; 0} ? 'display:none;' : ''">
+                    <div class="col-xs-4">
+                        <select th:name="'mobileConsumption.operatorMobileCallMinutes[__${otcStat.index}__].operator'" class="form-control enable-switch" data-value="" onfocus="this.setAttribute('data-value', this.value);" >
+                            <option value="-1">-- Odaberite operatera --</option>
+                            <option th:each="op : ${operators}" th:if="${op.networkType == T(hr.m2stanic.smartbuilding.core.NetworkType).MOBILE}" th:value="${op.id}" th:text="${op.name}"
+                                    th:selected="${otc.operator?.id == op.id}"></option>
+                        </select>
+                    </div>
+
+                    <div th:each="tp : ${T(hr.m2stanic.smartbuilding.core.TimePeriod).values()}" class="col-xs-2">
+                        <div class="input-group">
+                            <input type="text" class="form-control disabable" th:disabled="${otc.operator == null}"
+                                   th:field="*{mobileConsumption.operatorMobileCallMinutes[__${otcStat.index}__].timePeriodCallMinutes[__${tp}__]}"
+                                   data-bv-notempty="" data-bv-notempty-message="Morate unijeti cijeli broj jednak ili veći od 0"  data-bv-integer="" data-bv-integer-message="Morate unijeti cijeli broj jednak ili veći od 0"
+                                   data-bv-greaterthan="" data-bv-greaterthan-inclusive="true" data-bv-greaterthan-value="0" data-bv-greaterthan-message="Morate unijeti cijeli broj jednak ili veći od 0" />
+                            <span class="input-group-addon">min</span>
+                        </div>
+                    </div>
+
+                    <div class="col-xs-2 hidden-xs">
+                        <div class="input-group">
+                            <input type="text" class="form-control total-part" th:value="${consumption.mobileConsumption.operatorMobileCallMinutes[__${otcStat.index}__].totalMinutes}"  readonly="readonly"/>
+                            <span class="input-group-addon">min</span>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <hr/>
+            <h4 style="margin-top: 20px" th:text="#{calculator.InternationalTrafficFixedPhoneNetworks}">Međunarodni saobraćaj - fiksne mreže</h4>
+            <div th:replace="calculator/advanced-modeconsumption-header"></div>
+
+            <div>
+                <div class="operator-call-minutes row top-margin-10" th:each="otc : ${consumption.mobileConsumption.countryInternationalFixedCallMinutes}"
+                     th:styleappend="${otcStat.index &gt; 0} ? 'display:none;' : ''">
+                    <div class="col-xs-4">
+                        <select th:name="'mobileConsumption.countryInternationalFixedCallMinutes[__${otcStat.index}__].country'"
+                                class="form-control enable-switch" data-value="" onfocus="this.setAttribute('data-value', this.value);" >
+                            <option value="-1">-- Odaberite državu --</option>
+                            <option th:each="country : ${countries}" th:value="${country.id}" th:text="${country.name}"
+                                    th:selected="${otc.country?.id == country.id}"></option>
+                        </select>
+                    </div>
+
+
+                    <div th:each="tp : ${T(hr.m2stanic.smartbuilding.core.TimePeriod).values()}" class="col-xs-2">
+                        <div class="input-group">
+                            <input type="text" class="form-control disabable" th:disabled="${otc.country == null}"
+                                   th:field="*{mobileConsumption.countryInternationalFixedCallMinutes[__${otcStat.index}__].timePeriodCallMinutes[__${tp}__]}"
+                                   data-bv-notempty="" data-bv-notempty-message="Morate unijeti cijeli broj jednak ili veći od 0"  data-bv-integer="" data-bv-integer-message="Morate unijeti cijeli broj jednak ili veći od 0"
+                                   data-bv-greaterthan="" data-bv-greaterthan-inclusive="true" data-bv-greaterthan-value="0" data-bv-greaterthan-message="Morate unijeti cijeli broj jednak ili veći od 0" />
+                            <span class="input-group-addon">min</span>
+                        </div>
+                    </div>
+
+                    <div class="col-xs-2 hidden-xs">
+                        <div class="input-group">
+                            <input type="text" class="form-control total-part" th:value="${consumption.mobileConsumption.countryInternationalFixedCallMinutes[__${otcStat.index}__].totalMinutes}"  readonly="readonly"/>
+                            <span class="input-group-addon">min</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <hr/>
+            <h4 style="margin-top: 20px" th:text="#{calculator.InternationalTrafficMobileNetworks}">Međunarodni saobraćaj - mobilne mreže</h4>
+            <div th:replace="calculator/advanced-modeconsumption-header"></div>
+
+            <div>
+                <div class="operator-call-minutes row top-margin-10" th:each="otc : ${consumption.mobileConsumption.countryInternationalMobileCallMinutes}"
+                     th:styleappend="${otcStat.index &gt; 0} ? 'display:none;' : ''">
+                    <div class="col-xs-4">
+                        <select th:name="'mobileConsumption.countryInternationalMobileCallMinutes[__${otcStat.index}__].country'"
+                                class="form-control enable-switch" data-value="" onfocus="this.setAttribute('data-value', this.value);" >
+                            <option value="-1">-- Odaberite državu --</option>
+                            <option th:each="country : ${countries}" th:value="${country.id}" th:text="${country.name}"
+                                    th:selected="${otc.country?.id == country.id}"></option>
+                        </select>
+                    </div>
+
+
+                    <div th:each="tp : ${T(hr.m2stanic.smartbuilding.core.TimePeriod).values()}" class="col-xs-2">
+                        <div class="input-group">
+                            <input type="text" class="form-control disabable" th:disabled="${otc.country == null}"
+                                   th:field="*{mobileConsumption.countryInternationalMobileCallMinutes[__${otcStat.index}__].timePeriodCallMinutes[__${tp}__]}"
+                                   data-bv-notempty="" data-bv-notempty-message="Morate unijeti cijeli broj jednak ili veći od 0"  data-bv-integer="" data-bv-integer-message="Morate unijeti cijeli broj jednak ili veći od 0"
+                                   data-bv-greaterthan="" data-bv-greaterthan-inclusive="true" data-bv-greaterthan-value="0" data-bv-greaterthan-message="Morate unijeti cijeli broj jednak ili veći od 0" />
+                            <span class="input-group-addon">min</span>
+                        </div>
+                    </div>
+
+                    <div class="col-xs-2 hidden-xs">
+                        <div class="input-group">
+                            <input type="text" class="form-control total-part" th:value="${consumption.mobileConsumption.countryInternationalMobileCallMinutes[__${otcStat.index}__].totalMinutes}"  readonly="readonly"/>
+                            <span class="input-group-addon">min</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <h4 style="margin-top: 20px">&nbsp;</h4>
+
+            <div class="fnPhysical row">
+
+                <label class="col-sm-12 control-label" style="text-align: left !important;"
+                       th:text="#{calculator.prefferedNumber}">Preferirani broj</label>
+
+                <div class="col-sm-12">
+
+                    <div class="row">
+                        <div class="col-sm-4">
+                            <select th:field="*{mobileConsumption.friendNoOperator}"  class="form-control enable-switch">
+                                <option value="-1">-- Odaberite operatera --</option>
+                                <option th:each="op : ${operators}" th:if="${op.networkType == T(hr.m2stanic.smartbuilding.core.NetworkType).MOBILE || op.networkType == T(hr.m2stanic.smartbuilding.core.NetworkType).FIXED}"
+                                        th:value="${op.id}" th:text="${op.name}"></option>
+                            </select>
+                        </div>
+
+                        <div class="col-sm-4">
+                            <div class="input-group input-group-sm">
+                                <input th:field="*{mobileConsumption.friendNoCallMinutes}" type="text" class="form-control total-part mobileConsumption-ff-minutes"
+                                       data-bv-notempty="" data-bv-notempty-message="Morate unijeti cijeli broj jednak ili veći od 0"  data-bv-integer="" data-bv-integer-message="Morate unijeti cijeli broj jednak ili veći od 0"
+                                       data-bv-greaterthan="" data-bv-greaterthan-inclusive="true" data-bv-greaterthan-value="0" data-bv-greaterthan-message="Morate unijeti cijeli broj jednak ili veći od 0" />
+                                <span class="input-group-addon" style="min-width: 90px; text-align: left" th:text="#{calculator.minutesOfCall}">min. poziva</span>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-4">
+                            <div class="input-group input-group-sm">
+                                <input th:field="*{mobileConsumption.friendNoSMS}" type="text" class="form-control total-part mobileConsumption-ff-sms"
+                                       data-bv-notempty="" data-bv-notempty-message="Morate unijeti cijeli broj jednak ili veći od 0"  data-bv-integer="" data-bv-integer-message="Morate unijeti cijeli broj jednak ili veći od 0"
+                                       data-bv-greaterthan="" data-bv-greaterthan-inclusive="true" data-bv-greaterthan-value="0" data-bv-greaterthan-message="Morate unijeti cijeli broj jednak ili veći od 0" />
+                                <span class="input-group-addon" style="min-width: 90px; text-align: left" th:text="#{calculator.smsMessage}">SMS poruka</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+
+
+            <div class="fnLegal row hide">
+                <label class="col-sm-12 control-label" style="text-align: left !important;"
+                       th:text="#{calculator.prefferedNumber}">Preferirani broj</label>
+                <div class="col-sm-12">
+                    <div class="row">
+
+                        <div class="col-sm-4">
+                            <div class="input-group input-group-sm">
+                                <span class="input-group-addon" style="min-width: 70px; text-align: left">fiksna</span>
+                                <input th:field="*{mobileConsumption.groupNoCallMinutesFixed}"  type="text" class="form-control total-part"
+                                       data-bv-notempty="" data-bv-notempty-message="Morate unijeti cijeli broj jednak ili veći od 0"  data-bv-integer="" data-bv-integer-message="Morate unijeti cijeli broj jednak ili veći od 0"
+                                       data-bv-greaterthan="" data-bv-greaterthan-inclusive="true" data-bv-greaterthan-value="0" data-bv-greaterthan-message="Morate unijeti cijeli broj jednak ili veći od 0" />
+                                <span class="input-group-addon" style="min-width: 45px; text-align: left">min</span>
+
+                            </div>
+                        </div>
+
+
+                        <div class="col-sm-4">
+                            <div class="input-group input-group-sm">
+                                <span class="input-group-addon" style="min-width: 70px; text-align: left">mobilna</span>
+                                <input th:field="*{mobileConsumption.groupNoCallMinutesMobile}"  type="text" class="form-control total-part"
+                                       data-bv-notempty="" data-bv-notempty-message="Morate unijeti cijeli broj jednak ili veći od 0"  data-bv-integer="" data-bv-integer-message="Morate unijeti cijeli broj jednak ili veći od 0"
+                                       data-bv-greaterthan="" data-bv-greaterthan-inclusive="true" data-bv-greaterthan-value="0" data-bv-greaterthan-message="Morate unijeti cijeli broj jednak ili veći od 0" />
+                                <span class="input-group-addon" style="min-width: 45px; text-align: left">min</span>
+                            </div>
+
+                        </div>
+
+                        <div class="col-sm-4">
+                            <div class="input-group input-group-sm">
+                                <span class="input-group-addon" style="min-width: 70px; text-align: left">SMS</span>
+                                <input th:field="*{mobileConsumption.friendNoSMS}"  type="text" class="form-control total-part"
+                                       data-bv-notempty="" data-bv-notempty-message="Morate unijeti cijeli broj jednak ili veći od 0"  data-bv-integer="" data-bv-integer-message="Morate unijeti cijeli broj jednak ili veći od 0"
+                                       data-bv-greaterthan="" data-bv-greaterthan-inclusive="true" data-bv-greaterthan-value="0" data-bv-greaterthan-message="Morate unijeti cijeli broj jednak ili veći od 0" />
+                                <span class="input-group-addon" style="min-width: 45px; text-align: left">por</span>
+                            </div>
+
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+
+            <!--<div class="row top-margin-20">-->
+                <!--<label class="col-sm-10 control-label">Ukupno mjesečno</label>-->
+                <!--<div class="col-sm-2">-->
+                    <!--<div class="input-group">-->
+                        <!--<input type="text" class="form-control total" readonly="readonly"/>-->
+                        <!--<span class="input-group-addon">min</span>-->
+                    <!--</div>-->
+                <!--</div>-->
+            <!--</div>-->
+
+            <hr/>
+            <h4 style="margin-top: 20px" th:text="#{calculator.smsToNetworksInCrnaGora}">SMS prema mrežama u Crnoj Gori</h4>
+            <div th:replace="calculator/advanced-modeconsumption-header"></div>
+
+            <div>
+                <div class="operator-sms-count row top-margin-10" th:each="otc : ${consumption.mobileConsumption.operatorSMSCount}" th:styleappend="${otcStat.index &gt; 0} ? 'display:none;' : ''">
+                    <div class="col-xs-4">
+                        <select th:name="'mobileConsumption.operatorSMSCount[__${otcStat.index}__].operator'" class="form-control enable-switch" data-value="" onfocus="this.setAttribute('data-value', this.value);" >
+                            <option value="-1">-- Odaberite operatera --</option>
+                            <option th:each="op : ${operators}" th:if="${op.networkType == T(hr.m2stanic.smartbuilding.core.NetworkType).MOBILE}" th:value="${op.id}" th:text="${op.name}"
+                                    th:selected="${otc.operator?.id == op.id}"></option>
+                        </select>
+                    </div>
+
+                    <div th:each="tp : ${T(hr.m2stanic.smartbuilding.core.TimePeriod).values()}" class="col-xs-2">
+                        <input type="text" class="form-control disabable" th:disabled="${otc.operator == null}"
+                               th:field="*{mobileConsumption.operatorSMSCount[__${otcStat.index}__].timePeriodSMSCount[__${tp}__]}"
+                               data-bv-notempty="" data-bv-notempty-message="Morate unijeti cijeli broj jednak ili veći od 0"  data-bv-integer="" data-bv-integer-message="Morate unijeti cijeli broj jednak ili veći od 0"
+                               data-bv-greaterthan="" data-bv-greaterthan-inclusive="true" data-bv-greaterthan-value="0" data-bv-greaterthan-message="Morate unijeti cijeli broj jednak ili veći od 0" />
+                    </div>
+
+                    <div class="col-xs-2 hidden-xs">
+                        <input type="text" class="form-control total-part" th:value="${consumption.mobileConsumption.operatorSMSCount[__${otcStat.index}__].totalSMSCount}"  readonly="readonly"/>
+
+                    </div>
+                </div>
+
+            </div>
+
+            <hr/>
+            <h4 style="margin-top: 20px" th:text="'SMS __#{calculator.towardsForeignCountries}__'">SMS prema inozemstvu</h4>
+            <div th:replace="calculator/advanced-modeconsumption-header"></div>
+
+            <div>
+                <div class="operator-call-minutes row top-margin-10" th:each="otc : ${consumption.mobileConsumption.countrySMSCount}"
+                     th:styleappend="${otcStat.index &gt; 0} ? 'display:none;' : ''">
+                    <div class="col-xs-4">
+                        <select th:name="'mobileConsumption.countrySMSCount[__${otcStat.index}__].country'"
+                                class="form-control enable-switch" data-value="" onfocus="this.setAttribute('data-value', this.value);" >
+                            <option value="-1">-- Odaberite državu --</option>
+                            <option th:each="country : ${countries}" th:value="${country.id}" th:text="${country.name}"
+                                    th:selected="${otc.country?.id == country.id}"></option>
+                        </select>
+                    </div>
+
+                    <div th:each="tp : ${T(hr.m2stanic.smartbuilding.core.TimePeriod).values()}" class="col-xs-2">
+                        <input type="text" class="form-control disabable" th:disabled="${otc.country == null}"
+                                   th:field="*{mobileConsumption.countrySMSCount[__${otcStat.index}__].timePeriodSMSCount[__${tp}__]}"
+                               data-bv-notempty="" data-bv-notempty-message="Morate unijeti cijeli broj jednak ili veći od 0"  data-bv-integer="" data-bv-integer-message="Morate unijeti cijeli broj jednak ili veći od 0"
+                               data-bv-greaterthan="" data-bv-greaterthan-inclusive="true" data-bv-greaterthan-value="0" data-bv-greaterthan-message="Morate unijeti cijeli broj jednak ili veći od 0" />
+                    </div>
+
+                    <div class="col-xs-2 hidden-xs">
+                        <input type="text" class="form-control total-part" th:value="${consumption.mobileConsumption.countrySMSCount[__${otcStat.index}__].totalSMSCount}"  readonly="readonly"/>
+                    </div>
+                </div>
+            </div>
+
+
+            <hr/>
+
+            <div class="row top-margin-20">
+
+                <div class="col-xs-4 col-sm-2">
+                    <div>MMS</div>
+                    <input type="text" th:field="*{mobileConsumption.mmsCount}" class="form-control" placeholder="Broj poruka"
+                           data-bv-notempty="" data-bv-notempty-message="Morate unijeti cijeli broj jednak ili veći od 0"  data-bv-integer="" data-bv-integer-message="Morate unijeti cijeli broj jednak ili veći od 0"
+                           data-bv-greaterthan="" data-bv-greaterthan-inclusive="true" data-bv-greaterthan-value="0" data-bv-greaterthan-message="Morate unijeti cijeli broj jednak ili veći od 0" />
+                </div>
+                <div class="col-xs-4 col-sm-2">
+                    <div>DATA (MB)</div>
+                    <input type="text" th:field="*{mobileConsumption.dataAmountMB}" class="form-control" placeholder="Količina u MB"
+                           data-bv-notempty="" data-bv-notempty-message="Morate unijeti cijeli broj jednak ili veći od 0"  data-bv-integer="" data-bv-integer-message="Morate unijeti cijeli broj jednak ili veći od 0"
+                           data-bv-greaterthan="" data-bv-greaterthan-inclusive="true" data-bv-greaterthan-value="0" data-bv-greaterthan-message="Morate unijeti cijeli broj jednak ili veći od 0" />
+                </div>
+                <div class="col-xs-4 col-sm-8">
+                    <div>&nbsp;</div>
+                    <input id="onlyFullSpeedDataAdv" style="margin-top: 10px;" type="checkbox" th:field="*{mobileConsumption.onlyFullSpeedData}"/>
+                    <label for="onlyFullSpeedDataAdv" th:text="#{calculator.perMaxSpeed}">Po maksimalnoj brzini</label>
+                </div>
+            </div>
+
+
+            <input type="hidden" name="mobileConsumption.useTariffOptions" th:value="*{mobileConsumption.useTariffOptions}"/>
+            <input type="hidden" name="mobileConsumption.userProfile" th:value="-1"/>
+
+        </form>
+    </div>
+
+    <hr/>
+    <div class="row top-margin-20">
+
+        <div class="col-sm-4 form-group">
+            <input id="useTariffOptionsCB" type="checkbox" class="userTariffOptionsToggle" th:checked="${consumption.mobileConsumption.useTariffOptions}"/>
+            <label for="useTariffOptionsCB" th:text="#{calculator.takeTariffOptionsInCalculation}">Uzmi tariffne opcije u izračun &nbsp;&nbsp;&nbsp;&nbsp;</label>
+        </div>
+
+        <div class="col-sm-8 form-group" style="font-size: 12px !important;">
+
+            <div class="pull-right" style="margin-left: 10px !important;">
+                <span class="final-btn">
+                    <button  type="button" class="consumption-submit btn btn-default" th:text="#{calculator.calculate}">Izračunaj</button>
+                </span>
+            </div>
+
+
+        </div>
+    </div>
+
+</div>
+
+</body>
+</html>

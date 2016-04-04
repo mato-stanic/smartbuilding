@@ -1,0 +1,18 @@
+<td>
+   <select class="form-control" th:name="internationalCallsDistribution[__${ccpIndex}__].country">
+       <option th:each="country : ${countries}" th:text="${country.name}" th:value="${country.id}"
+               th:selected="${ccp.country?.id == country.id}">Zemlja</option>
+   </select>
+</td>
+
+<td>
+    <input type="text" class="form-control" th:name="internationalCallsDistribution[__${ccpIndex}__].percentage" th:value="${ccp.percentage}"
+           data-bv-notempty="" data-bv-notempty-message="Procenat mora biti brojčana vrijednost"
+           data-bv-numeric="" data-bv-numeric-message="Procenat mora biti brojčana vrijednost"
+           data-bv-lessthan="" data-bv-lessthan-value="100" data-bv-lessthan-inclusive="true"
+           data-bv-lessthan-message="Procenat ne smije biti veći od 100"/>
+</td>
+
+<td>
+    <button type="button" class="btn" th:attr="data-ccp-index=${ccpIndex}" onclick="deleteCountryCodePercentage(this)">Obriši</button>
+</td>

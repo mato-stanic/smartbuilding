@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+
+<head lang="en">
+    <meta charset="UTF-8"/>
+    <title>Smart building</title>
+</head>
+<body>
+
+
+<div class="bs-component"  th:fragment="content(internationalCallsDistribution)">
+    <table class="table">
+        <tr>
+            <th>Država</th>
+            <th th:text="${profileDTO instanceof T(hr.m2stanic.smartbuilding.web.dto.FixedPhoneUserProfileDTO) ? 'Procenat razgovora' : 'Procenat razgovora / poruka'}">
+                Procenat razgovora / poruka
+            </th>
+            <th width="50"></th>
+        </tr>
+
+        <tr th:each="ccp : ${internationalCallsDistribution}"  th:with="ccpIndex=${ccpStat.index}" >
+            <td th:replace="admin/user-profile/international-calls-row"> </td>
+        </tr>
+
+    </table>
+
+</div>
+
+</body>
+</html>
+
+
+

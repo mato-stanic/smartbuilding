@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+
+<head lang="en">
+    <meta charset="UTF-8"/>
+    <title>Smart building</title>
+</head>
+<body>
+
+<div th:fragment="content">
+
+    <div class="tray tray-center" >
+
+        <div class="mw1000 center-block">
+
+            <div class="blue-top">
+
+                <div class="panel heading-border panel-primary">
+
+                    <div class="panel-body bg-light">
+
+                        <div>
+                            <button type="button" class="btn btn-primary compose-msg pull-right">Nova poruka</button>
+                            <h2 class="pull-left">Poruke</h2>
+                            <div class="clearfix"></div>
+                        </div>
+
+
+                        <div class="panel">
+                            <div class="panel-heading">
+                                <ul class="nav panel-tabs-border panel-tabs panel-tabs-left">
+                                    <li class="active">
+                                        <a href="#received" data-toggle="tab">Primljene</a>
+                                    </li>
+                                    <li>
+                                        <a href="#sent" data-toggle="tab">Poslane</a>
+                                    </li>
+                                </ul>
+                            </div>
+                            <div class="panel-body">
+
+                                <div class="tab-content pn br-n">
+
+                                    <div id="received" class="tab-pane active">
+                                        <div th:replace="admin/messages/received :: content"></div>
+                                    </div>
+                                    <div id="sent" class="tab-pane">
+                                        <div th:replace="admin/messages/sent :: content"></div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+
+
+
+                        <div id="msgComposer" class="modal fade">
+                            <div class="modal-dialog modal-lg">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                        <h4 class="modal-title">Nova poruka</h4>
+                                    </div>
+
+                                    <div class="modal-body">
+
+                                        <form id="sendMsgForm" th:action="@{/admin/messages/send}"  method="post">
+
+                                            <div class="row">
+                                                <div class="form-group">
+                                                    <label class="col-sm-2 control-label">Primatelj </label>
+                                                    <div class="col-sm-10">
+                                                            <select name="recipientId" class="form-control"
+                                                                    data-bv-notempty=""  data-bv-notempty-message="Morate odabrati primatelja">
+                                                                <!--@thymesVar id="recipients" type="java.util.List<hr.m2stanic.smartbuilding.core.company.Company>"-->
+                                                                <option th:if="${loggedInUser.company instanceof T(hr.m2stanic.smartbuilding.core.company.Agency)}" value="">Odaberite primatelja</option>
+                                                                <option th:if="${loggedInUser.company instanceof T(hr.m2stanic.smartbuilding.core.company.Agency)}" th:each="rcp : ${recipients}" th:value="${rcp.id}" th:text="${rcp.getName()}"></option>
+                                                                <option th:if="${loggedInUser.company instanceof T(hr.m2stanic.smartbuilding.core.company.OperatorGroup)}" th:each="rcp : ${recipients}" th:value="${rcp.id}" th:text="${rcp.getName()}"></option>
+                                                            </select>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="row top-margin-20">
+                                                <label class="col-sm-2 control-label">Naslov </label>
+                                                <div class="form-group">
+                                                    <div class="col-sm-10">
+                                                            <input type="text" name="title" class="form-control" placeholder="Naslov"
+                                                                   data-bv-notempty=""  data-bv-notempty-message="Niste upisali naslov"/>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="row top-margin-20">
+                                                <div class="form-group">
+                                                    <div class="col-lg-12">
+                                                            <textarea rows="5" name="body" class="form-control" placeholder="Poruka..."
+                                                                      data-bv-notempty=""  data-bv-notempty-message="Niste upisali poruku"/>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                        </form>
+                                    </div>
+
+                                    <div class="modal-footer">
+                                        <button id="sendMsgBtn" type="button" class="btn btn-primary" >Pošalji</button>
+                                        <button  type="button" class="btn btn-default" data-dismiss="modal" th:text="#{admin.closeButton}">Zatvori</button>
+                                    </div>
+                                </div><!-- /.modal-content -->
+                            </div><!-- /.modal-dialog -->
+                        </div><!-- /.modal -->
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+
+
+
+
+
+    <script th:inline="javascript">
+        //<![CDATA[
+
+        var unreadMsgCount = [[${unreadMsgCount}]];
+
+        function showMessageComposer(recipientId, title){
+            if(recipientId)
+                $("#msgComposer select[name='recipientId'] ").val(recipientId);
+            $("#msgComposer input[name='title']").val(title ? title : '');
+            $("#msgComposer textarea[name='body']").val("");
+            $("#msgComposer").modal("show");
+        }
+
+        function loadSentMessages(page){
+            var url = [[@{/admin/messages/sent}]];
+            if(page)
+                url += "?page=" + page;
+
+            $("#sent").load(url);
+        }
+
+        function loadReceivedMessages(page){
+            var url = [[@{/admin/messages/received}]];
+            if(page)
+                url += "?page=" + page;
+            $("#received").load(url);
+        }
+
+        function showMessageDetails(msgId, markRead, el) {
+
+            $("#msgDetails-" + msgId).modal("show");
+            if(markRead && el && $(el).attr("data-msg-read") == "false")
+                markMessageRead(msgId, $(el));
+        }
+
+        function markMessageRead(msgId, el){
+            var url = [[@{/admin/messages/mark-read}]] + '?msgId=' + msgId;
+            $.ajax({
+                url: url,
+                success:function( respData, textStatus, jqXHR){
+                    if(respData == "SUCCESS") {
+                        $(".msg-" + msgId).css({ "font-weight": "normal"});
+                        el.attr("data-msg-read", "true");
+                        unreadMsgCount--;
+                        $("#unreadMsgCount").text(unreadMsgCount);
+                    }
+                }
+            });
+        }
+
+        $(document).ready(function (){
+
+            $(".compose-msg").on("click", function(ev){
+                ev.preventDefault();
+                showMessageComposer(null, null);
+            });
+
+
+
+            $('#sendMsgBtn').on("click", function(ev) {
+                ev.preventDefault();
+
+                $('#sendMsgForm').data('bootstrapValidator').validate();
+                var formValid = $('#sendMsgForm').data('bootstrapValidator').isValid();
+
+                if(!formValid)
+                    return;
+
+                var data = $("#sendMsgForm").serialize();
+                var url = [[@{/admin/messages/send}]];
+                $.post(url, data, function( data ){
+                        if(data == "SUCCESS") {
+                            $("#msgComposer").modal("hide");
+                            loadSentMessages();
+                            showMessageDialog(null, "Poruka je uspješno poslana!");
+                        }
+                        else{
+                            showMessageDialog(null, "Greška pri slanju poruke!");
+                        }
+                    }
+                ).fail(function() {
+                            showMessageDialog(null, "Greška pri slanju poruke!");
+                        });
+            });
+
+            var validatorOptions =  {excluded: [':disabled'], verbose:false};
+            $('#sendMsgForm').bootstrapValidator(validatorOptions);
+        });
+        //]]>
+    </script>
+
+</div>
+
+
+</body>
+</html>

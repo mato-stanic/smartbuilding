@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+
+<head lang="en">
+    <meta charset="UTF-8"/>
+    <title></title>
+</head>
+<body>
+
+
+<div class="sidebar-left-content nano-content" th:fragment="navigation">
+
+    <!-- Start: Sidebar Menu -->
+    <ul class="nav sidebar-menu">
+
+
+        <li class="sidebar-label pt15">MENU</li>
+
+        <li th:classappend="${mainNavSel == T(hr.m2stanic.smartbuilding.web.admin.MainNavigationItem).DASHBOARD} ? 'active' : ''">
+            <a th:href="@{/admin/}">
+                <span class="glyphicon glyphicon-home"></span>
+                <span class="sidebar-title">Pregled aktivnosti</span>
+            </a>
+        </li>
+
+        <li>
+            <a th:classappend="${mainNavSel == T(hr.m2stanic.smartbuilding.web.admin.MainNavigationItem).MESSAGES} ? 'menu-open' : ''" th:href="@{/admin/messages/list}">
+                <span class="glyphicons glyphicons-envelope"></span>
+                <span class="sidebar-title">Poruke (<span id="unreadMsgCount" th:text="${unreadMsgCount}"></span>)</span>
+            </a>
+        </li>
+
+        <!--@thymesVar id="loggedInUser" type="hr.m2stanic.smartbuilding.core.user.User"-->
+        <li th:if="${loggedInUser.role.hasPermission(T(hr.m2stanic.smartbuilding.core.security.Permission).MANAGE_USERS)}">
+
+            <a href="#" th:if="${loggedInUser.role.scope == T(hr.m2stanic.smartbuilding.core.security.RoleScope).ADMIN}" class="accordion-toggle"
+               th:classappend="${mainNavSel == T(hr.m2stanic.smartbuilding.web.admin.MainNavigationItem).USERS} ? 'menu-open' : ''">
+                <span class="glyphicons glyphicons-group"></span>
+                <span class="sidebar-title">Popis stanova</span>
+                <span class="caret"></span>
+            </a>
+
+
+            <ul class="nav sub-nav">
+
+                <li th:each="ag : ${agencies}">
+                    <a th:href="@{/admin/user/list(apartmentId=${ag.id})}">
+                        <span class="glyphicons glyphicons-building"></span>
+                        <span th:text="${ag.name.length() &gt; 18} ? ${ag.name.substring(0,18)} + '...' : ${ag.name}" th:title="${ag.name}">Agency name</span>
+                    </a>
+                </li>
+                <li th:each="op : ${userGroups}">
+                    <a th:href="@{/admin/user/list(apartmentId=${op.id})}">
+                        <span class="glyphicons glyphicons-building"></span>
+                        <span th:text="${op.name.length() &gt; 18} ? ${op.name.substring(0,18)} + '...' : ${op.name}" th:title="${op.name}">Operator name</span>
+                    </a>
+                </li>
+            </ul>
+
+        </li>
+
+        <li>
+            <a th:href="@{/res/ekip-manual.pdf}" target="_blank">
+                <span class="glyphicons glyphicons-book_open"></span>
+                <span class="sidebar-title">Upute za korišćenje</span>
+            </a>
+        </li>
+
+    </ul>
+    <!-- End: Sidebar Menu -->
+
+    <!-- Start: Sidebar Collapse Button -->
+    <div class="sidebar-toggle-mini">
+        <a href="#">
+            <span class="fa fa-sign-out"></span>
+        </a>
+    </div>
+    <!-- End: Sidebar Collapse Button -->
+
+</div>
+
+</body>
+</html>
