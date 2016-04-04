@@ -23,7 +23,7 @@
                         <!--<div class="row">-->
                             <!--<div class="col-sm-12">-->
                                 <!--<label class="control-label">Organizacija:</label>-->
-                                <!--<select name="companyId" class="form-control" style="width: auto !important;display: inline-block;">-->
+                                <!--<select name="apartmentId" class="form-control" style="width: auto !important;display: inline-block;">-->
                                     <!--<option value="-1">Sve</option>-->
                                     <!--<option th:each="ag : ${agencies}" th:value="${ag.id}" th:text="${ag.name}" th:selected="${ag.id == company?.id}"></option>-->
                                     <!--<option th:each="op : ${userGroups}" th:value="${op.id}" th:text="${op.name}" th:selected="${op.id == company?.id}"></option>-->
@@ -55,7 +55,7 @@
                     <tbody>
                         <!--@thymesVar id="userActivity" type="org.springframework.data.domain.Page<hr.m2stanic.smartbuilding.core.appuser.AppUser>"-->
                         <tr th:each="act : ${userActivity}">
-                            <td th:text="${act.company.name}">stan</td>
+                            <td th:text="${act.apartment.name}">stan</td>
                             <td th:text="${act.firstName}">ime</td>
                             <td th:text="${act.lastName}">prezime</td>
                             <th th:text="${act.lastLogin != null} ? ${act.lastLogin.toString('dd.MM.yyyy HH:mm')} : '- - -'">last login</th>

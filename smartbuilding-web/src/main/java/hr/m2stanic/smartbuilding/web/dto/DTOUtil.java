@@ -4,7 +4,7 @@ import hr.m2stanic.smartbuilding.core.company.Admin;
 import lombok.extern.slf4j.Slf4j;
 
 import hr.m2stanic.smartbuilding.core.appuser.AppUser;
-import hr.m2stanic.smartbuilding.core.company.Company;
+import hr.m2stanic.smartbuilding.core.company.Apartment;
 import hr.m2stanic.smartbuilding.core.company.UserGroup;
 import hr.m2stanic.smartbuilding.core.security.Role;
 import org.joda.time.LocalDateTime;
@@ -29,7 +29,7 @@ public class DTOUtil {
 
     public static UserDTO toDTO(AppUser appUser) {
         return appUser != null ? new UserDTO(appUser.getId(), appUser.getUsername(), appUser.isActive(), appUser.getFirstName(),
-                appUser.getLastName(), appUser.getPassword(), appUser.getEmail(), toDTO(appUser.getRole()), toDTO(appUser.getCompany())) : null;
+                appUser.getLastName(), appUser.getPassword(), appUser.getEmail(), toDTO(appUser.getRole()), toDTO(appUser.getApartment())) : null;
     }
 
     public static AppUser fromDTO(UserDTO user) {
@@ -37,7 +37,7 @@ public class DTOUtil {
                 user.getPassword(), user.getEmail(), fromDTO(user.getCompany()), fromDTO(user.getRole()), null) : null;
     }
 
-    public static Company fromDTO(CompanyDTO dto) {
+    public static Apartment fromDTO(CompanyDTO dto) {
         return (dto instanceof UserGroupDTO) ? fromDTO((UserGroupDTO) dto) : fromDTO((AgencyDTO) dto);
     }
 
@@ -46,8 +46,8 @@ public class DTOUtil {
     }
 
 
-    public static CompanyDTO toDTO(Company company) {
-        return company instanceof Admin ? toDTO((Admin) company) : toDTO((UserGroup) company);
+    public static CompanyDTO toDTO(Apartment apartment) {
+        return apartment instanceof Admin ? toDTO((Admin) apartment) : toDTO((UserGroup) apartment);
     }
 
 

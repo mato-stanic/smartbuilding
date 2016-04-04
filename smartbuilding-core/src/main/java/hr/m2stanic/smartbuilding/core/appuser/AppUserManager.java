@@ -17,7 +17,7 @@ public interface AppUserManager {
 
     List<AppUser> getAllUsersNotAdmin();
 
-    List<AppUser> getCompanyUsers(Long operatorId);
+    List<AppUser> getApartmentUsers(Long operatorId);
 
     Page<AppUser> getByRole(Long roleId, Pageable pageable);
 

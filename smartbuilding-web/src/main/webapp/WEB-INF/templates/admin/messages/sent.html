@@ -63,7 +63,7 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                        <h4 class="modal-title"><span th:text="${msg.sender.fullName} +' | '+ ${msg.sender.company.name} + '&nbsp; &#8594; &nbsp;' + ${msg.recipient.name}"></span></h4>
+                        <h4 class="modal-title"><span th:text="${msg.sender.fullName} +' | '+ ${msg.sender.getApartment.name} + '&nbsp; &#8594; &nbsp;' + ${msg.recipient.name}"></span></h4>
                     </div>
                     <div class="modal-body">
                         <h3 class="msg-title" th:text="${msg.title}"></h3>

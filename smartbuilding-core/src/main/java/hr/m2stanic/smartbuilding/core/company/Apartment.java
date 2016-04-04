@@ -17,7 +17,7 @@ import javax.validation.constraints.Size;
 @Inheritance
 @DiscriminatorColumn(name = "user_type")
 @Table(name = "organization")
-public abstract class Company {
+public abstract class Apartment {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "company_seq")
@@ -35,8 +35,8 @@ public abstract class Company {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Company company = (Company) o;
-        boolean sameName = Objects.equal(getName(), company.getName());
+        Apartment apartment = (Apartment) o;
+        boolean sameName = Objects.equal(getName(), apartment.getName());
         return sameName;
     }
 

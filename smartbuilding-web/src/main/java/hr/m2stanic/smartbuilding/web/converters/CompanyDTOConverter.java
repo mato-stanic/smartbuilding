@@ -17,6 +17,6 @@ public class CompanyDTOConverter implements Converter<String, CompanyDTO> {
 
     @Override
     public CompanyDTO convert(String id) {
-        return DTOUtil.toDTO(companyManager.getCompany(Long.parseLong(id)));
+        return DTOUtil.toDTO(companyManager.getApartment(Long.parseLong(id)));
     }
 }

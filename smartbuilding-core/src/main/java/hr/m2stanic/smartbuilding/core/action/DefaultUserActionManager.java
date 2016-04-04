@@ -35,17 +35,5 @@ public class DefaultUserActionManager implements UserActionManager {
     public void save(UserAction userAction) {
         queue.add(userAction);
     }
-
-    @Override
-    public Page<UserAction> getAllUserActions(Pageable pageable) {
-        return repository.findAll(pageable);
-    }
-
-    @Override
-    public Page<UserAction> getCompanyUserActions(Long companyId, Pageable pageable) {
-        return repository.findByUserCompanyId(companyId, pageable);
-    }
-
-
-
+    
 }

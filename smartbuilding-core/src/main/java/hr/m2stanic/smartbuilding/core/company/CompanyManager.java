@@ -5,15 +5,11 @@ import java.util.List;
 public interface CompanyManager {
 
 
-    Company save(Company agency);
+    Apartment save(Apartment agency);
 
-    Company getCompany(Long id);
+    Apartment getApartment(Long id);
 
-    Company getCompany(String name);
-
-    Admin getAgency(Long id);
-
-    List<Company> getAllCompanies();
+    Apartment getApartment(String name);
 
     List<Admin> getAllAgencies();
 

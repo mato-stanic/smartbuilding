@@ -10,10 +10,10 @@ import javax.persistence.Entity;
 
 @NoArgsConstructor
 @Entity
-@DiscriminatorValue("OPERATOR")
+@DiscriminatorValue("TENANT")
 @Getter
 @Setter
-public class UserGroup extends Company {
+public class UserGroup extends Apartment {
 
     public UserGroup(Long id, String name) {
         super(id, name);

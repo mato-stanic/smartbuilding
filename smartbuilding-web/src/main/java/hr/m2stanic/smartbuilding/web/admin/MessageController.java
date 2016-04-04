@@ -2,6 +2,7 @@ package hr.m2stanic.smartbuilding.web.admin;
 
 
 import hr.m2stanic.smartbuilding.core.company.Admin;
+import hr.m2stanic.smartbuilding.core.company.Apartment;
 import lombok.extern.slf4j.Slf4j;
 import org.joda.time.LocalDateTime;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +18,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import hr.m2stanic.smartbuilding.core.appuser.AppUser;
 import hr.m2stanic.smartbuilding.core.appuser.AppUserManager;
-import hr.m2stanic.smartbuilding.core.company.Company;
 import hr.m2stanic.smartbuilding.core.company.CompanyManager;
 import hr.m2stanic.smartbuilding.core.messages.Message;
 import hr.m2stanic.smartbuilding.core.messages.MessageManager;
@@ -46,13 +46,13 @@ public class MessageController {
 
         AppUser loggedInUser = appUserManager.getLoggedInUser();
 
-        List<? extends Company> recipients = loggedInUser.getCompany() instanceof Admin ? companyManager.getAllOperatorGroups() : companyManager.getAllAgencies();
+        List<? extends Apartment> recipients = loggedInUser.getApartment() instanceof Admin ? companyManager.getAllOperatorGroups() : companyManager.getAllAgencies();
         model.addAttribute("recipients", recipients);
 
-        Page<Message> receivedMessages = messageManager.getReceivedMessages(loggedInUser.getCompany(), pageable);
+        Page<Message> receivedMessages = messageManager.getReceivedMessages(loggedInUser.getApartment(), pageable);
         model.addAttribute("receivedMessages", receivedMessages);
 
-        Page<Message> sentMessages = messageManager.getSentMessages(loggedInUser.getCompany(), pageable);
+        Page<Message> sentMessages = messageManager.getSentMessages(loggedInUser.getApartment(), pageable);
         model.addAttribute("sentMessages", sentMessages);
 
         return "admin/messages/message-list";
@@ -64,7 +64,7 @@ public class MessageController {
     public String getReceivedMessages(Model model, @PageableDefault(size = 20) Pageable pageable) {
 
         AppUser loggedInUser = appUserManager.getLoggedInUser();
-        Page<Message> receivedMessages = messageManager.getReceivedMessages(loggedInUser.getCompany(), pageable);
+        Page<Message> receivedMessages = messageManager.getReceivedMessages(loggedInUser.getApartment(), pageable);
         model.addAttribute("receivedMessages", receivedMessages);
         return "admin/messages/received";
     }
@@ -75,7 +75,7 @@ public class MessageController {
     public String getSentMessages(Model model, @PageableDefault(size = 20) Pageable pageable) {
 
         AppUser loggedInUser = appUserManager.getLoggedInUser();
-        Page<Message> sentMessages = messageManager.getSentMessages(loggedInUser.getCompany(), pageable);
+        Page<Message> sentMessages = messageManager.getSentMessages(loggedInUser.getApartment(), pageable);
         model.addAttribute("sentMessages", sentMessages);
         return "admin/messages/sent";
     }
@@ -94,7 +94,7 @@ public class MessageController {
 
         AppUser loggedInUser = appUserManager.getLoggedInUser();
         try {
-            Company recipient = companyManager.getCompany(recipientId);
+            Apartment recipient = companyManager.getApartment(recipientId);
             Message message = new Message(null, LocalDateTime.now(), title, body, recipient, loggedInUser, false);
             messageManager.save(message);
             return "SUCCESS";
@@ -111,7 +111,7 @@ public class MessageController {
         try {
             AppUser loggedInUser = appUserManager.getLoggedInUser();
             Message message = messageManager.getMessage(msgId);
-            if (loggedInUser.getCompany().getId().equals(message.getRecipient().getId())) {
+            if (loggedInUser.getApartment().getId().equals(message.getRecipient().getId())) {
                 if (!message.isRead()) {
                     message.setRead(true);
                     messageManager.save(message);

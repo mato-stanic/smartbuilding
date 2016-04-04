@@ -1,6 +1,6 @@
 package hr.m2stanic.smartbuilding.core.messages;
 
-import hr.m2stanic.smartbuilding.core.company.Company;
+import hr.m2stanic.smartbuilding.core.company.Apartment;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -30,17 +30,17 @@ public class DefaultMessageManager implements MessageManager {
     }
 
     @Override
-    public Page<Message> getReceivedMessages(Company recipient, Pageable pageable) {
+    public Page<Message> getReceivedMessages(Apartment recipient, Pageable pageable) {
         return repository.findByRecipientOrderByIdDesc(recipient, pageable);
     }
 
     @Override
-    public Page<Message> getSentMessages(Company sender, Pageable pageable) {
-        return repository.findBySenderCompanyIdOrderByIdDesc(sender.getId(), pageable);
+    public Page<Message> getSentMessages(Apartment sender, Pageable pageable) {
+        return repository.findBySenderApartmentIdOrderByIdDesc(sender.getId(), pageable);
     }
 
     @Override
-    public Long getUnreadMessageCount(Long companyId) {
-        return repository.countByRecipientIdAndRead(companyId, false);
+    public Long getUnreadMessageCount(Long apartmentId) {
+        return repository.countByRecipientIdAndRead(apartmentId, false);
     }
 }

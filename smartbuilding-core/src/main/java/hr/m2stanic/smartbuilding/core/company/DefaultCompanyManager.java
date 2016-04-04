@@ -28,38 +28,20 @@ public class DefaultCompanyManager implements CompanyManager {
 
     @Override
     @Caching(evict = { @CacheEvict({COMPANIES_ALL_CACHE, COMPANIES_AGENCIES_CACHE, COMPANIES_OPERATOR_GROUPS_CACHE})}, put = {@CachePut(value={COMPANIES_BY_ID_CACHE}, key="#company.id") })
-    public Company save(Company company) {
-        return repository.save(company);
+    public Apartment save(Apartment apartment) {
+        return repository.save(apartment);
     }
 
     @Override
     @Cacheable(COMPANIES_BY_ID_CACHE)
-    public Company getCompany(Long id) {
+    public Apartment getApartment(Long id) {
         return repository.findOne(id);
     }
 
     @Override
-    public Company getCompany(String name) {
+    public Apartment getApartment(String name) {
         return repository.findByName(name);
     }
-
-    @Override
-    @Cacheable(COMPANIES_BY_ID_CACHE)
-    public Admin getAgency(Long id) {
-        Company company = repository.findOne(id);
-        return company instanceof Admin ? (Admin) company : null;
-    }
-
-
-    @Override
-    @Cacheable(COMPANIES_ALL_CACHE)
-    public List<Company> getAllCompanies() {
-        Pageable pageable = new PageRequest(0, 100, Sort.Direction.ASC, "name");
-        List<Company> companies = repository.findAll(pageable).getContent();
-        return companies != null ? companies : new ArrayList<>();
-    }
-
-
 
     @Override
     @Cacheable(COMPANIES_AGENCIES_CACHE)

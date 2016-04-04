@@ -6,7 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
 
-public interface CompanyRepository extends JpaRepository<Company, Long> {
+public interface CompanyRepository extends JpaRepository<Apartment, Long> {
 
     @Query("select o from UserGroup o")
     Page<UserGroup> findAllOperatorGroups(Pageable pageable);
@@ -14,7 +14,7 @@ public interface CompanyRepository extends JpaRepository<Company, Long> {
     @Query("select a from Admin a")
     Page<Admin> findAllAgencies(Pageable pageable);
 
-    Company findByName(String name);
+    Apartment findByName(String name);
 
 
 

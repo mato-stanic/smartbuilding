@@ -140,7 +140,7 @@ function updateButtons(){
     }
 
 
-    if(roleScope == 'OPERATOR') {
+    if(roleScope == 'TENANT') {
         $("#saveBtn").prop("disabled", false);
         $("#saveBtn").removeClass('hide');
         $("#nextBtn").addClass("hide");

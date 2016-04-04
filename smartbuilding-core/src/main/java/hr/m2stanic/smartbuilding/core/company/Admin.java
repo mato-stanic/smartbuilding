@@ -8,7 +8,7 @@ import javax.persistence.Entity;
 @NoArgsConstructor
 @Entity
 @DiscriminatorValue("ADMIN")
-public class Admin extends Company {
+public class Admin extends Apartment {
 
     public Admin(Long id, String name) {
         super(id, name);

@@ -1,7 +1,8 @@
 package hr.m2stanic.smartbuilding.core.appuser;
 
 import com.google.common.base.Objects;
-import hr.m2stanic.smartbuilding.core.company.Company;
+import hr.m2stanic.smartbuilding.core.company.Apartment;
+import hr.m2stanic.smartbuilding.core.company.Apartment;
 import hr.m2stanic.smartbuilding.core.security.Role;
 import lombok.*;
 import org.hibernate.annotations.Type;
@@ -45,8 +46,8 @@ public class AppUser implements Serializable {
     private String email;
 
     @ManyToOne
-    @JoinColumn(name = "company_id")
-    private Company company;
+    @JoinColumn(name = "apartment_id")
+    private Apartment apartment;
 
 
     @ManyToOne(optional = true)

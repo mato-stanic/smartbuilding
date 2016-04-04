@@ -5,7 +5,7 @@ $(document).ready(function(){
     $('#editProfileForm').bootstrapValidator(validatorOptions);
     updateInternationalCallsMsgs();
 
-    if(roleScope == "OPERATOR"){
+    if(roleScope == "TENANT"){
         toggleFormElements("editProfileForm", true);
         $("#editProfileForm a").hide();
         $("#editProfileForm .btn").hide();

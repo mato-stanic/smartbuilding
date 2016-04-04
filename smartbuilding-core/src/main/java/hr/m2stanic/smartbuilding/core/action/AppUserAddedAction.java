@@ -18,7 +18,7 @@ public class AppUserAddedAction extends UserAction {
 
 
     public AppUserAddedAction(AppUser loggedInUser, AppUser appUser) {
-        super(null, LocalDateTime.now(), loggedInUser.getId(), loggedInUser.getFullName(), loggedInUser.getCompany().getId(), loggedInUser.getCompany().getName(), ReferencedEntityType.APP_USER, appUser.getId(), appUser.getFullName());
+        super(null, LocalDateTime.now(), loggedInUser.getId(), loggedInUser.getFullName(), loggedInUser.getApartment().getId(), loggedInUser.getApartment().getName(), ReferencedEntityType.APP_USER, appUser.getId(), appUser.getFullName());
     }
 
     @Override

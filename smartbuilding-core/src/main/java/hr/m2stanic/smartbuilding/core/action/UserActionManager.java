@@ -8,9 +8,6 @@ public interface UserActionManager {
 
     void save(UserAction userAction);
 
-    Page<UserAction> getAllUserActions(Pageable pageable);
-
-    Page<UserAction> getCompanyUserActions(Long companyId, Pageable pageable);
 
 
 

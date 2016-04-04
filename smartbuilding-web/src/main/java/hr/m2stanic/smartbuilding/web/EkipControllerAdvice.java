@@ -186,7 +186,7 @@ public class EkipControllerAdvice {
     public Long unreadMsgCount() {
         AppUser user = appUserManager.getLoggedInUser();
         if (user != null) {
-            return messageManager.getUnreadMessageCount(user.getCompany().getId());
+            return messageManager.getUnreadMessageCount(user.getApartment().getId());
         }
         return 0L;
     }

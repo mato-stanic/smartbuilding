@@ -1,7 +1,8 @@
 package hr.m2stanic.smartbuilding.core.messages;
 
 import hr.m2stanic.smartbuilding.core.appuser.AppUser;
-import hr.m2stanic.smartbuilding.core.company.Company;
+import hr.m2stanic.smartbuilding.core.company.Apartment;
+import hr.m2stanic.smartbuilding.core.company.Apartment;
 import lombok.*;
 import org.hibernate.annotations.Type;
 import org.joda.time.LocalDateTime;
@@ -35,7 +36,7 @@ public class Message {
 
     @ManyToOne
     @JoinColumn(name = "recipient_id")
-    private Company recipient;
+    private Apartment recipient;
 
     @ManyToOne
     @JoinColumn(name = "sender_id")

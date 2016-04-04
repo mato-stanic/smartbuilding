@@ -64,7 +64,7 @@ function updateButtons(){
     }
 
 
-    if(roleScope == 'OPERATOR') {
+    if(roleScope == 'TENANT') {
         $("#saveBtn").prop("disabled", false);
 
         $("#tabOther input").prop("disabled", false);

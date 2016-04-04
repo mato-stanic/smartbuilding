@@ -1,7 +1,7 @@
 package hr.m2stanic.smartbuilding.core.messages;
 
 
-import hr.m2stanic.smartbuilding.core.company.Company;
+import hr.m2stanic.smartbuilding.core.company.Apartment;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -13,11 +13,11 @@ public interface MessageManager {
 
     void delete(Long messageId);
 
-    Page<Message> getReceivedMessages(Company recipient, Pageable pageable);
+    Page<Message> getReceivedMessages(Apartment recipient, Pageable pageable);
 
-    Page<Message> getSentMessages(Company sender, Pageable pageable);
+    Page<Message> getSentMessages(Apartment sender, Pageable pageable);
 
-    Long getUnreadMessageCount(Long companyId);
+    Long getUnreadMessageCount(Long apartmentId);
 
 
 }

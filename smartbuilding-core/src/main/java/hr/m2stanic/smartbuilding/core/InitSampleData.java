@@ -37,7 +37,7 @@ public class InitSampleData {
 
 
 
-    private AppUser initAdminUser(Role adminRole, Admin ekip) {
+    private AppUser initAdminUser(Role adminRole, Admin adm) {
 
         AppUser admin = appUserManager.getByUsername("admin");
         if (admin == null) {
@@ -45,7 +45,7 @@ public class InitSampleData {
             admin.setFirstName("Administrator");
             admin.setActive(true);
             admin.setRole(adminRole);
-            admin.setCompany(ekip);
+            admin.setApartment(adm);
             admin = appUserManager.save(admin);
         }
         return admin;
@@ -63,9 +63,9 @@ public class InitSampleData {
 
     private void initOperators() {
 
-        UserGroup s1a = (UserGroup) companyManager.getCompany("Stan 1a");
-        UserGroup s1b = (UserGroup) companyManager.getCompany("Stan 1b");
-        UserGroup s2a = (UserGroup) companyManager.getCompany("Stan 2a");
+        UserGroup s1a = (UserGroup) companyManager.getApartment("Stan 1a");
+        UserGroup s1b = (UserGroup) companyManager.getApartment("Stan 1b");
+        UserGroup s2a = (UserGroup) companyManager.getApartment("Stan 2a");
 
         if(s1a ==  null)
             s1a = (UserGroup) companyManager.save(new UserGroup(null, "Stan 1a"));
@@ -87,13 +87,12 @@ public class InitSampleData {
             adminRole = roleManager.save(adminRole);
         }
 
-        Role operatorRole = roleManager.getRoleByName("operator");
+        Role operatorRole = roleManager.getRoleByName("tenant");
         if (operatorRole == null) {
 
-            Set<Permission> permissions = Sets.newHashSet(Permission.ACCESS_ADMIN_CONSOLE, Permission.MANAGE_TARIFFS_OPERATOR,
-                    Permission.MANAGE_PACKETS_OPERATOR, Permission.MANAGE_ZONES_OPERATOR, Permission.MANAGE_OPTIONS_OPERATOR);
+            Set<Permission> permissions = Sets.newHashSet(Permission.ACCESS_ADMIN_CONSOLE);
 
-            operatorRole = new Role(RoleScope.OPERATOR, "operator", "Operator", "Can administer tariffs and other entities", permissions);
+            operatorRole = new Role(RoleScope.TENANT, "tenant", "Tenant", "Can administer tariffs and other entities", permissions);
             roleManager.save(operatorRole);
         }
 
