@@ -30,10 +30,51 @@ public class DefaultUserActionManager implements UserActionManager {
     @Autowired
     private ThreadPoolTaskExecutor taskExecutor;
 
+    private Saver saver;
+
 
     @Override
     public void save(UserAction userAction) {
         queue.add(userAction);
+    }
+
+    class Saver implements Runnable {
+        private boolean active = true;
+
+        @Override
+        public void run() {
+            while (active) {
+                try {
+                    UserAction userAction = queue.take();
+                    if (active) repository.save(userAction);
+                } catch (Exception e) {
+                    log.error("Failed to save user action!", e);
+                }
+            }
+        }
+
+        public void stop() {
+            this.active = false;
+            try {
+                //add some dummy action to make queue.take() method return
+                queue.put(new AppUserAddedAction());
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    @PostConstruct
+    public void init() {
+        saver = new Saver();
+        taskExecutor.execute(saver);
+    }
+
+    @PreDestroy
+    public void destroy() {
+        if (saver != null) {
+            saver.stop();
+        }
     }
     
 }
