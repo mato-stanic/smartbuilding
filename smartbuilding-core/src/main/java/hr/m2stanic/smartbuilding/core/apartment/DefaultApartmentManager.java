@@ -1,4 +1,4 @@
-package hr.m2stanic.smartbuilding.core.company;
+package hr.m2stanic.smartbuilding.core.apartment;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,17 +17,17 @@ import java.util.List;
 import static hr.m2stanic.smartbuilding.core.CacheConstants.*;
 
 @Service
-public class DefaultCompanyManager implements CompanyManager {
+public class DefaultApartmentManager implements ApartmentManager {
 
 
 
     @Autowired
-    private CompanyRepository repository;
+    private ApartmentRepository repository;
 
 
 
     @Override
-    @Caching(evict = { @CacheEvict({COMPANIES_ALL_CACHE, COMPANIES_AGENCIES_CACHE, COMPANIES_OPERATOR_GROUPS_CACHE})}, put = {@CachePut(value={COMPANIES_BY_ID_CACHE}, key="#company.id") })
+    @Caching(evict = { @CacheEvict({COMPANIES_ALL_CACHE, COMPANIES_AGENCIES_CACHE, COMPANIES_OPERATOR_GROUPS_CACHE})}, put = {@CachePut(value={COMPANIES_BY_ID_CACHE}, key="#apartment.id") })
     public Apartment save(Apartment apartment) {
         return repository.save(apartment);
     }

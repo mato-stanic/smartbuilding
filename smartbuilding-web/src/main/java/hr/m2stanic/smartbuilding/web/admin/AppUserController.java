@@ -1,7 +1,7 @@
 package hr.m2stanic.smartbuilding.web.admin;
 
-import hr.m2stanic.smartbuilding.core.company.Admin;
-import hr.m2stanic.smartbuilding.core.company.Apartment;
+import hr.m2stanic.smartbuilding.core.apartment.Admin;
+import hr.m2stanic.smartbuilding.core.apartment.Apartment;
 import hr.m2stanic.smartbuilding.web.dto.UserDTO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +16,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import hr.m2stanic.smartbuilding.core.action.*;
 import hr.m2stanic.smartbuilding.core.appuser.AppUser;
 import hr.m2stanic.smartbuilding.core.appuser.AppUserManager;
-import hr.m2stanic.smartbuilding.core.company.CompanyManager;
+import hr.m2stanic.smartbuilding.core.apartment.ApartmentManager;
 import hr.m2stanic.smartbuilding.core.security.Role;
 import hr.m2stanic.smartbuilding.core.security.RoleManager;
 import hr.m2stanic.smartbuilding.core.security.RoleScope;
@@ -36,7 +36,7 @@ public class AppUserController {
     private AppUserManager appUserManager;
 
     @Autowired
-    private CompanyManager companyManager;
+    private ApartmentManager apartmentManager;
 
     @Autowired
     private RoleManager roleManager;
@@ -49,7 +49,7 @@ public class AppUserController {
     public String listUsers(Model model, Long apartmentId) {
 
         List<AppUser> appUsers = getUsers(apartmentId);
-        if (apartmentId != null) model.addAttribute("apartment", companyManager.getApartment(apartmentId));
+        if (apartmentId != null) model.addAttribute("apartment", apartmentManager.getApartment(apartmentId));
         model.addAttribute("userList", appUsers);
         return "admin/user/user-list";
     }
@@ -75,7 +75,7 @@ public class AppUserController {
         List<AppUser> appUsers = getUsers(apartmentId);
         model.addAttribute("userList", appUsers);
 
-        Apartment apartment = apartmentId != null ? companyManager.getApartment(apartmentId) : null;
+        Apartment apartment = apartmentId != null ? apartmentManager.getApartment(apartmentId) : null;
         if (apartment != null) model.addAttribute("company", apartment);
 
         model.addAttribute("roles", roleManager.getRoles(apartment != null && apartment instanceof Admin ? RoleScope.ADMIN : RoleScope.TENANT));
@@ -152,7 +152,7 @@ public class AppUserController {
     public UserDTO getUser(Long id, Long apartmentId) {
         AppUser appUser = id != null ? appUserManager.getUser(id) : new AppUser();
         if (appUser.getId() == null && apartmentId != null) {
-            Apartment apartment = companyManager.getApartment(apartmentId);
+            Apartment apartment = apartmentManager.getApartment(apartmentId);
             appUser.setApartment(apartment);
             appUser.setRole(getDefaultRole(RoleScope.TENANT));
         }

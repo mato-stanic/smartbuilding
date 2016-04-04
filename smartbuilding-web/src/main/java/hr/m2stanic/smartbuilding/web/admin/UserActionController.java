@@ -1,6 +1,6 @@
 package hr.m2stanic.smartbuilding.web.admin;
 
-import hr.m2stanic.smartbuilding.core.company.Apartment;
+import hr.m2stanic.smartbuilding.core.apartment.Apartment;
 import hr.m2stanic.smartbuilding.core.security.RoleScope;
 import org.joda.time.LocalDateTime;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,8 +14,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import hr.m2stanic.smartbuilding.core.appuser.AppUser;
 import hr.m2stanic.smartbuilding.core.appuser.AppUserManager;
-import hr.m2stanic.smartbuilding.core.company.CompanyManager;
-import hr.m2stanic.smartbuilding.core.company.UserGroup;
+import hr.m2stanic.smartbuilding.core.apartment.ApartmentManager;
+import hr.m2stanic.smartbuilding.core.apartment.UserGroup;
 
 import java.util.List;
 
@@ -26,7 +26,7 @@ public class UserActionController {
     private AppUserManager appUserManager;
 
     @Autowired
-    private CompanyManager companyManager;
+    private ApartmentManager apartmentManager;
 
 
     @RequestMapping(value = {"/admin/", "/admin"})
@@ -55,7 +55,7 @@ public class UserActionController {
     private Apartment resolveApartment(Long apartmentId, AppUser loggedInUser) {
         Apartment apartment = null;
         if (loggedInUser.getApartment() instanceof UserGroup) apartment = loggedInUser.getApartment();
-        else if (apartmentId != null) apartment = companyManager.getApartment(apartmentId);
+        else if (apartmentId != null) apartment = apartmentManager.getApartment(apartmentId);
         return apartment;
     }
 

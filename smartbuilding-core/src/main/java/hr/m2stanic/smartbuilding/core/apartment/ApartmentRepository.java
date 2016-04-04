@@ -1,4 +1,4 @@
-package hr.m2stanic.smartbuilding.core.company;
+package hr.m2stanic.smartbuilding.core.apartment;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -6,7 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
 
-public interface CompanyRepository extends JpaRepository<Apartment, Long> {
+public interface ApartmentRepository extends JpaRepository<Apartment, Long> {
 
     @Query("select o from UserGroup o")
     Page<UserGroup> findAllOperatorGroups(Pageable pageable);

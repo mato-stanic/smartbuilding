@@ -1,8 +1,7 @@
 package hr.m2stanic.smartbuilding.core.appuser;
 
 import com.google.common.base.Objects;
-import hr.m2stanic.smartbuilding.core.company.Apartment;
-import hr.m2stanic.smartbuilding.core.company.Apartment;
+import hr.m2stanic.smartbuilding.core.apartment.Apartment;
 import hr.m2stanic.smartbuilding.core.security.Role;
 import lombok.*;
 import org.hibernate.annotations.Type;

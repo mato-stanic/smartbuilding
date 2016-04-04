@@ -1,8 +1,8 @@
 package hr.m2stanic.smartbuilding.web.admin;
 
 
-import hr.m2stanic.smartbuilding.core.company.Admin;
-import hr.m2stanic.smartbuilding.core.company.Apartment;
+import hr.m2stanic.smartbuilding.core.apartment.Admin;
+import hr.m2stanic.smartbuilding.core.apartment.Apartment;
 import lombok.extern.slf4j.Slf4j;
 import org.joda.time.LocalDateTime;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import hr.m2stanic.smartbuilding.core.appuser.AppUser;
 import hr.m2stanic.smartbuilding.core.appuser.AppUserManager;
-import hr.m2stanic.smartbuilding.core.company.CompanyManager;
+import hr.m2stanic.smartbuilding.core.apartment.ApartmentManager;
 import hr.m2stanic.smartbuilding.core.messages.Message;
 import hr.m2stanic.smartbuilding.core.messages.MessageManager;
 import hr.m2stanic.smartbuilding.web.thymeleaf.Layout;
@@ -38,7 +38,7 @@ public class MessageController {
     private AppUserManager appUserManager;
 
     @Autowired
-    private CompanyManager companyManager;
+    private ApartmentManager apartmentManager;
 
 
     @RequestMapping("/list")
@@ -46,7 +46,7 @@ public class MessageController {
 
         AppUser loggedInUser = appUserManager.getLoggedInUser();
 
-        List<? extends Apartment> recipients = loggedInUser.getApartment() instanceof Admin ? companyManager.getAllOperatorGroups() : companyManager.getAllAgencies();
+        List<? extends Apartment> recipients = loggedInUser.getApartment() instanceof Admin ? apartmentManager.getAllOperatorGroups() : apartmentManager.getAllAgencies();
         model.addAttribute("recipients", recipients);
 
         Page<Message> receivedMessages = messageManager.getReceivedMessages(loggedInUser.getApartment(), pageable);
@@ -94,7 +94,7 @@ public class MessageController {
 
         AppUser loggedInUser = appUserManager.getLoggedInUser();
         try {
-            Apartment recipient = companyManager.getApartment(recipientId);
+            Apartment recipient = apartmentManager.getApartment(recipientId);
             Message message = new Message(null, LocalDateTime.now(), title, body, recipient, loggedInUser, false);
             messageManager.save(message);
             return "SUCCESS";

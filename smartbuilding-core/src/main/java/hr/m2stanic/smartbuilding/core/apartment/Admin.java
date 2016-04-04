@@ -1,4 +1,4 @@
-package hr.m2stanic.smartbuilding.core.company;
+package hr.m2stanic.smartbuilding.core.apartment;
 
 import lombok.NoArgsConstructor;
 

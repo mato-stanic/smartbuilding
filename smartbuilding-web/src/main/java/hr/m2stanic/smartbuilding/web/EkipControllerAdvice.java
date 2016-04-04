@@ -16,7 +16,7 @@ import org.springframework.web.servlet.NoHandlerFoundException;
 
 import hr.m2stanic.smartbuilding.core.appuser.AppUser;
 import hr.m2stanic.smartbuilding.core.appuser.AppUserManager;
-import hr.m2stanic.smartbuilding.core.company.*;
+import hr.m2stanic.smartbuilding.core.apartment.*;
 import hr.m2stanic.smartbuilding.core.messages.MessageManager;
 
 import javax.servlet.ServletContext;
@@ -42,7 +42,7 @@ public class EkipControllerAdvice {
     private AppUserManager appUserManager;
 
     @Autowired
-    private CompanyManager companyManager;
+    private ApartmentManager apartmentManager;
 
     @Autowired
     private MessageManager messageManager;
@@ -95,12 +95,12 @@ public class EkipControllerAdvice {
 
     @ModelAttribute("agencies")
     public List<AgencyDTO> getAgencies() {
-        return companyManager.getAllAgencies().stream().map(a -> DTOUtil.toDTO(a)).collect(Collectors.toList());
+        return apartmentManager.getAllAgencies().stream().map(a -> DTOUtil.toDTO(a)).collect(Collectors.toList());
     }
 
     @ModelAttribute("userGroups")
     public List<UserGroupDTO> getUserGroups() {
-        return companyManager.getAllOperatorGroups().stream().map(a -> DTOUtil.toDTO(a)).collect(Collectors.toList());
+        return apartmentManager.getAllOperatorGroups().stream().map(a -> DTOUtil.toDTO(a)).collect(Collectors.toList());
     }
 
     @ModelAttribute("baseUrl")

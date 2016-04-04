@@ -2,7 +2,7 @@ package hr.m2stanic.smartbuilding.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.joda.JodaModule;
-import hr.m2stanic.smartbuilding.core.company.CompanyManager;
+import hr.m2stanic.smartbuilding.core.apartment.ApartmentManager;
 import hr.m2stanic.smartbuilding.core.security.RoleManager;
 import hr.m2stanic.smartbuilding.web.thymeleaf.ThymeleafLayoutInterceptor;
 import hr.m2stanic.smartbuilding.web.converters.*;
@@ -62,7 +62,7 @@ public class WebDispatcherConfig extends WebMvcConfigurerAdapter {
     private WebSecurityManager securityManager;
 
     @Autowired
-    private CompanyManager companyManager;
+    private ApartmentManager apartmentManager;
 
     @Autowired
     private RoleManager roleManager;
@@ -203,7 +203,7 @@ public class WebDispatcherConfig extends WebMvcConfigurerAdapter {
         registrar.setDateTimeFormatter(dateTimeFormatter);
         registrar.registerFormatters(conversionService);
 
-        conversionService.addConverter(new CompanyDTOConverter(companyManager));
+        conversionService.addConverter(new CompanyDTOConverter(apartmentManager));
         conversionService.addConverter(new RoleDTOConverter(roleManager));
         return conversionService;
     }

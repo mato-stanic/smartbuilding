@@ -1,13 +1,12 @@
 package hr.m2stanic.smartbuilding.web.dto;
 
-import hr.m2stanic.smartbuilding.core.company.Admin;
+import hr.m2stanic.smartbuilding.core.apartment.Admin;
 import lombok.extern.slf4j.Slf4j;
 
 import hr.m2stanic.smartbuilding.core.appuser.AppUser;
-import hr.m2stanic.smartbuilding.core.company.Apartment;
-import hr.m2stanic.smartbuilding.core.company.UserGroup;
+import hr.m2stanic.smartbuilding.core.apartment.Apartment;
+import hr.m2stanic.smartbuilding.core.apartment.UserGroup;
 import hr.m2stanic.smartbuilding.core.security.Role;
-import org.joda.time.LocalDateTime;
 
 import java.util.stream.Collectors;
 

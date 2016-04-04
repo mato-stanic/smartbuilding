@@ -1,7 +1,7 @@
 package hr.m2stanic.smartbuilding.core.messages;
 
 
-import hr.m2stanic.smartbuilding.core.company.Apartment;
+import hr.m2stanic.smartbuilding.core.apartment.Apartment;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 

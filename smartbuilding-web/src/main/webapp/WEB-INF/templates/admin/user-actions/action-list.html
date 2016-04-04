@@ -19,14 +19,14 @@
 
                 <form id="actionFilterForm"  th:action="@{/admin/}">
 
-                    <!--<div class="form-group" th:if="${loggedInUser.company instanceof T(hr.m2stanic.smartbuilding.core.company.Agency)}">-->
+                    <!--<div class="form-group" th:if="${loggedInUser.apartment instanceof T(hr.m2stanic.smartbuilding.core.apartment.Agency)}">-->
                         <!--<div class="row">-->
                             <!--<div class="col-sm-12">-->
                                 <!--<label class="control-label">Organizacija:</label>-->
                                 <!--<select name="apartmentId" class="form-control" style="width: auto !important;display: inline-block;">-->
                                     <!--<option value="-1">Sve</option>-->
-                                    <!--<option th:each="ag : ${agencies}" th:value="${ag.id}" th:text="${ag.name}" th:selected="${ag.id == company?.id}"></option>-->
-                                    <!--<option th:each="op : ${userGroups}" th:value="${op.id}" th:text="${op.name}" th:selected="${op.id == company?.id}"></option>-->
+                                    <!--<option th:each="ag : ${agencies}" th:value="${ag.id}" th:text="${ag.name}" th:selected="${ag.id == apartment?.id}"></option>-->
+                                    <!--<option th:each="op : ${userGroups}" th:value="${op.id}" th:text="${op.name}" th:selected="${op.id == apartment?.id}"></option>-->
                                 <!--</select>-->
 
                                 <!--&nbsp;&nbsp;&nbsp;&nbsp;-->
