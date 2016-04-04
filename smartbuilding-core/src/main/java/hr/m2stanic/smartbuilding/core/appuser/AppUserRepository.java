@@ -17,6 +17,9 @@ public interface AppUserRepository extends JpaRepository<AppUser, Long>, JpaSpec
 
     AppUser findByUsername(String username);
 
+    @Query("select u from AppUser u where u.company.name not like 'ADMIN' order by u.company.name asc")
+    List<AppUser> findAllNotAdmin();
+
     AppUser findByEmail(String email);
 
     @Query("select u from AppUser u where u.company.id = ?1")

@@ -6,6 +6,7 @@ import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -41,6 +42,11 @@ public class AppUserManagerImpl implements AppUserManager {
     @Override
     public List<AppUser> getAllUsers() {
         return appUserRepository.findAll();
+    }
+
+    @Override
+    public List<AppUser> getAllUsersNotAdmin() {
+        return appUserRepository.findAllNotAdmin();
     }
 
     @Override

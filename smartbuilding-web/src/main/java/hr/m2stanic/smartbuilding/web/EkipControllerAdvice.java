@@ -129,7 +129,7 @@ public class EkipControllerAdvice {
         if (!baseUrl.endsWith("/"))
             baseUrl += "/";
 
-        System.out.println("base url: " + baseUrl);
+//        System.out.println("base url: " + baseUrl);
         return baseUrl;
     }
 

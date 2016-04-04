@@ -7,6 +7,8 @@ import hr.m2stanic.smartbuilding.core.appuser.AppUser;
 import hr.m2stanic.smartbuilding.core.company.Company;
 import hr.m2stanic.smartbuilding.core.company.UserGroup;
 import hr.m2stanic.smartbuilding.core.security.Role;
+import org.joda.time.LocalDateTime;
+
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -30,14 +32,17 @@ public class DTOUtil {
                 appUser.getLastName(), appUser.getPassword(), appUser.getEmail(), toDTO(appUser.getRole()), toDTO(appUser.getCompany())) : null;
     }
 
-
     public static AppUser fromDTO(UserDTO user) {
         return user != null ? new AppUser(user.getId(), user.getUsername(), user.isActive(), user.getFirstName(), user.getLastName(),
-                user.getPassword(), user.getEmail(), fromDTO(user.getCompany()), fromDTO(user.getRole())) : null;
+                user.getPassword(), user.getEmail(), fromDTO(user.getCompany()), fromDTO(user.getRole()), null) : null;
     }
 
     public static Company fromDTO(CompanyDTO dto) {
         return (dto instanceof UserGroupDTO) ? fromDTO((UserGroupDTO) dto) : fromDTO((AgencyDTO) dto);
+    }
+
+    public static UserGroup fromDTO(UserGroupDTO dto) {
+        return dto != null ? new UserGroup(dto.getId(), dto.getName()) : null;
     }
 
 

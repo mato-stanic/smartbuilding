@@ -15,11 +15,13 @@
 
 
         <li class="sidebar-label pt15">MENU</li>
-
+<!--loggedInUser.getRole().getScope().equals(RoleScope.ADMIN)-->
+        <!--<span th:if="${loggedInUser.role.scope == T(hr.m2stanic.smartbuilding.core.security.RoleScope).ADMIN}"></span>-->
         <li th:classappend="${mainNavSel == T(hr.m2stanic.smartbuilding.web.admin.MainNavigationItem).DASHBOARD} ? 'active' : ''">
             <a th:href="@{/admin/}">
                 <span class="glyphicon glyphicon-home"></span>
-                <span class="sidebar-title">Pregled aktivnosti</span>
+                <span class="sidebar-title" th:if="${loggedInUser.role.scope == T(hr.m2stanic.smartbuilding.core.security.RoleScope).ADMIN}">Pregled aktivnosti</span>
+                <span class="sidebar-title" th:if="${loggedInUser.role.scope != T(hr.m2stanic.smartbuilding.core.security.RoleScope).ADMIN}">Upravljanje stanom</span>
             </a>
         </li>
 

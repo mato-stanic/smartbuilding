@@ -1,5 +1,8 @@
 package hr.m2stanic.smartbuilding.web.admin;
 
+import hr.m2stanic.smartbuilding.core.security.Permission;
+import hr.m2stanic.smartbuilding.core.security.RoleScope;
+import org.joda.time.LocalDateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -19,6 +22,8 @@ import hr.m2stanic.smartbuilding.core.company.Company;
 import hr.m2stanic.smartbuilding.core.company.CompanyManager;
 import hr.m2stanic.smartbuilding.core.company.UserGroup;
 
+import java.util.List;
+
 @Controller
 public class UserActionController {
 
@@ -33,24 +38,25 @@ public class UserActionController {
 
 
     @RequestMapping(value = {"/admin/", "/admin"})
-    public String listUserActions(Model model, @RequestParam(required = false) Long companyId, @RequestParam(required = false) Boolean onlyApprovalRequests,
+    public String listUserActions(Model model,
                                   @PageableDefault(sort = "id", direction = Sort.Direction.DESC) Pageable pageable) {
 
+
         AppUser loggedInUser = appUserManager.getLoggedInUser();
-
-        Company company = resolveCompany(companyId, loggedInUser);
-
-        if (company != null) {
-            model.addAttribute("company", company);
+        loggedInUser.setLastLogin(new LocalDateTime());
+        appUserManager.save(loggedInUser);
+        if(loggedInUser.getRole().getScope().equals(RoleScope.ADMIN))
+        {
+            List<AppUser> userActivity = appUserManager.getAllUsersNotAdmin();
+            model.addAttribute("userActivity", userActivity);
+            return "admin/user-actions/action-list";
+        }
+        else
+        {
+            return "admin/user-actions/apt-layout";
         }
 
-        if (onlyApprovalRequests != null) {
-            model.addAttribute("onlyApprovalRequests", onlyApprovalRequests);
-        }
 
-//        model.addAttribute("userActions", userActions);
-
-        return "admin/user-actions/action-list";
     }
 
 

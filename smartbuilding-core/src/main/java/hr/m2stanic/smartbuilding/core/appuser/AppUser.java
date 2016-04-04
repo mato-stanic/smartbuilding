@@ -4,6 +4,8 @@ import com.google.common.base.Objects;
 import hr.m2stanic.smartbuilding.core.company.Company;
 import hr.m2stanic.smartbuilding.core.security.Role;
 import lombok.*;
+import org.hibernate.annotations.Type;
+import org.joda.time.LocalDateTime;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -51,6 +53,9 @@ public class AppUser implements Serializable {
     @JoinColumn(name = "role_id")
     private Role role = null;
 
+    @Column(name = "last_login")
+    @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentLocalDateTime")
+    private LocalDateTime lastLogin = null;
 
     public AppUser(String username, String password) {
         this.username = username;
