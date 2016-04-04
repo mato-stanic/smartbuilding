@@ -34,7 +34,7 @@
                         <tr th:each="user : ${userList}">
                             <td th:text="${user.username}">User</td>
                             <td th:text="${user.fullName}">Ime i prezime</td>
-                            <td th:text="${user.company.name}">Organizacija</td>
+                            <td th:text="${user.apartment.name}">Organizacija</td>
 
                             <td style="font-size: 1.5em;" width="40" align="center">
                                 <a th:if="${apartment}" th:href="@{/admin/user/edit(id=${user.id}, apartmentId=${apartment.id})}" title="Uredi">

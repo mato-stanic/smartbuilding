@@ -61,10 +61,10 @@ public class AppUserController {
 
 
     @RequestMapping(value = "/edit", method = RequestMethod.GET)
-    public String showUserForm(Model model, @RequestParam(required = false) Long id, @RequestParam(required = false) Long apartmentId) {
+    public String showUserForm(Model model, @RequestParam(required = false) Long id, @RequestParam(required = false) Long companyId) {
 
-        UserDTO userDTO = getUser(id, apartmentId);
-        fillEditUserModel(model, apartmentId, userDTO);
+        UserDTO userDTO = getUser(id, companyId);
+        fillEditUserModel(model, companyId, userDTO);
         return "admin/user/user-form";
     }
 
@@ -84,10 +84,10 @@ public class AppUserController {
 
     @RequestMapping(value = "/edit", method = RequestMethod.POST)
     public String processUserForm(Model model, @Valid @ModelAttribute UserDTO userDTO, BindingResult result,
-                                  @RequestParam(required = false) Long apartmentId) {
+                                  @RequestParam(required = false) Long companyId) {
 
         if (result.hasErrors()) {
-            fillEditUserModel(model, apartmentId, userDTO);
+            fillEditUserModel(model, companyId, userDTO);
             return "admin/user/user-form";
         }
         try {
@@ -99,10 +99,10 @@ public class AppUserController {
             UserAction action = isNew ? new AppUserAddedAction(loggedInUser, appUser) : new AppUserUpdatedAction(loggedInUser, appUser);
             userActionManager.save(action);
 
-            return "redirect:/admin/user/list?apartmentId=" + appUser.getApartment().getId();
+            return "redirect:/admin/user/list?companyId=" + appUser.getApartment().getId();
         } catch (DataIntegrityViolationException daoe) {
             result.addError(new ObjectError("name", "User sa istim korisnickim imenom već postoji!"));
-            fillEditUserModel(model, apartmentId, userDTO);
+            fillEditUserModel(model, companyId, userDTO);
             return "admin/user/user-form";
         }
     }
@@ -134,6 +134,9 @@ public class AppUserController {
             loggedInUser.setEmail(email);
             loggedInUser.setPassword(password);
             appUserManager.save(loggedInUser);
+
+            UserAction userAction = new AppUserUpdatedAction(loggedInUser, loggedInUser);
+            userActionManager.save(userAction);
             return "SUCCESS";
 
         } catch (Exception e) {

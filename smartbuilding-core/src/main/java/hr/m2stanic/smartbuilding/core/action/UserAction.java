@@ -32,11 +32,11 @@ public abstract class UserAction {
     @Column(name = "user_name")
     private String userName;
 
-    @Column(name = "user_company_id")
-    private Long userCompanyId;
+    @Column(name = "user_apartment_id")
+    private Long userApartmentId;
 
-    @Column(name = "user_company_name")
-    private String userCompanyName;
+    @Column(name = "user_apartment_name")
+    private String userApartmentName;
 
     @Column(name = "ref_type")
     @Enumerated(EnumType.STRING)

@@ -7,8 +7,4 @@ import org.springframework.data.domain.Pageable;
 public interface UserActionManager {
 
     void save(UserAction userAction);
-
-
-
-
 }

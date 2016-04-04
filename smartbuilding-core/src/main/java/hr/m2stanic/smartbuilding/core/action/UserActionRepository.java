@@ -10,7 +10,7 @@ import java.util.List;
 
 public interface UserActionRepository extends JpaRepository<UserAction, Long>, JpaSpecificationExecutor {
 
-    Page<UserAction> findByUserCompanyId(Long id, Pageable pageable);
+    Page<UserAction> findByUserApartmentId(Long id, Pageable pageable);
 
     List<UserAction> findByIdIn(List<Long> ids);
 

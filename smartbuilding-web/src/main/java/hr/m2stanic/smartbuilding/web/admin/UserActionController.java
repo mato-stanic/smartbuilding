@@ -12,7 +12,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import hr.m2stanic.smartbuilding.core.action.UserActionManager;
 import hr.m2stanic.smartbuilding.core.appuser.AppUser;
 import hr.m2stanic.smartbuilding.core.appuser.AppUserManager;
 import hr.m2stanic.smartbuilding.core.company.CompanyManager;
@@ -22,9 +21,6 @@ import java.util.List;
 
 @Controller
 public class UserActionController {
-
-    @Autowired
-    private UserActionManager userActionManager;
 
     @Autowired
     private AppUserManager appUserManager;
