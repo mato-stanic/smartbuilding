@@ -7,11 +7,11 @@ import hr.m2stanic.smartbuilding.web.dto.ApartmentDTO;
 import hr.m2stanic.smartbuilding.web.dto.DTOUtil;
 
 
-public class CompanyDTOConverter implements Converter<String, ApartmentDTO> {
+public class ApartmentDTOConverter implements Converter<String, ApartmentDTO> {
 
     private final ApartmentManager apartmentManager;
 
-    public CompanyDTOConverter(ApartmentManager apartmentManager) {
+    public ApartmentDTOConverter(ApartmentManager apartmentManager) {
         this.apartmentManager = apartmentManager;
     }
 

@@ -51,10 +51,10 @@
                               th:title="${apt.name}">Agency name</span>
                     </a>
                 </li>
-                <li th:each="op : ${userGroups}">
-                    <a th:href="@{/admin/user/list(apartmentId=${op.id})}">
+                <li th:each="ta : ${tenantApartments}">
+                    <a th:href="@{/admin/user/list(apartmentId=${ta.id})}">
                         <span class="glyphicons glyphicons-building"></span>
-                        <span th:text="${op.name.length() &gt; 18} ? ${op.name.substring(0,18)} + '...' : ${op.name}" th:title="${op.name}">Operator name</span>
+                        <span th:text="${ta.name.length() &gt; 18} ? ${ta.name.substring(0,18)} + '...' : ${ta.name}" th:title="${ta.name}">Operator name</span>
                     </a>
                 </li>
             </ul>

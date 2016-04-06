@@ -127,9 +127,9 @@
                                                             th:selected="${apt.id} == ${userDTO.apartment?.id}">stan
                                                     </option>
 
-                                                    <option th:each="og : ${userGroups}"
-                                                            th:value="${og.id}"
-                                                            th:text="${og.name}" th:selected="${og.id} == ${userDTO.apartment?.id}">stan</option>
+                                                    <option th:each="ta : ${tenantApartments}"
+                                                            th:value="${ta.id}"
+                                                            th:text="${ta.name}" th:selected="${ta.id} == ${userDTO.apartment?.id}">stan</option>
                                                 </select>
 
                                                 <input type="email" th:value="${apartment.name}"  class="form-control"

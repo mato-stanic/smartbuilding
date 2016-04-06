@@ -45,7 +45,7 @@ public class MessageController {
 
         AppUser loggedInUser = appUserManager.getLoggedInUser();
 
-        List<? extends Apartment> recipients = loggedInUser.getApartment() instanceof Admin ? apartmentManager.getAllUserGroups() : apartmentManager.getAllApartments();
+        List<? extends Apartment> recipients = loggedInUser.getApartment() instanceof Admin ? apartmentManager.getAllTenantApartments() : apartmentManager.getAllApartments();
         model.addAttribute("recipients", recipients);
 
         Page<Message> receivedMessages = messageManager.getReceivedMessages(loggedInUser.getApartment(), pageable);

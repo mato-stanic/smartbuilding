@@ -5,7 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 
 import hr.m2stanic.smartbuilding.core.appuser.AppUser;
 import hr.m2stanic.smartbuilding.core.apartment.Apartment;
-import hr.m2stanic.smartbuilding.core.apartment.UserGroup;
+import hr.m2stanic.smartbuilding.core.apartment.Tenants;
 import hr.m2stanic.smartbuilding.core.security.Role;
 
 import java.util.stream.Collectors;
@@ -37,16 +37,16 @@ public class DTOUtil {
     }
 
     public static Apartment fromDTO(ApartmentDTO dto) {
-        return (dto instanceof UserGroupDTO) ? fromDTO((UserGroupDTO) dto) : fromDTO((AdminDTO) dto);
+        return (dto instanceof TenantsDTO) ? fromDTO((TenantsDTO) dto) : fromDTO((AdminDTO) dto);
     }
 
-    public static UserGroup fromDTO(UserGroupDTO dto) {
-        return dto != null ? new UserGroup(dto.getId(), dto.getName()) : null;
+    public static Tenants fromDTO(TenantsDTO dto) {
+        return dto != null ? new Tenants(dto.getId(), dto.getName()) : null;
     }
 
 
     public static ApartmentDTO toDTO(Apartment apartment) {
-        return apartment instanceof Admin ? toDTO((Admin) apartment) : toDTO((UserGroup) apartment);
+        return apartment instanceof Admin ? toDTO((Admin) apartment) : toDTO((Tenants) apartment);
     }
 
 
@@ -60,8 +60,8 @@ public class DTOUtil {
         return dto != null ? new Admin(dto.getId(), dto.getName()) : null;
     }
 
-    public static UserGroupDTO toDTO(UserGroup og) {
-        return og != null ? new UserGroupDTO(og.getId(), og.getName()) : null;
+    public static TenantsDTO toDTO(Tenants og) {
+        return og != null ? new TenantsDTO(og.getId(), og.getName()) : null;
     }
 
 }

@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import hr.m2stanic.smartbuilding.core.appuser.AppUser;
 import hr.m2stanic.smartbuilding.core.appuser.AppUserManager;
 import hr.m2stanic.smartbuilding.core.apartment.ApartmentManager;
-import hr.m2stanic.smartbuilding.core.apartment.UserGroup;
+import hr.m2stanic.smartbuilding.core.apartment.Tenants;
 
 import java.util.List;
 
@@ -54,7 +54,7 @@ public class UserActionController {
 
     private Apartment resolveApartment(Long apartmentId, AppUser loggedInUser) {
         Apartment apartment = null;
-        if (loggedInUser.getApartment() instanceof UserGroup) apartment = loggedInUser.getApartment();
+        if (loggedInUser.getApartment() instanceof Tenants) apartment = loggedInUser.getApartment();
         else if (apartmentId != null) apartment = apartmentManager.getApartment(apartmentId);
         return apartment;
     }

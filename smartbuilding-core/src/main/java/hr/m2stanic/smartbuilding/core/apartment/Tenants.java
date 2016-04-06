@@ -12,9 +12,9 @@ import javax.persistence.Entity;
 @DiscriminatorValue("TENANT")
 @Getter
 @Setter
-public class UserGroup extends Apartment {
+public class Tenants extends Apartment {
 
-    public UserGroup(Long id, String name) {
+    public Tenants(Long id, String name) {
         super(id, name);
     }
 }

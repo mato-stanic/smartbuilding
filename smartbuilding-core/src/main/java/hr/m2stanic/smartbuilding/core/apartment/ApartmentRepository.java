@@ -8,8 +8,8 @@ import org.springframework.data.jpa.repository.Query;
 
 public interface ApartmentRepository extends JpaRepository<Apartment, Long> {
 
-    @Query("select o from UserGroup o")
-    Page<UserGroup> findAllOperatorGroups(Pageable pageable);
+    @Query("select o from Tenants o")
+    Page<Tenants> findAllOperatorGroups(Pageable pageable);
 
     @Query("select a from Admin a")
     Page<Admin> findAllAgencies(Pageable pageable);

@@ -6,7 +6,7 @@ import hr.m2stanic.smartbuilding.core.appuser.AppUserManager;
 import hr.m2stanic.smartbuilding.core.messages.MessageManager;
 import hr.m2stanic.smartbuilding.web.dto.AdminDTO;
 import hr.m2stanic.smartbuilding.web.dto.DTOUtil;
-import hr.m2stanic.smartbuilding.web.dto.UserGroupDTO;
+import hr.m2stanic.smartbuilding.web.dto.TenantsDTO;
 import hr.m2stanic.smartbuilding.web.thymeleaf.ThymeleafLayoutInterceptor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -99,9 +99,9 @@ public class EkipControllerAdvice {
         return apartmentManager.getAllApartments().stream().map(a -> DTOUtil.toDTO(a)).collect(Collectors.toList());
     }
 
-    @ModelAttribute("userGroups")
-    public List<UserGroupDTO> getUserGroups() {
-        return apartmentManager.getAllUserGroups().stream().map(a -> DTOUtil.toDTO(a)).collect(Collectors.toList());
+    @ModelAttribute("tenantApartments")
+    public List<TenantsDTO> getTenantApartments() {
+        return apartmentManager.getAllTenantApartments().stream().map(a -> DTOUtil.toDTO(a)).collect(Collectors.toList());
     }
 
 //    @ModelAttribute("tenants")

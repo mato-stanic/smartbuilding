@@ -80,7 +80,7 @@
                                                                         th:each="rcp : ${recipients}"
                                                                         th:value="${rcp.id}"
                                                                         th:text="${rcp.getName()}"></option>
-                                                                <option th:if="${loggedInUser.apartment instanceof T(hr.m2stanic.smartbuilding.core.apartment.UserGroup)}"
+                                                                <option th:if="${loggedInUser.apartment instanceof T(hr.m2stanic.smartbuilding.core.apartment.Tenants)}"
                                                                         th:each="rcp : ${recipients}"
                                                                         th:value="${rcp.id}"
                                                                         th:text="${rcp.getName()}"></option>

@@ -4,7 +4,6 @@ import hr.m2stanic.smartbuilding.core.action.*;
 import hr.m2stanic.smartbuilding.core.apartment.Admin;
 import hr.m2stanic.smartbuilding.core.apartment.Apartment;
 import hr.m2stanic.smartbuilding.core.apartment.ApartmentManager;
-import hr.m2stanic.smartbuilding.core.apartment.UserGroup;
 import hr.m2stanic.smartbuilding.core.appuser.AppUser;
 import hr.m2stanic.smartbuilding.core.appuser.AppUserManager;
 import hr.m2stanic.smartbuilding.core.security.Role;

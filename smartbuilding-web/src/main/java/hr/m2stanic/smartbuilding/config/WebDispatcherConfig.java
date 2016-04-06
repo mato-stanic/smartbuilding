@@ -4,7 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.joda.JodaModule;
 import hr.m2stanic.smartbuilding.core.apartment.ApartmentManager;
 import hr.m2stanic.smartbuilding.core.security.RoleManager;
-import hr.m2stanic.smartbuilding.web.converters.CompanyDTOConverter;
+import hr.m2stanic.smartbuilding.web.converters.ApartmentDTOConverter;
 import hr.m2stanic.smartbuilding.web.converters.RoleDTOConverter;
 import hr.m2stanic.smartbuilding.web.thymeleaf.ThymeleafLayoutInterceptor;
 import org.apache.shiro.spring.web.ShiroFilterFactoryBean;
@@ -205,7 +205,7 @@ public class WebDispatcherConfig extends WebMvcConfigurerAdapter {
         registrar.setDateTimeFormatter(dateTimeFormatter);
         registrar.registerFormatters(conversionService);
 
-        conversionService.addConverter(new CompanyDTOConverter(apartmentManager));
+        conversionService.addConverter(new ApartmentDTOConverter(apartmentManager));
         conversionService.addConverter(new RoleDTOConverter(roleManager));
         return conversionService;
     }

@@ -13,7 +13,7 @@ public interface ApartmentManager {
 
     List<Admin> getAllApartments();
 
-    List<UserGroup> getAllUserGroups();
+    List<Tenants> getAllTenantApartments();
 
     void delete(Long operatorId);
 

@@ -4,7 +4,7 @@ package hr.m2stanic.smartbuilding.core;
 import com.google.common.collect.Sets;
 import hr.m2stanic.smartbuilding.core.apartment.Admin;
 import hr.m2stanic.smartbuilding.core.apartment.ApartmentManager;
-import hr.m2stanic.smartbuilding.core.apartment.UserGroup;
+import hr.m2stanic.smartbuilding.core.apartment.Tenants;
 import hr.m2stanic.smartbuilding.core.appuser.AppUser;
 import hr.m2stanic.smartbuilding.core.appuser.AppUserManager;
 import hr.m2stanic.smartbuilding.core.security.Permission;
@@ -65,18 +65,18 @@ public class InitSampleData {
 
     private void initOperators() {
 
-        UserGroup s1a = (UserGroup) apartmentManager.getApartment("Stan 1a");
-        UserGroup s1b = (UserGroup) apartmentManager.getApartment("Stan 1b");
-        UserGroup s2a = (UserGroup) apartmentManager.getApartment("Stan 2a");
+        Tenants s1a = (Tenants) apartmentManager.getApartment("Stan 1a");
+        Tenants s1b = (Tenants) apartmentManager.getApartment("Stan 1b");
+        Tenants s2a = (Tenants) apartmentManager.getApartment("Stan 2a");
 
         if(s1a ==  null)
-            s1a = (UserGroup) apartmentManager.save(new UserGroup(null, "Stan 1a"));
+            s1a = (Tenants) apartmentManager.save(new Tenants(null, "Stan 1a"));
 
         if(s1b ==  null)
-            s1b = (UserGroup) apartmentManager.save(new UserGroup(null, "Stan 1b"));
+            s1b = (Tenants) apartmentManager.save(new Tenants(null, "Stan 1b"));
 
         if(s2a ==  null)
-            s2a = (UserGroup) apartmentManager.save(new UserGroup(null, "Stan 1c"));
+            s2a = (Tenants) apartmentManager.save(new Tenants(null, "Stan 1c"));
 
     }
 

@@ -53,9 +53,9 @@ public class DefaultApartmentManager implements ApartmentManager {
 
     @Override
     @Cacheable(COMPANIES_OPERATOR_GROUPS_CACHE)
-    public List<UserGroup> getAllUserGroups() {
+    public List<Tenants> getAllTenantApartments() {
         Pageable pageable = new PageRequest(0, 100, Sort.Direction.ASC, "name");
-        List<UserGroup> agencies = repository.findAllOperatorGroups(pageable).getContent();
+        List<Tenants> agencies = repository.findAllOperatorGroups(pageable).getContent();
         return agencies != null ? agencies : new ArrayList<>();
     }
 
