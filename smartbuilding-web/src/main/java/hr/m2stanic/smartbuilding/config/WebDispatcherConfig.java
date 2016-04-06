@@ -4,8 +4,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.joda.JodaModule;
 import hr.m2stanic.smartbuilding.core.apartment.ApartmentManager;
 import hr.m2stanic.smartbuilding.core.security.RoleManager;
+import hr.m2stanic.smartbuilding.web.converters.CompanyDTOConverter;
+import hr.m2stanic.smartbuilding.web.converters.RoleDTOConverter;
 import hr.m2stanic.smartbuilding.web.thymeleaf.ThymeleafLayoutInterceptor;
-import hr.m2stanic.smartbuilding.web.converters.*;
 import org.apache.shiro.spring.web.ShiroFilterFactoryBean;
 import org.apache.shiro.web.mgt.WebSecurityManager;
 import org.joda.time.format.DateTimeFormatter;
@@ -50,7 +51,8 @@ import java.util.Map;
 @Configuration
 @EnableWebMvc
 @ComponentScan(basePackages = "hr.m2stanic.smartbuilding.web")
-@PropertySource(value = {"classpath:/smartbuilding.common.properties", "classpath:/smartbuilding.properties"})
+@PropertySource(value = {"classpath:/smartbuilding.common.properties"})
+//@PropertySource(value = {"classpath:/smartbuilding.common.properties", "classpath:/smartbuilding.properties"})
 public class WebDispatcherConfig extends WebMvcConfigurerAdapter {
 
 

@@ -2,9 +2,11 @@ package hr.m2stanic.smartbuilding.core;
 
 
 import com.google.common.collect.Sets;
+import hr.m2stanic.smartbuilding.core.apartment.Admin;
+import hr.m2stanic.smartbuilding.core.apartment.ApartmentManager;
+import hr.m2stanic.smartbuilding.core.apartment.UserGroup;
 import hr.m2stanic.smartbuilding.core.appuser.AppUser;
 import hr.m2stanic.smartbuilding.core.appuser.AppUserManager;
-import hr.m2stanic.smartbuilding.core.apartment.*;
 import hr.m2stanic.smartbuilding.core.security.Permission;
 import hr.m2stanic.smartbuilding.core.security.Role;
 import hr.m2stanic.smartbuilding.core.security.RoleManager;
@@ -54,7 +56,7 @@ public class InitSampleData {
 
     private Admin initEkipAgency() {
 
-        List<Admin> agencies = apartmentManager.getAllAgencies();
+        List<Admin> agencies = apartmentManager.getAllApartments();
         if (agencies.size() == 0) {
             return (Admin) apartmentManager.save(new Admin(null, "EKIP"));
         } else return agencies.get(0);

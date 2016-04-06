@@ -118,9 +118,11 @@
                                                 <select name ="company" class="form-control"
                                                         data-bv-notempty=""  data-bv-notempty-message="Polje mora biti popunjeno">
 
-                                                    <option th:each="agency : ${agencies}"
-                                                            th:value="${agency.id}"
-                                                            th:text="${agency.name}" th:selected="${agency.id} == ${userDTO.company?.id}">Operator</option>
+                                                    <option th:each="apt : ${apartments}"
+                                                            th:value="${apt.id}"
+                                                            th:text="${apt.name}"
+                                                            th:selected="${apt.id} == ${userDTO.company?.id}">Operator
+                                                    </option>
 
                                                     <option th:each="og : ${userGroups}"
                                                             th:value="${og.id}"

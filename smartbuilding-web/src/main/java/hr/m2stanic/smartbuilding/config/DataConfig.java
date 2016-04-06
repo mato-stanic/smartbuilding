@@ -23,7 +23,8 @@ import java.util.Properties;
 @Configuration
 @EnableTransactionManagement
 @EnableJpaRepositories({"hr.m2stanic.smartbuilding.core"})
-@PropertySource(value = {"classpath:/smartbuilding.common.properties", "classpath:/smartbuilding.properties"})
+@PropertySource(value = {"classpath:/smartbuilding.common.properties"})
+//@PropertySource(value = {"classpath:/smartbuilding.common.properties", "classpath:/smartbuilding.properties"})
 @Slf4j
 public class DataConfig {
 

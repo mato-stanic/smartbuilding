@@ -1,10 +1,10 @@
 package hr.m2stanic.smartbuilding.config;
 
+import com.sun.mail.util.MailSSLSocketFactory;
 import hr.m2stanic.smartbuilding.core.CacheConstants;
 import hr.m2stanic.smartbuilding.core.InitSampleData;
 import hr.m2stanic.smartbuilding.core.files.DefaultFileManager;
 import hr.m2stanic.smartbuilding.core.files.FileManager;
-import com.sun.mail.util.MailSSLSocketFactory;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.Cache;
@@ -28,7 +28,8 @@ import java.util.List;
 import java.util.Properties;
 
 @Configuration
-@PropertySource(value = {"classpath:/smartbuilding.common.properties", "classpath:/smartbuilding.properties"})
+@PropertySource(value = {"classpath:/smartbuilding.common.properties"})
+//@PropertySource(value = {"classpath:/smartbuilding.common.properties", "classpath:/smartbuilding.properties"})
 @ComponentScan(basePackages = {"hr.m2stanic.smartbuilding.core"})
 @EnableCaching
 @Slf4j

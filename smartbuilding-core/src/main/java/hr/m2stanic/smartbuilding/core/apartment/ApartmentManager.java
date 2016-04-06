@@ -11,9 +11,9 @@ public interface ApartmentManager {
 
     Apartment getApartment(String name);
 
-    List<Admin> getAllAgencies();
+    List<Admin> getAllApartments();
 
-    List<UserGroup> getAllOperatorGroups();
+    List<UserGroup> getAllUserGroups();
 
     void delete(Long operatorId);
 

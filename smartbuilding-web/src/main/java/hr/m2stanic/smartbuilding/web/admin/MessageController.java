@@ -3,6 +3,12 @@ package hr.m2stanic.smartbuilding.web.admin;
 
 import hr.m2stanic.smartbuilding.core.apartment.Admin;
 import hr.m2stanic.smartbuilding.core.apartment.Apartment;
+import hr.m2stanic.smartbuilding.core.apartment.ApartmentManager;
+import hr.m2stanic.smartbuilding.core.appuser.AppUser;
+import hr.m2stanic.smartbuilding.core.appuser.AppUserManager;
+import hr.m2stanic.smartbuilding.core.messages.Message;
+import hr.m2stanic.smartbuilding.core.messages.MessageManager;
+import hr.m2stanic.smartbuilding.web.thymeleaf.Layout;
 import lombok.extern.slf4j.Slf4j;
 import org.joda.time.LocalDateTime;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,13 +21,6 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-
-import hr.m2stanic.smartbuilding.core.appuser.AppUser;
-import hr.m2stanic.smartbuilding.core.appuser.AppUserManager;
-import hr.m2stanic.smartbuilding.core.apartment.ApartmentManager;
-import hr.m2stanic.smartbuilding.core.messages.Message;
-import hr.m2stanic.smartbuilding.core.messages.MessageManager;
-import hr.m2stanic.smartbuilding.web.thymeleaf.Layout;
 
 import java.util.List;
 
@@ -46,7 +45,7 @@ public class MessageController {
 
         AppUser loggedInUser = appUserManager.getLoggedInUser();
 
-        List<? extends Apartment> recipients = loggedInUser.getApartment() instanceof Admin ? apartmentManager.getAllOperatorGroups() : apartmentManager.getAllAgencies();
+        List<? extends Apartment> recipients = loggedInUser.getApartment() instanceof Admin ? apartmentManager.getAllUserGroups() : apartmentManager.getAllApartments();
         model.addAttribute("recipients", recipients);
 
         Page<Message> receivedMessages = messageManager.getReceivedMessages(loggedInUser.getApartment(), pageable);

@@ -1,7 +1,15 @@
 package hr.m2stanic.smartbuilding.web.admin;
 
+import hr.m2stanic.smartbuilding.core.action.*;
 import hr.m2stanic.smartbuilding.core.apartment.Admin;
 import hr.m2stanic.smartbuilding.core.apartment.Apartment;
+import hr.m2stanic.smartbuilding.core.apartment.ApartmentManager;
+import hr.m2stanic.smartbuilding.core.appuser.AppUser;
+import hr.m2stanic.smartbuilding.core.appuser.AppUserManager;
+import hr.m2stanic.smartbuilding.core.security.Role;
+import hr.m2stanic.smartbuilding.core.security.RoleManager;
+import hr.m2stanic.smartbuilding.core.security.RoleScope;
+import hr.m2stanic.smartbuilding.web.dto.DTOUtil;
 import hr.m2stanic.smartbuilding.web.dto.UserDTO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,15 +20,6 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-
-import hr.m2stanic.smartbuilding.core.action.*;
-import hr.m2stanic.smartbuilding.core.appuser.AppUser;
-import hr.m2stanic.smartbuilding.core.appuser.AppUserManager;
-import hr.m2stanic.smartbuilding.core.apartment.ApartmentManager;
-import hr.m2stanic.smartbuilding.core.security.Role;
-import hr.m2stanic.smartbuilding.core.security.RoleManager;
-import hr.m2stanic.smartbuilding.core.security.RoleScope;
-import hr.m2stanic.smartbuilding.web.dto.DTOUtil;
 
 import javax.validation.Valid;
 import java.util.List;
@@ -61,10 +60,10 @@ public class AppUserController {
 
 
     @RequestMapping(value = "/edit", method = RequestMethod.GET)
-    public String showUserForm(Model model, @RequestParam(required = false) Long id, @RequestParam(required = false) Long companyId) {
+    public String showUserForm(Model model, @RequestParam(required = false) Long id, @RequestParam(required = false) Long apartmentId) {
 
-        UserDTO userDTO = getUser(id, companyId);
-        fillEditUserModel(model, companyId, userDTO);
+        UserDTO userDTO = getUser(id, apartmentId);
+        fillEditUserModel(model, apartmentId, userDTO);
         return "admin/user/user-form";
     }
 
@@ -84,10 +83,10 @@ public class AppUserController {
 
     @RequestMapping(value = "/edit", method = RequestMethod.POST)
     public String processUserForm(Model model, @Valid @ModelAttribute UserDTO userDTO, BindingResult result,
-                                  @RequestParam(required = false) Long companyId) {
+                                  @RequestParam(required = false) Long apartmentId) {
 
         if (result.hasErrors()) {
-            fillEditUserModel(model, companyId, userDTO);
+            fillEditUserModel(model, apartmentId, userDTO);
             return "admin/user/user-form";
         }
         try {
@@ -98,11 +97,14 @@ public class AppUserController {
             appUser = appUserManager.save(appUser);
             UserAction action = isNew ? new AppUserAddedAction(loggedInUser, appUser) : new AppUserUpdatedAction(loggedInUser, appUser);
             userActionManager.save(action);
+            if (loggedInUser.getRole().getScope().equals(RoleScope.ADMIN))
+                return "redirect:/admin/user/list?apartmentId=" + appUser.getApartment().getId();
+            else
+                return "redirect:/admin/user/list?apartmentId=" + loggedInUser.getApartment().getId();
 
-            return "redirect:/admin/user/list?companyId=" + appUser.getApartment().getId();
         } catch (DataIntegrityViolationException daoe) {
             result.addError(new ObjectError("name", "User sa istim korisnickim imenom već postoji!"));
-            fillEditUserModel(model, companyId, userDTO);
+            fillEditUserModel(model, apartmentId, userDTO);
             return "admin/user/user-form";
         }
     }

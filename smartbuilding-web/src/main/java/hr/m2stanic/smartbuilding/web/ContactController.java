@@ -36,7 +36,8 @@ import java.util.Locale;
 @Controller
 @Slf4j
 @SessionAttributes("questionForm")
-@PropertySource(value = {"classpath:/smartbuilding.common.properties", "classpath:/smartbuilding.properties"})
+@PropertySource(value = {"classpath:/smartbuilding.common.properties"})
+//@PropertySource(value = {"classpath:/smartbuilding.common.properties", "classpath:/smartbuilding.properties"})
 public class ContactController {
 
 

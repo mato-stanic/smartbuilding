@@ -1,5 +1,9 @@
 package hr.m2stanic.smartbuilding.web;
 
+import hr.m2stanic.smartbuilding.core.apartment.ApartmentManager;
+import hr.m2stanic.smartbuilding.core.appuser.AppUser;
+import hr.m2stanic.smartbuilding.core.appuser.AppUserManager;
+import hr.m2stanic.smartbuilding.core.messages.MessageManager;
 import hr.m2stanic.smartbuilding.web.dto.AgencyDTO;
 import hr.m2stanic.smartbuilding.web.dto.DTOUtil;
 import hr.m2stanic.smartbuilding.web.dto.UserGroupDTO;
@@ -14,15 +18,12 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.NoHandlerFoundException;
 
-import hr.m2stanic.smartbuilding.core.appuser.AppUser;
-import hr.m2stanic.smartbuilding.core.appuser.AppUserManager;
-import hr.m2stanic.smartbuilding.core.apartment.*;
-import hr.m2stanic.smartbuilding.core.messages.MessageManager;
-
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import java.io.InputStream;
-import java.net.*;
+import java.net.InetAddress;
+import java.net.NetworkInterface;
+import java.net.UnknownHostException;
 import java.util.Enumeration;
 import java.util.List;
 import java.util.jar.Attributes;
@@ -93,15 +94,18 @@ public class EkipControllerAdvice {
     }
 
 
-    @ModelAttribute("agencies")
-    public List<AgencyDTO> getAgencies() {
-        return apartmentManager.getAllAgencies().stream().map(a -> DTOUtil.toDTO(a)).collect(Collectors.toList());
+    @ModelAttribute("apartments")
+    public List<AgencyDTO> getApartments() {
+        return apartmentManager.getAllApartments().stream().map(a -> DTOUtil.toDTO(a)).collect(Collectors.toList());
     }
 
     @ModelAttribute("userGroups")
     public List<UserGroupDTO> getUserGroups() {
-        return apartmentManager.getAllOperatorGroups().stream().map(a -> DTOUtil.toDTO(a)).collect(Collectors.toList());
+        return apartmentManager.getAllUserGroups().stream().map(a -> DTOUtil.toDTO(a)).collect(Collectors.toList());
     }
+
+//    @ModelAttribute("tenants")
+//    public List<>
 
     @ModelAttribute("baseUrl")
     public String getBaseUrl() {

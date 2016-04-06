@@ -34,7 +34,6 @@
 
         <!--@thymesVar id="loggedInUser" type="hr.m2stanic.smartbuilding.core.user.User"-->
         <li th:if="${loggedInUser.role.hasPermission(T(hr.m2stanic.smartbuilding.core.security.Permission).MANAGE_USERS)}">
-
             <a href="#" th:if="${loggedInUser.role.scope == T(hr.m2stanic.smartbuilding.core.security.RoleScope).ADMIN}" class="accordion-toggle"
                th:classappend="${mainNavSel == T(hr.m2stanic.smartbuilding.web.admin.MainNavigationItem).USERS} ? 'menu-open' : ''">
                 <span class="glyphicons glyphicons-group"></span>
@@ -45,10 +44,11 @@
 
             <ul class="nav sub-nav">
 
-                <li th:each="ag : ${agencies}">
-                    <a th:href="@{/admin/user/list(apartmentId=${ag.id})}">
+                <li th:each="apt : ${apartments}">
+                    <a th:href="@{/admin/user/list(apartmentId=${apt.id})}">
                         <span class="glyphicons glyphicons-building"></span>
-                        <span th:text="${ag.name.length() &gt; 18} ? ${ag.name.substring(0,18)} + '...' : ${ag.name}" th:title="${ag.name}">Agency name</span>
+                        <span th:text="${apt.name.length() &gt; 18} ? ${apt.name.substring(0,18)} + '...' : ${apt.name}"
+                              th:title="${apt.name}">Agency name</span>
                     </a>
                 </li>
                 <li th:each="op : ${userGroups}">
@@ -60,6 +60,14 @@
             </ul>
 
         </li>
+        <li th:if="${loggedInUser.role.hasPermission(T(hr.m2stanic.smartbuilding.core.security.Permission).MANAGE_USERS)}">
+            <a th:href="@{/admin/user/list(apartmentId=${loggedInUser.apartment.id})}"
+               th:if="${loggedInUser.role.scope == T(hr.m2stanic.smartbuilding.core.security.RoleScope).TENANT}">
+                <span class="glyphicons glyphicons-group"></span>
+                <span class="sidebar-title">Popis stanara</span>
+            </a>
+        </li>
+
 
         <li>
             <a th:href="@{/res/ekip-manual.pdf}" target="_blank">
