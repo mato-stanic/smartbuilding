@@ -10,7 +10,7 @@ import javax.validation.constraints.Size;
 @NoArgsConstructor
 @Getter
 @Setter
-public class CompanyDTO {
+public class ApartmentDTO {
 
     @Setter(AccessLevel.PRIVATE)
     private Long id;
@@ -22,9 +22,9 @@ public class CompanyDTO {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof CompanyDTO)) return false;
+        if (!(o instanceof ApartmentDTO)) return false;
 
-        CompanyDTO that = (CompanyDTO) o;
+        ApartmentDTO that = (ApartmentDTO) o;
 
         return !(name != null ? !name.equals(that.name) : that.name != null);
 

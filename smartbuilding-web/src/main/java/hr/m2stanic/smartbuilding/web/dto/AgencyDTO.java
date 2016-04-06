@@ -8,7 +8,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
-public class AgencyDTO extends CompanyDTO {
+public class AgencyDTO extends ApartmentDTO {
 
     public AgencyDTO(Long id, String name) {
         super(id, name);

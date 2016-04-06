@@ -110,24 +110,33 @@
                                         </div>
                                     </div>
 
-
+                                    <!--@thymesVar id="loggedInUser" type="hr.m2stanic.smartbuilding.core.user.User"-->
+                                    <!--@thymesVar id="apartment" type="hr.m2stanic.smartbuilding.core.apartment.Apartment"-->
                                     <div class="form-group">
-                                        <label  class="col-lg-3 control-label">Organizacija</label>
+                                        <label  class="col-lg-3 control-label">Stan</label>
                                         <div class="col-lg-8">
                                             <div class="bs-component">
-                                                <select name ="company" class="form-control"
-                                                        data-bv-notempty=""  data-bv-notempty-message="Polje mora biti popunjeno">
+
+                                                <select name ="apartment" class="form-control"
+                                                        data-bv-notempty=""  data-bv-notempty-message="Polje mora biti popunjeno"
+                                                        th:if="${loggedInUser.role.scope == T(hr.m2stanic.smartbuilding.core.security.RoleScope).ADMIN}">
 
                                                     <option th:each="apt : ${apartments}"
                                                             th:value="${apt.id}"
                                                             th:text="${apt.name}"
-                                                            th:selected="${apt.id} == ${userDTO.company?.id}">Operator
+                                                            th:selected="${apt.id} == ${userDTO.apartment?.id}">stan
                                                     </option>
 
                                                     <option th:each="og : ${userGroups}"
                                                             th:value="${og.id}"
-                                                            th:text="${og.name}" th:selected="${og.id} == ${userDTO.company?.id}">Operator</option>
+                                                            th:text="${og.name}" th:selected="${og.id} == ${userDTO.apartment?.id}">stan</option>
                                                 </select>
+
+                                                <input type="email" th:value="${apartment.name}"  class="form-control"
+                                                       data-bv-notempty=""  data-bv-notempty-message="Polje mora biti popunjeno"
+                                                       th:if="${loggedInUser.role.scope == T(hr.m2stanic.smartbuilding.core.security.RoleScope).TENANT}" readonly="readonly"/>
+                                                <!--<input type="text" th:value="${apartment.id}"-->
+                                                       <!--th:if="${loggedInUser.role.scope == T(hr.m2stanic.smartbuilding.core.security.RoleScope).TENANT}"/>-->
                                             </div>
                                         </div>
                                     </div>

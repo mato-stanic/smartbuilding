@@ -4,6 +4,7 @@ import hr.m2stanic.smartbuilding.core.action.*;
 import hr.m2stanic.smartbuilding.core.apartment.Admin;
 import hr.m2stanic.smartbuilding.core.apartment.Apartment;
 import hr.m2stanic.smartbuilding.core.apartment.ApartmentManager;
+import hr.m2stanic.smartbuilding.core.apartment.UserGroup;
 import hr.m2stanic.smartbuilding.core.appuser.AppUser;
 import hr.m2stanic.smartbuilding.core.appuser.AppUserManager;
 import hr.m2stanic.smartbuilding.core.security.Role;
@@ -63,6 +64,7 @@ public class AppUserController {
     public String showUserForm(Model model, @RequestParam(required = false) Long id, @RequestParam(required = false) Long apartmentId) {
 
         UserDTO userDTO = getUser(id, apartmentId);
+
         fillEditUserModel(model, apartmentId, userDTO);
         return "admin/user/user-form";
     }
@@ -78,6 +80,12 @@ public class AppUserController {
         if (apartment != null) model.addAttribute("company", apartment);
 
         model.addAttribute("roles", roleManager.getRoles(apartment != null && apartment instanceof Admin ? RoleScope.ADMIN : RoleScope.TENANT));
+
+        AppUser loggedInUser = appUserManager.getLoggedInUser();
+        model.addAttribute("loggedInUser", loggedInUser);
+        if(loggedInUser.getRole().getScope().equals(RoleScope.TENANT)) {
+            model.addAttribute("apartment", loggedInUser.getApartment());
+        }
     }
 
 
@@ -103,7 +111,7 @@ public class AppUserController {
                 return "redirect:/admin/user/list?apartmentId=" + loggedInUser.getApartment().getId();
 
         } catch (DataIntegrityViolationException daoe) {
-            result.addError(new ObjectError("name", "User sa istim korisnickim imenom već postoji!"));
+            result.addError(new ObjectError("name", "User sa istim korisničkim imenom već postoji!"));
             fillEditUserModel(model, apartmentId, userDTO);
             return "admin/user/user-form";
         }

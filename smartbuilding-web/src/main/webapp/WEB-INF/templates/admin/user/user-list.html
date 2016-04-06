@@ -77,7 +77,7 @@
                     ev.preventDefault();
                     var uId = $(this).attr("data-user-id");
                     var targetUrl = [[@{/admin/user/delete}]] + "?id=" + uId;
-                    if(operatorId)
+                    if(apartmentId)
                         targetUrl += "&apartmentId=" + apartmentId;
                     var onConfirm = function(){
                         window.location = targetUrl;

@@ -73,14 +73,14 @@
                                                             <select name="recipientId" class="form-control"
                                                                     data-bv-notempty=""  data-bv-notempty-message="Morate odabrati primatelja">
                                                                 <!--@thymesVar id="recipients" type="java.util.List<hr.m2stanic.smartbuilding.core.apartment.Apartment>"-->
-                                                                <option th:if="${loggedInUser.apartment instanceof T(hr.m2stanic.smartbuilding.core.company.Agency)}"
+                                                                <option th:if="${loggedInUser.apartment instanceof T(hr.m2stanic.smartbuilding.core.apartment.Apartment)}"
                                                                         value="">Odaberite primatelja
                                                                 </option>
-                                                                <option th:if="${loggedInUser.apartment instanceof T(hr.m2stanic.smartbuilding.core.company.Agency)}"
+                                                                <option th:if="${loggedInUser.apartment instanceof T(hr.m2stanic.smartbuilding.core.apartment.Apartment)}"
                                                                         th:each="rcp : ${recipients}"
                                                                         th:value="${rcp.id}"
                                                                         th:text="${rcp.getName()}"></option>
-                                                                <option th:if="${loggedInUser.apartment instanceof T(hr.m2stanic.smartbuilding.core.company.OperatorGroup)}"
+                                                                <option th:if="${loggedInUser.apartment instanceof T(hr.m2stanic.smartbuilding.core.apartment.UserGroup)}"
                                                                         th:each="rcp : ${recipients}"
                                                                         th:value="${rcp.id}"
                                                                         th:text="${rcp.getName()}"></option>

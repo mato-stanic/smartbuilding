@@ -28,7 +28,7 @@ public class UserDTO {
 
     private RoleDTO role = null;
 
-    private CompanyDTO company;
+    private ApartmentDTO apartment;
 
     public String getFullName() {
         StringBuilder fullName = new StringBuilder();
