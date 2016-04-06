@@ -4,7 +4,7 @@ import hr.m2stanic.smartbuilding.core.apartment.ApartmentManager;
 import hr.m2stanic.smartbuilding.core.appuser.AppUser;
 import hr.m2stanic.smartbuilding.core.appuser.AppUserManager;
 import hr.m2stanic.smartbuilding.core.messages.MessageManager;
-import hr.m2stanic.smartbuilding.web.dto.AgencyDTO;
+import hr.m2stanic.smartbuilding.web.dto.AdminDTO;
 import hr.m2stanic.smartbuilding.web.dto.DTOUtil;
 import hr.m2stanic.smartbuilding.web.dto.UserGroupDTO;
 import hr.m2stanic.smartbuilding.web.thymeleaf.ThymeleafLayoutInterceptor;
@@ -95,7 +95,7 @@ public class EkipControllerAdvice {
 
 
     @ModelAttribute("apartments")
-    public List<AgencyDTO> getApartments() {
+    public List<AdminDTO> getApartments() {
         return apartmentManager.getAllApartments().stream().map(a -> DTOUtil.toDTO(a)).collect(Collectors.toList());
     }
 

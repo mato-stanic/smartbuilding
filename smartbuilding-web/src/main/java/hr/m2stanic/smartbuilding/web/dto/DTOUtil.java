@@ -37,7 +37,7 @@ public class DTOUtil {
     }
 
     public static Apartment fromDTO(ApartmentDTO dto) {
-        return (dto instanceof UserGroupDTO) ? fromDTO((UserGroupDTO) dto) : fromDTO((AgencyDTO) dto);
+        return (dto instanceof UserGroupDTO) ? fromDTO((UserGroupDTO) dto) : fromDTO((AdminDTO) dto);
     }
 
     public static UserGroup fromDTO(UserGroupDTO dto) {
@@ -50,13 +50,13 @@ public class DTOUtil {
     }
 
 
-    public static AgencyDTO toDTO(Admin og) {
-        return og != null ? new AgencyDTO(og.getId(), og.getName()) : null;
+    public static AdminDTO toDTO(Admin og) {
+        return og != null ? new AdminDTO(og.getId(), og.getName()) : null;
     }
 
 
 
-    public static Admin fromDTO(AgencyDTO dto) {
+    public static Admin fromDTO(AdminDTO dto) {
         return dto != null ? new Admin(dto.getId(), dto.getName()) : null;
     }
 
