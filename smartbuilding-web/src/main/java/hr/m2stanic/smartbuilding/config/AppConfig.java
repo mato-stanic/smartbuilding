@@ -31,7 +31,6 @@ import java.util.Properties;
 @PropertySource(value = {"classpath:/smartbuilding.common.properties"})
 //@PropertySource(value = {"classpath:/smartbuilding.common.properties", "classpath:/smartbuilding.properties"})
 @ComponentScan(basePackages = {"hr.m2stanic.smartbuilding.core"})
-@EnableCaching
 @Slf4j
 public class AppConfig {
 
@@ -56,38 +55,6 @@ public class AppConfig {
         executor.setCorePoolSize(5);
         executor.setMaxPoolSize(50);
         return executor;
-    }
-
-    @Bean
-    public CacheManager cacheManager() {
-        // configure and return an implementation of Spring's CacheManager SPI
-        SimpleCacheManager cacheManager = new SimpleCacheManager();
-        List<Cache> caches = new ArrayList<>();
-
-        caches.add(new ConcurrentMapCache(CacheConstants.OPERATORS_ALL_CACHE));
-        caches.add(new ConcurrentMapCache(CacheConstants.OPERATORS_BY_ID_CACHE));
-        caches.add(new ConcurrentMapCache(CacheConstants.OPERATORS_BY_GROUP_OPERATORS_CACHE));
-        caches.add(new ConcurrentMapCache(CacheConstants.OPERATORS_BY_NETWORK_TYPE_CACHE));
-
-        caches.add(new ConcurrentMapCache(CacheConstants.COMPANIES_ALL_CACHE));
-        caches.add(new ConcurrentMapCache(CacheConstants.COMPANIES_BY_ID_CACHE));
-        caches.add(new ConcurrentMapCache(CacheConstants.COMPANIES_AGENCIES_CACHE));
-        caches.add(new ConcurrentMapCache(CacheConstants.COMPANIES_OPERATOR_GROUPS_CACHE));
-
-        caches.add(new ConcurrentMapCache(CacheConstants.COUNTRIES_ALL_CACHE));
-        caches.add(new ConcurrentMapCache(CacheConstants.COUNTRIES_BY_ID));
-        caches.add(new ConcurrentMapCache(CacheConstants.COUNTRIES_BY_ISO));
-        caches.add(new ConcurrentMapCache(CacheConstants.COUNTRIES_BY_PARENT_ID));
-
-        caches.add(new ConcurrentMapCache(CacheConstants.PRICES_FIXED_BY_TARIFF_ID));
-        caches.add(new ConcurrentMapCache(CacheConstants.PRICES_MOBILE_BY_TARIFF_ID));
-        caches.add(new ConcurrentMapCache(CacheConstants.PRICES_SMS_BY_TARIFF_ID));
-        caches.add(new ConcurrentMapCache(CacheConstants.PRICES_MMS_BY_TARIFF_ID));
-        caches.add(new ConcurrentMapCache(CacheConstants.PRICES_FRIEND_CALLS_BY_TARIFF_ID));
-        caches.add(new ConcurrentMapCache(CacheConstants.PRICES_FRIEND_SMS_BY_TARIFF_ID));
-
-        cacheManager.setCaches(caches);
-        return cacheManager;
     }
 
 

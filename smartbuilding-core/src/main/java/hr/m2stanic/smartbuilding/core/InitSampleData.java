@@ -31,9 +31,9 @@ public class InitSampleData {
 
     public void init() {
         Role adminRole = initRoles();
-        Admin agency = initEkipAgency();
-        AppUser admin = initAdminUser(adminRole, agency);
-        initOperators();
+        Admin admin = initSmartBuilding();
+        AppUser adm = initAdminUser(adminRole, admin);
+        initTenants();
     }
 
 
@@ -54,16 +54,16 @@ public class InitSampleData {
     }
 
 
-    private Admin initEkipAgency() {
+    private Admin initSmartBuilding() {
 
-        List<Admin> agencies = apartmentManager.getAllApartments();
-        if (agencies.size() == 0) {
-            return (Admin) apartmentManager.save(new Admin(null, "EKIP"));
-        } else return agencies.get(0);
+        List<Admin> apartments = apartmentManager.getAllApartments();
+        if (apartments.size() == 0) {
+            return (Admin) apartmentManager.save(new Admin(null, "Admin"));
+        } else return apartments.get(0);
     }
 
 
-    private void initOperators() {
+    private void initTenants() {
 
         Tenants s1a = (Tenants) apartmentManager.getApartment("Stan 1a");
         Tenants s1b = (Tenants) apartmentManager.getApartment("Stan 1b");
@@ -84,18 +84,18 @@ public class InitSampleData {
 
         Role adminRole = roleManager.getRoleByName("admin");
         if (adminRole == null) {
-            adminRole = new Role(RoleScope.ADMIN, "admin", "Administrator", "Can administer tariffs and other entities",
+            adminRole = new Role(RoleScope.ADMIN, "admin", "Administrator", "Can administer everything on web",
                     Sets.newHashSet(Permission.values()));
             adminRole = roleManager.save(adminRole);
         }
 
-        Role operatorRole = roleManager.getRoleByName("tenant");
-        if (operatorRole == null) {
+        Role tenantRole = roleManager.getRoleByName("tenant");
+        if (tenantRole == null) {
 
-            Set<Permission> permissions = Sets.newHashSet(Permission.ACCESS_ADMIN_CONSOLE);
+            Set<Permission> permissions = Sets.newHashSet(Permission.ACCESS_ADMIN_CONSOLE, Permission.MANAGE_USERS);
 
-            operatorRole = new Role(RoleScope.TENANT, "tenant", "Tenant", "Can administer tariffs and other entities", permissions);
-            roleManager.save(operatorRole);
+            tenantRole = new Role(RoleScope.TENANT, "tenant", "Tenant", "Can administer own apartment and users", permissions);
+            roleManager.save(tenantRole);
         }
 
         return adminRole;

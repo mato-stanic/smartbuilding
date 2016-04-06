@@ -1,6 +1,7 @@
 package hr.m2stanic.smartbuilding.web.admin;
 
 import hr.m2stanic.smartbuilding.core.apartment.Apartment;
+import hr.m2stanic.smartbuilding.core.apartment.ApartmentLayout;
 import hr.m2stanic.smartbuilding.core.security.RoleScope;
 import org.joda.time.LocalDateTime;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,6 +46,8 @@ public class UserActionController {
         }
         else
         {
+            ApartmentLayout apartmentLayout = apartmentManager.getApartmentRoomStates(loggedInUser.getApartment());
+            model.addAttribute("apartmentLayout", apartmentLayout);
             return "admin/user-actions/apt-layout";
         }
 

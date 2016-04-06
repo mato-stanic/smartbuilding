@@ -12,14 +12,25 @@
     <div>
 
         <h2>Upravljanje stanom</h2>
+        <!--@thymesVar id="apartmentLayout" type="hr.m2stanic.smartbuilding.core.apartment.ApartmentLayout"-->
 
         <div class="panel">
 
             <div class="panel-body">
-                <ul class="nav nav-tabs">
-                    <li role="presentation" class="active"><a href="#">Jednostavno upravljanje</a></li>
-                    <li role="presentation"><a href="#">Napredno upravljanje</a></li>
+                <ul id="tabs" class="nav nav-tabs" data-tabs="tabs">
+                    <li class="active"><a href="#simple" data-toggle="tab">Jednostavno upravljanje</a></li>
+                    <li><a href="#advanced" data-toggle="tab">Napredno upravljanje</a></li>
                 </ul>
+                <div id="my-tab-content" class="tab-content">
+                    <div class="tab-pane active" id="simple">
+                        <h1>Red</h1>
+                        <p>Kitchen <span th:text="${apartmentLayout.kitchen}"></span></p>
+                    </div>
+                    <div class="tab-pane" id="advanced">
+                        <h1>Orange</h1>
+                        <p>orange orange orange orange orange</p>
+                    </div>
+                </div>
 
             </div>
         </div>

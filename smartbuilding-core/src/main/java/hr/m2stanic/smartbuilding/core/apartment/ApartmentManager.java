@@ -15,6 +15,8 @@ public interface ApartmentManager {
 
     List<Tenants> getAllTenantApartments();
 
+    ApartmentLayout getApartmentRoomStates(Apartment apartment);
+
     void delete(Long operatorId);
 
 }
