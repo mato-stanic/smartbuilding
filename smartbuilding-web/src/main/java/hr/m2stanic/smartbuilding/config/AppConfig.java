@@ -1,17 +1,11 @@
 package hr.m2stanic.smartbuilding.config;
 
 import com.sun.mail.util.MailSSLSocketFactory;
-import hr.m2stanic.smartbuilding.core.CacheConstants;
 import hr.m2stanic.smartbuilding.core.InitSampleData;
 import hr.m2stanic.smartbuilding.core.files.DefaultFileManager;
 import hr.m2stanic.smartbuilding.core.files.FileManager;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.Cache;
-import org.springframework.cache.CacheManager;
-import org.springframework.cache.annotation.EnableCaching;
-import org.springframework.cache.concurrent.ConcurrentMapCache;
-import org.springframework.cache.support.SimpleCacheManager;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -23,8 +17,6 @@ import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 
 import javax.annotation.PostConstruct;
 import java.security.GeneralSecurityException;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Properties;
 
 @Configuration
