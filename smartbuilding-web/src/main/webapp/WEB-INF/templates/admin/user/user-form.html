@@ -132,8 +132,8 @@
                                                             th:text="${ta.name}" th:selected="${ta.id} == ${userDTO.apartment?.id}">stan</option>
                                                 </select>
 
-                                                <input type="email" th:value="${apartment.name}"  class="form-control"
-                                                       data-bv-notempty=""  data-bv-notempty-message="Polje mora biti popunjeno"
+                                                <input type="text" th:value="${apartment.name}" class="form-control"
+                                                       data-bv-notempty="" data-bv-notempty-message="Polje mora biti popunjeno"
                                                        th:if="${loggedInUser.role.scope == T(hr.m2stanic.smartbuilding.core.security.RoleScope).TENANT}" readonly="readonly"/>
                                                 <!--<input type="text" th:value="${apartment.id}"-->
                                                        <!--th:if="${loggedInUser.role.scope == T(hr.m2stanic.smartbuilding.core.security.RoleScope).TENANT}"/>-->
