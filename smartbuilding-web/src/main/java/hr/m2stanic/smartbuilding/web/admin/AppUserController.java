@@ -3,7 +3,6 @@ package hr.m2stanic.smartbuilding.web.admin;
 import hr.m2stanic.smartbuilding.core.action.*;
 import hr.m2stanic.smartbuilding.core.apartment.Admin;
 import hr.m2stanic.smartbuilding.core.apartment.Apartment;
-import hr.m2stanic.smartbuilding.core.apartment.ApartmentLayout;
 import hr.m2stanic.smartbuilding.core.apartment.ApartmentManager;
 import hr.m2stanic.smartbuilding.core.appuser.AppUser;
 import hr.m2stanic.smartbuilding.core.appuser.AppUserManager;
@@ -152,40 +151,6 @@ public class AppUserController {
         } catch (Exception e) {
            log.error("Failed to change email and/or password!", e);
             return "Greška prilikom promjene email adrese i/ili passworda!";
-        }
-
-    }
-
-    @RequestMapping("/apartmentLayout")
-    @ResponseBody
-    public String changeApartmentLayout(@RequestParam Long apartmentId,
-                                        @RequestParam String roomToChange,
-                                        @RequestParam Boolean state, RedirectAttributes ra) {
-        try {
-            Apartment apartment = apartmentManager.getApartment(apartmentId);
-            ApartmentLayout apartmentLayout = apartmentManager.getApartmentRoomStates(apartment);
-            switch (roomToChange) {
-                case "living_room":
-                    apartmentLayout.setLivingRoom(state);
-                    break;
-                case "kitchen":
-                    apartmentLayout.setKitchen(state);
-                    break;
-                case "bathroom":
-                    apartmentLayout.setBathroom(state);
-                    break;
-                case "bedroom":
-                    apartmentLayout.setBedroom(state);
-                    break;
-                case "hallway":
-                    apartmentLayout.setHallway(state);
-                    break;
-            }
-            apartmentManager.save(apartmentLayout);
-            return "SUCCESS";
-
-        } catch (Exception e) {
-            return "ERROR";
         }
 
     }
