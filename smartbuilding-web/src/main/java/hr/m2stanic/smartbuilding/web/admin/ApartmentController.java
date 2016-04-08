@@ -88,9 +88,6 @@ public class ApartmentController {
                 else{
                     cronJobEqual = false;
                 }
-
-
-
             }
             if(cronJobEqual)
                 return "CRONEXISTS";
