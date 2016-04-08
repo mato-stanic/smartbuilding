@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+
+<head lang="en">
+    <meta charset="UTF-8"/>
+    <title></title>
+</head>
+<body>
+
+<div th:fragment="aptLayout">
+    <div class="alert alert-success alert-dismissable" id="successMessage">
+        <i class="fa fa-check pr10"></i>
+        <strong>Uspješno promijenjena vrijednost</strong>
+    </div>
+
+    <div class="alert alert-danger alert-dismissable" id="errorMessage">
+        <i class="fa fa-check pr10"></i>
+        <strong>Nažalost dogodila se neka pogreška, molim vas pokušajte kasnije.</strong>
+    </div>
+
+    <div class="form-horizontal" style="padding-top:10px;">
+
+        <div class="form-group">
+            <label class="col-lg-1 control-label">Dnevna soba</label>
+            <div class="col-lg-2">
+                <div class="bs-component">
+                    <div class="switch switch-info switch-inline">
+                        <input id="living_room" type="checkbox"
+                               th:checked="${apartmentLayout.livingRoom}"/>
+                        <label for="living_room"></label>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="col-lg-1 control-label">Kuhinja</label>
+            <div class="col-lg-2">
+                <div class="bs-component">
+                    <div class="switch switch-info switch-inline">
+                        <input id="kitchen" type="checkbox"
+                               th:checked="${apartmentLayout.kitchen}"/>
+                        <label for="kitchen"></label>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="col-lg-1 control-label">Kupaonica</label>
+            <div class="col-lg-2">
+                <div class="bs-component">
+                    <div class="switch switch-info switch-inline">
+                        <input id="bathroom" type="checkbox"
+                               th:checked="${apartmentLayout.bathroom}"/>
+                        <label for="bathroom"></label>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="col-lg-1 control-label">Spavaća soba</label>
+            <div class="col-lg-2">
+                <div class="bs-component">
+                    <div class="switch switch-info switch-inline">
+                        <input id="bedroom" type="checkbox"
+                               th:checked="${apartmentLayout.bedroom}"/>
+                        <label for="bedroom"></label>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="col-lg-1 control-label">Hodnik</label>
+            <div class="col-lg-2">
+                <div class="bs-component">
+                    <div class="switch switch-info switch-inline">
+                        <input id="hallway" type="checkbox"
+                               th:checked="${apartmentLayout.hallway}"/>
+                        <label for="hallway"></label>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <script th:inline="javascript">
+        //<![CDATA[
+
+        $(document).ready(function () {
+            $('#successMessage').hide();
+            $('#errorMessage').hide();
+
+            $('input[type="checkbox"]').change(function () {
+                var checkBoxId = $('#' + this.id);
+                var checkState = checkBoxId.is(":checked");
+                var url = "admin/user/apartmentLayout/simple";
+                var apartmentId = $('#apartmentId').val();
+                $.ajax(url, {
+                    data: {
+                        apartmentId: apartmentId,
+                        roomToChange: this.id,
+                        state: checkState
+                    },
+                    success: function (data, textStatus, jqXHR) {
+                        if (data === "SUCCESS") {
+                            if ($('#successMessage').is(":visible")) {
+                                return;
+                            }
+                            $('#successMessage').show();
+                            setTimeout(function () {
+                                $('#successMessage').hide();
+                            }, 3000);
+                        }
+                        else if (data === "ERROR") {
+                            if ($('#errorMessage').is(":visible")) {
+                                return;
+                            }
+                            $('#errorMessage').show();
+                            setTimeout(function () {
+                                checkBoxId.prop("checked", !checkBoxId.prop("checked"));
+                                $('#errorMessage').hide();
+                            }, 3000);
+                        }
+
+                    }
+                });
+            });
+
+        });
+        //]]>
+    </script>
+
+</div>
+
+</body>
+</html>

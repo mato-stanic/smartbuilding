@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+
+<head lang="en">
+    <meta charset="UTF-8"/>
+    <title></title>
+</head>
+<body>
+
+<div th:fragment="aptLayout">
+    <h3>Postavke za automatsku kontrolu svjetla</h3>
+
+    <div class="tab-block mb25">
+        <ul class="nav tabs-left tabs-border">
+            <li class="active">
+                <a href="#livingroom" data-toggle="tab">Dnevna soba</a>
+            </li>
+            <li>
+                <a href="#tab14_2" data-toggle="tab">Kuhinja</a>
+            </li>
+        </ul>
+        <div class="tab-content">
+            <div id="livingroom" class="tab-pane active">
+                <div>
+                    <label class="field-label text-muted fs18 mb10 col-md-2 text-right">Akcija: </label>
+                    <div class="col-md-8">
+                        <div class="radio-custom radio-primary mb5 radio-inline">
+                            <input type="radio" id="turnOn" name="action" checked="checked"/>
+                            <label for="turnOn">Upali svjetlo</label>
+                        </div>
+                        <div class="radio-custom radio-primary mb5 radio-inline">
+                            <input type="radio" id="turnOf" name="action"/>
+                            <label for="turnOf">Ugasi svjetlo</label>
+                        </div>
+                    </div>
+                </div>
+                <br/><br/>
+                <div>
+                    <label class="field-label text-muted fs18 mb10 col-md-2 text-right">Vrijedi za dane: </label>
+                    <div class="col-md-8">
+                        <div class="checkbox-custom checkbox-primary mb5 checkbox-inline">
+                            <input type="checkbox" checked="" id="monday" class="dayPick"/>
+                            <label for="monday">Ponedjeljak</label>
+                        </div>
+                        <div class="checkbox-custom checkbox-primary mb5 checkbox-inline">
+                            <input type="checkbox" checked="" id="tuesday" class="dayPick"/>
+                            <label for="tuesday">Utorak</label>
+                        </div>
+                        <div class="checkbox-custom checkbox-primary mb5 checkbox-inline">
+                            <input type="checkbox" checked="" id="wednesday" class="dayPick"/>
+                            <label for="wednesday">Srijeda</label>
+                        </div>
+                        <div class="checkbox-custom checkbox-primary mb5 checkbox-inline">
+                            <input type="checkbox" checked="" id="thursday" class="dayPick"/>
+                            <label for="thursday">Četvrtak</label>
+                        </div>
+                        <div class="checkbox-custom checkbox-primary mb5 checkbox-inline">
+                            <input type="checkbox" checked="" id="friday" class="dayPick"/>
+                            <label for="friday">Petak</label>
+                        </div>
+                        <div class="checkbox-custom checkbox-primary mb5 checkbox-inline">
+                            <input type="checkbox" checked="" id="saturday" class="dayPick"/>
+                            <label for="saturday">Subota</label>
+                        </div>
+                        <div class="checkbox-custom checkbox-primary mb5 checkbox-inline">
+                            <input type="checkbox" checked="" id="sunday" class="dayPick"/>
+                            <label for="sunday">Nedjelja</label>
+                        </div>
+                    </div>
+                </div>
+                <br/><br/>
+                <div>
+                    <label class="col-md-2  text-muted fs18 mb10 control-label text-right" for="datetimepicker3">Odaberi
+                        vrijeme: </label>
+                    <div class="col-md-5">
+                        <input type='text' class="form-control" id='datetimepicker3'/>
+                        <!--<input type="text" class="form-control" id="inputPrimary" />-->
+                    </div>
+                </div>
+                <br/><br/><br/>
+                <div class="col-md-12">
+                    <button type="button" id="testButton" class="btn btn-default col-md-2">test button</button>
+                    <div class="col-md-10"></div>
+                </div>
+
+            </div>
+            <div id="tab14_2" class="tab-pane">
+                <p><b>TAB TWO - </b> Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry
+                    richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck
+                    quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid
+                    single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore
+                    wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings
+                    occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of
+                    them accusamus labore sustainable VHS.</p>
+            </div>
+        </div>
+    </div>
+
+
+    <script th:inline="javascript">
+        //<![CDATA[
+
+        $(document).ready(function () {
+
+            $('#datetimepicker3').datetimepicker({
+                format: 'HH:mm',
+                useCurrent: true,
+                widgetPositioning: {
+                    horizontal: 'left',
+                    vertical: 'bottom'
+                }
+
+            });
+
+            $('#datetimepicker3').on("show", onShowDatePicker);
+
+            function onShowDatePicker(event) {
+                if (event) {
+                    console.log("event triggered");
+                    //overwrite the backbground color of the date picker such as the text is readable
+                    $(".bootstrap-datetimepicker-widget").css("background-color", "#3c3e43");
+                    $(".bootstrap-datetimepicker-widget").css("width: ", "200px");
+                }
+            }
+
+        });
+
+        //]]>
+    </script>
+
+    <script th:inline="javascript">
+        //<![CDATA[
+
+        $(document).ready(function () {
+            var checkBoxId = $('#' + this.id);
+            var checkState = checkBoxId.is(":checked");
+            var url = "admin/user/apartmentLayout/simple";
+            var apartmentId = $('#apartmentId').val();
+            $("#testButton").click(function () {
+                console.log($('.dayPick:checkbox:checked'))
+            });
+
+        });
+        //]]>
+    </script>
+
+</div>
+
+</body>
+</html>

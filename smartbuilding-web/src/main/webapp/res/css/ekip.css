@@ -284,4 +284,13 @@ a .glyphicon-collapse-down {
     color: #4987cc;
 }
 
+.bootstrap-datetimepicker-widget.usetwentyfour table td,
+.bootstrap-datetimepicker-widget.usetwentyfour table td span,
+.bootstrap-datetimepicker-widget.usetwentyfour table td a span {
+    height: 15px !important;
+    line-height: 15px !important;
+    width: 15px !important;
+    padding: 0px !important;
+}
+
 
