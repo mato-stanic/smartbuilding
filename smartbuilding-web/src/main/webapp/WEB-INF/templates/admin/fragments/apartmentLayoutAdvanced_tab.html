@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+
+<head lang="en">
+    <meta charset="UTF-8"/>
+    <title></title>
+</head>
+<body>
+
+<div th:fragment="tabLayout">
+    <div>
+        <label class="field-label text-muted fs18 mb10 col-md-2 text-right">Akcija: </label>
+        <div class="col-md-8">
+            <div class="radio-custom radio-primary mb5 radio-inline">
+                <input type="radio" id="turnOn" name="action" checked="checked"/>
+                <label for="turnOn">Upali svjetlo</label>
+            </div>
+            <div class="radio-custom radio-primary mb5 radio-inline">
+                <input type="radio" id="turnOf" name="action"/>
+                <label for="turnOf">Ugasi svjetlo</label>
+            </div>
+        </div>
+    </div>
+    <br/><br/>
+    <div>
+        <label class="field-label text-muted fs18 mb10 col-md-2 text-right">Vrijedi za dane: </label>
+        <div class="col-md-8">
+            <div class="checkbox-custom checkbox-primary mb5 checkbox-inline">
+                <input type="checkbox" checked="" id="monday" class="dayPick"/>
+                <label for="monday">Ponedjeljak</label>
+            </div>
+            <div class="checkbox-custom checkbox-primary mb5 checkbox-inline">
+                <input type="checkbox" checked="" id="tuesday" class="dayPick"/>
+                <label for="tuesday">Utorak</label>
+            </div>
+            <div class="checkbox-custom checkbox-primary mb5 checkbox-inline">
+                <input type="checkbox" checked="" id="wednesday" class="dayPick"/>
+                <label for="wednesday">Srijeda</label>
+            </div>
+            <div class="checkbox-custom checkbox-primary mb5 checkbox-inline">
+                <input type="checkbox" checked="" id="thursday" class="dayPick"/>
+                <label for="thursday">Četvrtak</label>
+            </div>
+            <div class="checkbox-custom checkbox-primary mb5 checkbox-inline">
+                <input type="checkbox" checked="" id="friday" class="dayPick"/>
+                <label for="friday">Petak</label>
+            </div>
+            <div class="checkbox-custom checkbox-primary mb5 checkbox-inline">
+                <input type="checkbox" checked="" id="saturday" class="dayPick"/>
+                <label for="saturday">Subota</label>
+            </div>
+            <div class="checkbox-custom checkbox-primary mb5 checkbox-inline">
+                <input type="checkbox" checked="" id="sunday" class="dayPick"/>
+                <label for="sunday">Nedjelja</label>
+            </div>
+        </div>
+    </div>
+    <br/><br/>
+    <div>
+        <label class="col-md-2  text-muted fs18 mb10 control-label text-right" for="datetimepicker3">Odaberi
+            vrijeme: </label>
+        <div class="col-md-5">
+            <input type='text' class="form-control" id='datetimepicker3'/>
+            <!--<input type="text" class="form-control" id="inputPrimary" />-->
+        </div>
+    </div>
+    <br/><br/><br/>
+    <div class="col-md-12" style="margin-bottom: 15px;">
+        <button type="button" id="save" class="btn btn-primary col-md-2">Spremi</button>
+    </div>
+
+</div>
+</body>
+</html>
