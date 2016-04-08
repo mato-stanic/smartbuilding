@@ -13,19 +13,19 @@
     <div class="tab-block mb25">
         <ul class="nav tabs-left tabs-border">
             <li class="active">
-                <a href="#tabContent" data-toggle="tab" id="livingroom">Dnevna soba</a>
+                <a href="#tabContent" data-toggle="tab" id="livingroomTab">Dnevna soba</a>
             </li>
             <li>
-                <a href="#tabContent" data-toggle="tab" id="kitchen">Kuhinja</a>
+                <a href="#tabContent" data-toggle="tab" id="kitchenTab">Kuhinja</a>
             </li>
             <li>
-                <a href="#tabContent" data-toggle="tab" id="bathroom">Kupaonica</a>
+                <a href="#tabContent" data-toggle="tab" id="bathroomTab">Kupaonica</a>
             </li>
             <li>
-                <a href="#tabContent" data-toggle="tab" id="bedroom">Spavaća soba</a>
+                <a href="#tabContent" data-toggle="tab" id="bedroomTab">Spavaća soba</a>
             </li>
             <li>
-                <a href="#tabContent" data-toggle="tab" id="hallway">Hodnik</a>
+                <a href="#tabContent" data-toggle="tab" id="hallwayTab">Hodnik</a>
             </li>
         </ul>
         <div class="tab-content">
@@ -41,6 +41,11 @@
 
         $(document).ready(function () {
             var selectedRoom = "livingroom";
+            $('#successMessageAdvanced').hide();
+            $('#errorMessageAdvanced').hide();
+            $('#timeNotPicked').hide();
+            $('#dayNotPicked').hide();
+            $('#cronexists').hide();
 
             $('#datetimepicker3').datetimepicker({
                 format: 'HH:mm',
@@ -52,20 +57,19 @@
 
             });
 
-
-            $('#livingroom').click(function () {
+            $('#livingroomTab').click(function () {
                 selectedRoom = "livingroom";
             });
-            $('#kitchen').click(function () {
+            $('#kitchenTab').click(function () {
                 selectedRoom = "kitchen";
             });
-            $('#bathroom').click(function () {
+            $('#bathroomTab').click(function () {
                 selectedRoom = "bathroom";
             });
-            $('#bedroom').click(function () {
+            $('#bedroomTab').click(function () {
                 selectedRoom = "bedroom";
             });
-            $('#hallway').click(function () {
+            $('#hallwayTab').click(function () {
                 selectedRoom = "hallway";
             });
 
@@ -73,8 +77,72 @@
             var url = "admin/user/apartmentLayout/advanced";
             var apartmentId = $('#apartmentId').val();
             $("#save").click(function () {
-                console.log("from:" + selectedRoom);
-                console.log($('.dayPick:checkbox:checked'))
+
+                var checkedDays = [];
+                $('.dayPick:checkbox:checked').each(function () {
+                    checkedDays.push(this.id);
+                });
+
+                var action = [];
+                $('.actionbutton:radio:checked').each(function () {
+                    action.push(this.id);
+                });
+
+                var time = $('#datetimepicker3').val();
+                if(time === ""){
+                    $('#timeNotPicked').show();
+                            setTimeout(function () {
+                                $('#timeNotPicked').hide();
+                            }, 3000);
+                }
+                else if(checkedDays.length == 0) {
+                    $('#dayNotPicked').show();
+                    setTimeout(function () {
+                        $('#dayNotPicked').hide();
+                    }, 3000);
+                }
+                else{
+                    $.ajax(url, {
+                        data: {
+                            apartmentId: apartmentId,
+                            roomToChange: selectedRoom,
+                            action: action[0],
+                            checkedDays: checkedDays,
+                            time: time
+                        },
+                        traditional: true,
+                        success: function (data, textStatus, jqXHR) {
+                            if (data === "SUCCESS") {
+                                if ($('#successMessageAdvanced').is(":visible")) {
+                                    return;
+                                }
+                                $('#successMessageAdvanced').show();
+                                setTimeout(function () {
+                                    $('#successMessageAdvanced').hide();
+                                }, 3000);
+                            }
+                            else if (data === "ERROR") {
+                                if ($('#errorMessageAdvanced').is(":visible")) {
+                                    return;
+                                }
+                                $('#errorMessageAdvanced').show();
+                                setTimeout(function () {
+                                    $('#errorMessageAdvanced').hide();
+                                }, 3000);
+                            }
+                            else if(data === "CRONEXISTS"){
+                                if ($('#cronexists').is(":visible")) {
+                                    return;
+                                }
+                                $('#cronexists').show();
+                                setTimeout(function () {
+                                    $('#cronexists').hide();
+                                }, 5000);
+                            }
+                        }
+                    });
+                }
+
             });
         });
 

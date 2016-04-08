@@ -1,6 +1,7 @@
 package hr.m2stanic.smartbuilding.web.admin;
 
 import hr.m2stanic.smartbuilding.core.apartment.Apartment;
+import hr.m2stanic.smartbuilding.core.apartment.ApartmentCronJob;
 import hr.m2stanic.smartbuilding.core.apartment.ApartmentLayout;
 import hr.m2stanic.smartbuilding.core.apartment.ApartmentManager;
 import lombok.extern.slf4j.Slf4j;
@@ -11,6 +12,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import java.util.List;
 
 @Slf4j
 @Controller
@@ -48,6 +51,59 @@ public class ApartmentController {
             }
             apartmentManager.save(apartmentLayout);
             return "SUCCESS";
+
+        } catch (Exception e) {
+            return "ERROR";
+        }
+
+    }
+
+    @RequestMapping("/apartmentLayout/advanced")
+    @ResponseBody
+    public String changeApartmentLayoutCron(@RequestParam Long apartmentId,
+                                            @RequestParam String roomToChange,
+                                            @RequestParam String action,
+                                            @RequestParam List<String> checkedDays,
+                                            @RequestParam String time, RedirectAttributes ra) {
+        try {
+            Apartment apartment = apartmentManager.getApartment(apartmentId);
+            List<ApartmentCronJob> apartmentCronJobs = apartmentManager.getApartmentCronJobsForRoom(apartment, roomToChange);
+            boolean cronJobEqual = false;
+            boolean dayListSameSize = false;
+
+            for (ApartmentCronJob apartmentCronJob : apartmentCronJobs) {
+                cronJobEqual = false;
+                dayListSameSize = false;
+                if(apartmentCronJob.getDays().size() == checkedDays.size())
+                    dayListSameSize = true;
+                else
+                    dayListSameSize = false;
+
+                if(dayListSameSize){
+                    if(apartmentCronJob.getAction().equals(action) && apartmentCronJob.getTime().equals(time) && apartmentCronJob.getDays().containsAll(checkedDays)) {
+                        cronJobEqual = true;
+                        break;
+                    }
+                }
+                else{
+                    cronJobEqual = false;
+                }
+
+
+
+            }
+            if(cronJobEqual)
+                return "CRONEXISTS";
+            else {
+                ApartmentCronJob apartmentCronJob = new ApartmentCronJob();
+                apartmentCronJob.setApartment(apartment);
+                apartmentCronJob.setRoom(roomToChange);
+                apartmentCronJob.setAction(action);
+                apartmentCronJob.setDays(checkedDays);
+                apartmentCronJob.setTime(time);
+                apartmentManager.save(apartmentCronJob);
+                return "SUCCESS";
+            }
 
         } catch (Exception e) {
             return "ERROR";

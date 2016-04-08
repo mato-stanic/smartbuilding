@@ -19,6 +19,10 @@ public interface ApartmentManager {
 
     ApartmentLayout save(ApartmentLayout apartmentLayout);
 
+    ApartmentCronJob save(ApartmentCronJob apartmentCronJob);
+
+    List<ApartmentCronJob> getApartmentCronJobsForRoom(Apartment apartment, String room);
+
     void delete(Long operatorId);
 
 }

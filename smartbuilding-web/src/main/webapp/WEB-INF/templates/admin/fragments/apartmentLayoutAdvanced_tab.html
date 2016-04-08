@@ -8,16 +8,37 @@
 <body>
 
 <div th:fragment="tabLayout">
+    <div class="alert alert-success alert-dismissable" id="successMessageAdvanced">
+        <i class="fa fa-check pr10"></i>
+        <strong>Uspješno spremljena vrijednost</strong>
+    </div>
+    <div class="alert alert-danger alert-dismissable" id="errorMessageAdvanced">
+        <i class="fa fa-times pr10"></i>
+        <strong>Nažalost dogodila se neka pogreška, molim vas pokušajte kasnije.</strong>
+    </div>
+    <div class="alert alert-danger alert-dismissable" id="timeNotPicked">
+        <i class="fa fa-times pr10"></i>
+        <strong>Molim vas odaberite vrijeme.</strong>
+    </div>
+    <div class="alert alert-danger alert-dismissable" id="dayNotPicked">
+        <i class="fa fa-times pr10"></i>
+        <strong>Morate odabrati barem jedan dan.</strong>
+    </div>
+    <div class="alert alert-warning alert-dismissable" id="cronexists">
+        <i class="fa fa-warning pr10"></i>
+        <strong>Za odabranu prostoriju već postoji automatska kontrola s odabranim podacima.</strong>
+    </div>
+
     <div>
         <label class="field-label text-muted fs18 mb10 col-md-2 text-right">Akcija: </label>
         <div class="col-md-8">
             <div class="radio-custom radio-primary mb5 radio-inline">
-                <input type="radio" id="turnOn" name="action" checked="checked"/>
+                <input type="radio" id="turnOn" name="action" checked="checked" class="actionbutton"/>
                 <label for="turnOn">Upali svjetlo</label>
             </div>
             <div class="radio-custom radio-primary mb5 radio-inline">
-                <input type="radio" id="turnOf" name="action"/>
-                <label for="turnOf">Ugasi svjetlo</label>
+                <input type="radio" id="turnOff" name="action" class="actionbutton"/>
+                <label for="turnOff">Ugasi svjetlo</label>
             </div>
         </div>
     </div>
@@ -26,31 +47,31 @@
         <label class="field-label text-muted fs18 mb10 col-md-2 text-right">Vrijedi za dane: </label>
         <div class="col-md-8">
             <div class="checkbox-custom checkbox-primary mb5 checkbox-inline">
-                <input type="checkbox" checked="" id="monday" class="dayPick"/>
+                <input type="checkbox" checked="" id="monday" class="dayPick" name="day"/>
                 <label for="monday">Ponedjeljak</label>
             </div>
             <div class="checkbox-custom checkbox-primary mb5 checkbox-inline">
-                <input type="checkbox" checked="" id="tuesday" class="dayPick"/>
+                <input type="checkbox" checked="" id="tuesday" class="dayPick" name="day"/>
                 <label for="tuesday">Utorak</label>
             </div>
             <div class="checkbox-custom checkbox-primary mb5 checkbox-inline">
-                <input type="checkbox" checked="" id="wednesday" class="dayPick"/>
+                <input type="checkbox" checked="" id="wednesday" class="dayPick" name="day"/>
                 <label for="wednesday">Srijeda</label>
             </div>
             <div class="checkbox-custom checkbox-primary mb5 checkbox-inline">
-                <input type="checkbox" checked="" id="thursday" class="dayPick"/>
+                <input type="checkbox" checked="" id="thursday" class="dayPick" name="day"/>
                 <label for="thursday">Četvrtak</label>
             </div>
             <div class="checkbox-custom checkbox-primary mb5 checkbox-inline">
-                <input type="checkbox" checked="" id="friday" class="dayPick"/>
+                <input type="checkbox" checked="" id="friday" class="dayPick" name="day"/>
                 <label for="friday">Petak</label>
             </div>
             <div class="checkbox-custom checkbox-primary mb5 checkbox-inline">
-                <input type="checkbox" checked="" id="saturday" class="dayPick"/>
+                <input type="checkbox" checked="" id="saturday" class="dayPick" name="day"/>
                 <label for="saturday">Subota</label>
             </div>
             <div class="checkbox-custom checkbox-primary mb5 checkbox-inline">
-                <input type="checkbox" checked="" id="sunday" class="dayPick"/>
+                <input type="checkbox" checked="" id="sunday" class="dayPick" name="day"/>
                 <label for="sunday">Nedjelja</label>
             </div>
         </div>
@@ -65,7 +86,7 @@
         </div>
     </div>
     <br/><br/><br/>
-    <div class="col-md-12" style="margin-bottom: 15px;">
+    <div class="col-md-12" style="margin-bottom: 40px;">
         <button type="button" id="save" class="btn btn-primary col-md-2">Spremi</button>
     </div>
 

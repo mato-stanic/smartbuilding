@@ -22,6 +22,9 @@ public class DefaultApartmentManager implements ApartmentManager {
     @Autowired
     private ApartmentLayoutRepository apartmentLayoutRepository;
 
+    @Autowired
+    private ApartmentCronJobRepository apartmentCronJobRepository;
+
 
 
     @Override
@@ -61,6 +64,16 @@ public class DefaultApartmentManager implements ApartmentManager {
     @Override
     public ApartmentLayout save(ApartmentLayout apartmentLayout) {
         return apartmentLayoutRepository.save(apartmentLayout);
+    }
+
+    @Override
+    public ApartmentCronJob save(ApartmentCronJob apartmentCronJob) {
+        return apartmentCronJobRepository.save(apartmentCronJob);
+    }
+
+    @Override
+    public List<ApartmentCronJob> getApartmentCronJobsForRoom(Apartment apartment, String room) {
+        return apartmentCronJobRepository.findByApartmentAndRoom(apartment, room);
     }
 
     @Override
