@@ -13,6 +13,7 @@
 
         <h2>Upravljanje stanom</h2>
         <!--@thymesVar id="apartmentLayout" type="hr.m2stanic.smartbuilding.core.apartment.ApartmentLayout"-->
+        <input type="hidden" id="apartmentId" th:value="${apartmentLayout.apartment.id}"/>
 
         <div class="panel">
 
@@ -23,6 +24,17 @@
                 </ul>
                 <div id="my-tab-content" class="tab-content">
                     <div class="tab-pane active" id="simple">
+
+                        <div class="alert alert-success alert-dismissable" id="successMessage">
+                            <i class="fa fa-check pr10"></i>
+                            <strong>Uspješno promijenjena vrijednost</strong>
+                        </div>
+
+                        <div class="alert alert-danger alert-dismissable" id="errorMessage">
+                            <i class="fa fa-check pr10"></i>
+                            <strong>Nažalost dogodila se neka pogreška, molim vas pokušajte kasnije.</strong>
+                        </div>
+
                         <div class="form-horizontal" style="padding-top:10px;">
 
                             <div class="form-group">
@@ -102,10 +114,48 @@
         </div>
 
         <script th:inline="javascript">
+            //<![CDATA[
+            $(document).ready(function () {
+                $('#successMessage').hide();
+                $('#errorMessage').hide();
 
+                $('input[type="checkbox"]').change(function () {
+                    var checkBoxId = $('#' + this.id);
+                    var checkState = checkBoxId.is(":checked");
+                    var url = "admin/user/apartmentLayout";
+                    var apartmentId = $('#apartmentId').val();
+                    $.ajax(url, {
+                        data: {
+                            apartmentId: apartmentId,
+                            roomToChange: this.id,
+                            state: checkState
+                        },
+                        success: function (data, textStatus, jqXHR) {
+                            if (data === "SUCCESS") {
+                                if ($('#successMessage').is(":visible")) {
+                                    return;
+                                }
+                                $('#successMessage').show();
+                                setTimeout(function () {
+                                    $('#successMessage').hide();
+                                }, 3000);
+                            }
+                            else if (data === "ERROR") {
+                                if ($('#errorMessage').is(":visible")) {
+                                    return;
+                                }
+                                $('#errorMessage').show();
+                                setTimeout(function () {
+                                    checkBoxId.prop("checked", !checkBoxId.prop("checked"));
+                                    $('#errorMessage').hide();
+                                }, 3000);
+                            }
 
-            $(document).ready(function() {
+                        }
+                    });
+                });
             });
+            //]]>
         </script>
 
 

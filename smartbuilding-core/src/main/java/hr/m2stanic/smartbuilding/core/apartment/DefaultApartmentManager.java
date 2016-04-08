@@ -59,6 +59,11 @@ public class DefaultApartmentManager implements ApartmentManager {
     }
 
     @Override
+    public ApartmentLayout save(ApartmentLayout apartmentLayout) {
+        return apartmentLayoutRepository.save(apartmentLayout);
+    }
+
+    @Override
     public void delete(Long operatorId) {
         apartmentRepository.delete(operatorId);
     }

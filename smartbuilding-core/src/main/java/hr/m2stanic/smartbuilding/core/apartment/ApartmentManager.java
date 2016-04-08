@@ -17,6 +17,8 @@ public interface ApartmentManager {
 
     ApartmentLayout getApartmentRoomStates(Apartment apartment);
 
+    ApartmentLayout save(ApartmentLayout apartmentLayout);
+
     void delete(Long operatorId);
 
 }

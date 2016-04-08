@@ -38,47 +38,8 @@
                     </tbody>
                 </table>
 
-                <!--<ul th:if="${userActions.totalPages &gt; 1}" class="pagination">-->
-                    <!--<li class="paginate_button previous" th:classappend="${userActions.number == 0} ? 'disabled'" aria-controls="datatable" tabindex="0" id="datatable_previous">-->
-                        <!--<a th:href="'javascript:refreshPage(__${userActions.number}__)'"><i class="glyphicons glyphicons-chevron-left"></i></a>-->
-                    <!--</li>-->
-
-                    <!--<li class="disabled" aria-controls="datatable" tabindex="0">-->
-                        <!--<a href="#" th:text="${userActions.number + 1} + ' / ' + ${userActions.totalPages}"></a>-->
-                    <!--</li>-->
-
-                    <!--<li class="paginate_button next" th:classappend="${userActions.number >= userActions.totalPages - 1 } ? 'disabled'" aria-controls="datatable" tabindex="0" id="datatable_next">-->
-                        <!--<a th:href="'javascript:refreshPage(__${userActions.number + 2}__)'" ><i class="glyphicons glyphicons-chevron-right"></i></a>-->
-                    <!--</li>-->
-                <!--</ul>-->
-
             </div>
         </div>
-
-        <script th:inline="javascript">
-
-            function refreshPage(pageNo){
-                $("#actionFilterForm input[name='page']").val(pageNo);
-                var data = $("#actionFilterForm").serialize();
-                var url = url = [[@{/admin/}]];
-                document.location = url + "?" + data;
-            }
-
-            $(document).ready(function() {
-
-                $("#actionFilterForm select, #actionFilterForm input").on("change", function(ev){
-                    ev.preventDefault();
-                    refreshPage(1);
-                });
-
-
-
-                $("li.disabled a").on("click", function(ev){
-                    ev.preventDefault();
-                });
-            });
-        </script>
-
 
     </div>
 </div>
