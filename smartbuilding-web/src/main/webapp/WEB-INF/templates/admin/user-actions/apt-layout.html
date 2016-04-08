@@ -18,97 +18,102 @@
         <div class="panel">
 
             <div class="panel-body">
-                <ul id="tabs" class="nav nav-tabs" data-tabs="tabs">
-                    <li class="active"><a href="#simple" data-toggle="tab">Jednostavno upravljanje</a></li>
-                    <li><a href="#advanced" data-toggle="tab">Napredno upravljanje</a></li>
-                </ul>
-                <div id="my-tab-content" class="tab-content">
-                    <div class="tab-pane active" id="simple">
+                <div class="tab-block mb25">
+                    <ul class="nav nav-tabs tabs-border">
+                        <li class="active">
+                            <a href="#simple" data-toggle="tab" aria-expanded="true">Jednostavno upravljanje</a>
+                        </li>
+                        <li class="">
+                            <a href="#advanced" data-toggle="tab" aria-expanded="false">Napredno upravljanje</a>
+                        </li>
+                    </ul>
+                    <div class="tab-content">
+                        <div id="simple" class="tab-pane active">
+                            <div class="alert alert-success alert-dismissable" id="successMessage">
+                                <i class="fa fa-check pr10"></i>
+                                <strong>Uspješno promijenjena vrijednost</strong>
+                            </div>
 
-                        <div class="alert alert-success alert-dismissable" id="successMessage">
-                            <i class="fa fa-check pr10"></i>
-                            <strong>Uspješno promijenjena vrijednost</strong>
+                            <div class="alert alert-danger alert-dismissable" id="errorMessage">
+                                <i class="fa fa-check pr10"></i>
+                                <strong>Nažalost dogodila se neka pogreška, molim vas pokušajte kasnije.</strong>
+                            </div>
+
+                            <div class="form-horizontal" style="padding-top:10px;">
+
+                                <div class="form-group">
+                                    <label class="col-lg-1 control-label">Dnevna soba</label>
+                                    <div class="col-lg-2">
+                                        <div class="bs-component">
+                                            <div class="switch switch-info switch-inline">
+                                                <input id="living_room" type="checkbox"
+                                                       th:checked="${apartmentLayout.livingRoom}"/>
+                                                <label for="living_room"></label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="col-lg-1 control-label">Kuhinja</label>
+                                    <div class="col-lg-2">
+                                        <div class="bs-component">
+                                            <div class="switch switch-info switch-inline">
+                                                <input id="kitchen" type="checkbox"
+                                                       th:checked="${apartmentLayout.kitchen}"/>
+                                                <label for="kitchen"></label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="col-lg-1 control-label">Kupaonica</label>
+                                    <div class="col-lg-2">
+                                        <div class="bs-component">
+                                            <div class="switch switch-info switch-inline">
+                                                <input id="bathroom" type="checkbox"
+                                                       th:checked="${apartmentLayout.bathroom}"/>
+                                                <label for="bathroom"></label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="col-lg-1 control-label">Spavaća soba</label>
+                                    <div class="col-lg-2">
+                                        <div class="bs-component">
+                                            <div class="switch switch-info switch-inline">
+                                                <input id="bedroom" type="checkbox"
+                                                       th:checked="${apartmentLayout.bedroom}"/>
+                                                <label for="bedroom"></label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="col-lg-1 control-label">Hodnik</label>
+                                    <div class="col-lg-2">
+                                        <div class="bs-component">
+                                            <div class="switch switch-info switch-inline">
+                                                <input id="hallway" type="checkbox"
+                                                       th:checked="${apartmentLayout.hallway}"/>
+                                                <label for="hallway"></label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
                         </div>
-
-                        <div class="alert alert-danger alert-dismissable" id="errorMessage">
-                            <i class="fa fa-check pr10"></i>
-                            <strong>Nažalost dogodila se neka pogreška, molim vas pokušajte kasnije.</strong>
+                        <div id="advanced" class="tab-pane">
+                            advanced stuff :D
                         </div>
-
-                        <div class="form-horizontal" style="padding-top:10px;">
-
-                            <div class="form-group">
-                                <label class="col-lg-1 control-label">Dnevna soba</label>
-                                <div class="col-lg-2">
-                                    <div class="bs-component">
-                                        <div class="switch switch-info switch-inline">
-                                            <input id="living_room" type="checkbox"
-                                                   th:checked="${apartmentLayout.livingRoom}"/>
-                                            <label for="living_room"></label>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="form-group">
-                                <label class="col-lg-1 control-label">Kuhinja</label>
-                                <div class="col-lg-2">
-                                    <div class="bs-component">
-                                        <div class="switch switch-info switch-inline">
-                                            <input id="kitchen" type="checkbox"
-                                                   th:checked="${apartmentLayout.kitchen}"/>
-                                            <label for="kitchen"></label>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="form-group">
-                                <label class="col-lg-1 control-label">Kupaonica</label>
-                                <div class="col-lg-2">
-                                    <div class="bs-component">
-                                        <div class="switch switch-info switch-inline">
-                                            <input id="bathroom" type="checkbox"
-                                                   th:checked="${apartmentLayout.bathroom}"/>
-                                            <label for="bathroom"></label>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="form-group">
-                                <label class="col-lg-1 control-label">Spavaća soba</label>
-                                <div class="col-lg-2">
-                                    <div class="bs-component">
-                                        <div class="switch switch-info switch-inline">
-                                            <input id="bedroom" type="checkbox"
-                                                   th:checked="${apartmentLayout.bedroom}"/>
-                                            <label for="bedroom"></label>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="form-group">
-                                <label class="col-lg-1 control-label">Hodnik</label>
-                                <div class="col-lg-2">
-                                    <div class="bs-component">
-                                        <div class="switch switch-info switch-inline">
-                                            <input id="hallway" type="checkbox"
-                                                   th:checked="${apartmentLayout.hallway}"/>
-                                            <label for="hallway"></label>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                    </div>
-                    <div class="tab-pane" id="advanced">
-                        <h1>Orange</h1>
-                        <p>orange orange orange orange orange</p>
                     </div>
                 </div>
+
 
             </div>
         </div>
