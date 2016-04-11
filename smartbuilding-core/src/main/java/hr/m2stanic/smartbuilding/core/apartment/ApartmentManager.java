@@ -23,6 +23,8 @@ public interface ApartmentManager {
 
     List<ApartmentCronJob> getApartmentCronJobsForRoom(Apartment apartment, String room);
 
+    List<ApartmentCronJob> getApartmentCronJobs(Apartment apartment);
+
     void delete(Long operatorId);
 
 }

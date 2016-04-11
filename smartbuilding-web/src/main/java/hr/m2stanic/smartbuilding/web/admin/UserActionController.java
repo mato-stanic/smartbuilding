@@ -2,6 +2,10 @@ package hr.m2stanic.smartbuilding.web.admin;
 
 import hr.m2stanic.smartbuilding.core.apartment.Apartment;
 import hr.m2stanic.smartbuilding.core.apartment.ApartmentLayout;
+import hr.m2stanic.smartbuilding.core.apartment.ApartmentManager;
+import hr.m2stanic.smartbuilding.core.apartment.Tenants;
+import hr.m2stanic.smartbuilding.core.appuser.AppUser;
+import hr.m2stanic.smartbuilding.core.appuser.AppUserManager;
 import hr.m2stanic.smartbuilding.core.security.RoleScope;
 import org.joda.time.LocalDateTime;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,11 +16,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
-
-import hr.m2stanic.smartbuilding.core.appuser.AppUser;
-import hr.m2stanic.smartbuilding.core.appuser.AppUserManager;
-import hr.m2stanic.smartbuilding.core.apartment.ApartmentManager;
-import hr.m2stanic.smartbuilding.core.apartment.Tenants;
 
 import java.util.List;
 
@@ -48,7 +47,8 @@ public class UserActionController {
         {
             ApartmentLayout apartmentLayout = apartmentManager.getApartmentRoomStates(loggedInUser.getApartment());
             model.addAttribute("apartmentLayout", apartmentLayout);
-            return "admin/user-actions/apt-layout";
+            return "admin/user-actions/apartment/apartmentLayoutSimple";
+//            return "admin/user-actions/apt-layout";
         }
 
 
@@ -66,5 +66,6 @@ public class UserActionController {
     public MainNavigationItem getMainNavigationSelection() {
         return MainNavigationItem.DASHBOARD;
     }
+
 
 }

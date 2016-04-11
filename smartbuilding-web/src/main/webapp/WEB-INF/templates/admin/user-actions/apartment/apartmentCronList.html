@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+
+<head lang="en">
+    <meta charset="UTF-8"/>
+    <title></title>
+</head>
+<body>
+
+<div th:fragment="content">
+    <div class="panel">
+
+        <div class="panel-body">
+
+            <table class="table">
+                <thead>
+                <tr class="primary">
+                    <th>Soba</th>
+                    <th>Vrijeme</th>
+                    <th>Dani</th>
+                    <th>Akcija</th>
+                    <th></th>
+                </tr>
+                </thead>
+                <tbody>
+                <!--@thymesVar id="cronJobs" type="org.springframework.data.domain.Page<hr.m2stanic.smartbuilding.core.apartment.ApartmentCronJob>"-->
+                <tr th:each="cj : ${cronJobs}">
+                    <td th:text="${cj.room}">soba</td>
+                    <td th:text="${cj.time}">vrijeme</td>
+                    <td>
+                        <ul class="list-inline">
+                            <li th:each="day : ${cj.days}" th:text="${day}"></li>
+                        </ul>
+                    </td>
+                    <td th:text="${cj.action}">akcija</td>
+                    <td> delete and shits</td>
+
+                </tr>
+
+                </tbody>
+            </table>
+
+        </div>
+    </div>
+
+    <script th:inline="javascript">
+        //<![CDATA[
+
+        $(document).ready(function () {
+            var url = "admin/user/apartmentLayout/cronList";
+            var apartmentId = $('#apartmentId').val();
+
+        });
+
+        //]]>
+    </script>
+</div>
+</body>
+</html>

@@ -18,12 +18,41 @@
 <!--loggedInUser.getRole().getScope().equals(RoleScope.ADMIN)-->
         <!--<span th:if="${loggedInUser.role.scope == T(hr.m2stanic.smartbuilding.core.security.RoleScope).ADMIN}"></span>-->
         <li th:classappend="${mainNavSel == T(hr.m2stanic.smartbuilding.web.admin.MainNavigationItem).DASHBOARD} ? 'active' : ''">
-            <a th:href="@{/admin/}">
+            <a th:href="@{/admin/}"
+               th:if="${loggedInUser.role.scope == T(hr.m2stanic.smartbuilding.core.security.RoleScope).ADMIN}">
                 <span class="glyphicon glyphicon-home"></span>
-                <span class="sidebar-title" th:if="${loggedInUser.role.scope == T(hr.m2stanic.smartbuilding.core.security.RoleScope).ADMIN}">Pregled aktivnosti</span>
-                <span class="sidebar-title" th:if="${loggedInUser.role.scope != T(hr.m2stanic.smartbuilding.core.security.RoleScope).ADMIN}">Upravljanje stanom</span>
+                <span class="sidebar-title">Pregled aktivnosti</span>
+                <!--<span class="sidebar-title" th:if="${loggedInUser.role.scope == T(hr.m2stanic.smartbuilding.core.security.RoleScope).TENANT}">Upravljanje stanom</span>-->
             </a>
+            <a href="#"
+               th:if="${loggedInUser.role.scope == T(hr.m2stanic.smartbuilding.core.security.RoleScope).TENANT}"
+               class="accordion-toggle"
+               th:classappend="${mainNavSel == T(hr.m2stanic.smartbuilding.web.admin.MainNavigationItem).USERS} ? 'menu-open' : ''">
+                <span class="glyphicons glyphicon-home"></span>
+                <span class="sidebar-title">Upravljanje stanom</span>
+                <span class="caret"></span>
+            </a>
+
+            <ul class="nav sub-nav">
+                <li>
+                    <a th:href="@{admin/user/apartmentLayout/simple(apartmentId=${loggedInUser.apartment.id})}">
+                        <span>Jednostavno upravljanje</span>
+                    </a>
+                </li>
+                <li>
+                    <a th:href="@{admin/user/apartmentLayout/advanced(apartmentId=${loggedInUser.apartment.id})}">
+                        <span>Napredno upravljanje</span>
+                    </a>
+                </li>
+                <li>
+                    <a th:href="@{admin/user/apartmentLayout/cronList(apartmentId=${loggedInUser.apartment.id})}">
+                        <span>Automatizirane akcije</span>
+                    </a>
+                </li>
+
+            </ul>
         </li>
+
 
         <li>
             <a th:classappend="${mainNavSel == T(hr.m2stanic.smartbuilding.web.admin.MainNavigationItem).MESSAGES} ? 'menu-open' : ''" th:href="@{/admin/messages/list}">
