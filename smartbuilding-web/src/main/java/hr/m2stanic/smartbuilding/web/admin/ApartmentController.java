@@ -155,7 +155,7 @@ public class ApartmentController {
 
     @ModelAttribute("mainNavSel")
     public MainNavigationItem getMainNavigationSelection() {
-        return MainNavigationItem.USERS;
+        return MainNavigationItem.DASHBOARD;
     }
 
 

@@ -27,7 +27,7 @@
             <a href="#"
                th:if="${loggedInUser.role.scope == T(hr.m2stanic.smartbuilding.core.security.RoleScope).TENANT}"
                class="accordion-toggle"
-               th:classappend="${mainNavSel == T(hr.m2stanic.smartbuilding.web.admin.MainNavigationItem).USERS} ? 'menu-open' : ''">
+               th:classappend="${mainNavSel == T(hr.m2stanic.smartbuilding.web.admin.MainNavigationItem).DASHBOARD} ? 'menu-open' : ''">
                 <span class="glyphicons glyphicon-home"></span>
                 <span class="sidebar-title">Upravljanje stanom</span>
                 <span class="caret"></span>
