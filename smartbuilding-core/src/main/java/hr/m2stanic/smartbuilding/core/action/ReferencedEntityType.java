@@ -2,6 +2,6 @@ package hr.m2stanic.smartbuilding.core.action;
 
 public enum ReferencedEntityType {
 
-    APP_USER, TENANT
+    APP_USER, TENANT, CRON_JOB
 
 }

@@ -17,8 +17,8 @@
                 <tr class="primary">
                     <th>Soba</th>
                     <th>Vrijeme</th>
-                    <th>Dani</th>
-                    <th>Akcija</th>
+                    <th style="width: 50%;">Dani</th>
+                    <th>Akcija</th>APP_USER_UPDATED
                     <th></th>
                 </tr>
                 </thead>
@@ -33,8 +33,11 @@
                         </ul>
                     </td>
                     <td th:text="${cj.action}">akcija</td>
-                    <td> delete and shits</td>
-
+                    <td style="font-size: 1.5em;" width="40" align="center">
+                        <a  href="#" title="Obriši" class="delete-cron" th:attr="data-cron-id = ${cj.id}, data-apartment-id = ${cj.apartment.id}">
+                            <span class="fa fa-trash-o"></span>
+                        </a>
+                    </td>
                 </tr>
 
                 </tbody>
@@ -47,8 +50,18 @@
         //<![CDATA[
 
         $(document).ready(function () {
-            var url = "admin/user/apartmentLayout/cronList";
-            var apartmentId = $('#apartmentId').val();
+            $(".delete-cron").on("click", function(ev){
+                ev.preventDefault();
+                var cId = $(this).attr("data-cron-id");
+                var apId = $(this).attr("data-apartment-id");
+                var targetUrl = [[@{/admin/user/apartment/cron/delete}]] + "?id=" + cId;
+                if(apId)
+                    targetUrl += "&apartmentId=" + apId;
+                var onConfirm = function(){
+                    window.location = targetUrl;
+                };
+                showConfirmDialog(onConfirm, "Potvrda brisanja", "Jeste li sigurni da želite obrisati ovog automatsku akciju?");
+            });
 
         });
 

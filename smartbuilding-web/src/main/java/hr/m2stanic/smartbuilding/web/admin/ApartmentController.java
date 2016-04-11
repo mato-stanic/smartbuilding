@@ -1,5 +1,8 @@
 package hr.m2stanic.smartbuilding.web.admin;
 
+import hr.m2stanic.smartbuilding.core.action.ApartmentCronJobDeletedAction;
+import hr.m2stanic.smartbuilding.core.action.UserAction;
+import hr.m2stanic.smartbuilding.core.action.UserActionManager;
 import hr.m2stanic.smartbuilding.core.apartment.Apartment;
 import hr.m2stanic.smartbuilding.core.apartment.ApartmentCronJob;
 import hr.m2stanic.smartbuilding.core.apartment.ApartmentLayout;
@@ -29,6 +32,9 @@ public class ApartmentController {
 
     @Autowired
     private AppUserManager appUserManager;
+
+    @Autowired
+    private UserActionManager userActionManager;
 
 
 
@@ -219,6 +225,26 @@ public class ApartmentController {
             cronJob.setDays(correctedDays);
             model.addAttribute("cronJobs", cronJobs);
         }
+    }
+
+    @RequestMapping("/apartment/cron/delete")
+    public String deleteCronJob(@RequestParam Long id,
+                             @RequestParam Long apartmentId,
+                              RedirectAttributes ra) {
+        try {
+            ApartmentCronJob apartmentCronJob = apartmentManager.getAparatmentCronJob(id);
+            AppUser loggedInUser = appUserManager.getLoggedInUser();
+            AppUser appUser = appUserManager.getUser(id);
+            if (apartmentCronJob != null) {
+                apartmentManager.deleteCronJob(id);
+                UserAction action = new ApartmentCronJobDeletedAction(loggedInUser, apartmentCronJob);
+                userActionManager.save(action);
+
+            }
+        } catch (Exception e) {
+            ra.addFlashAttribute("flashMsg", "Ne mogu brisati automatsku akciju!");
+        }
+        return "redirect:/admin/user/apartmentLayout/cronList?apartmentId=" + apartmentId;
     }
 
 }

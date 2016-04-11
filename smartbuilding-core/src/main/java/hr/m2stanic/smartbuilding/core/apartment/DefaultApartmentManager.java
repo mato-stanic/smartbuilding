@@ -82,6 +82,16 @@ public class DefaultApartmentManager implements ApartmentManager {
     }
 
     @Override
+    public ApartmentCronJob getAparatmentCronJob(Long apartmentCronJobId) {
+        return apartmentCronJobRepository.findOne(apartmentCronJobId);
+    }
+
+    @Override
+    public void deleteCronJob(Long apartmentCronJobId) {
+        apartmentCronJobRepository.delete(apartmentCronJobId);
+    }
+
+    @Override
     public void delete(Long operatorId) {
         apartmentRepository.delete(operatorId);
     }
