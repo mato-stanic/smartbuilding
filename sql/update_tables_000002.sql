@@ -22,3 +22,7 @@ FOREIGN KEY (apartment_cron_id) REFERENCES apartment_cron (id)
 );
 
 ALTER TABLE public.apartment_cron ADD room VARCHAR(255) NULL;
+
+ALTER TABLE apartment_layout OWNER TO m2stanic;
+ALTER TABLE apartment_cron OWNER TO m2stanic;
+ALTER TABLE apartment_cron_days OWNER TO m2stanic;
