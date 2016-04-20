@@ -44,6 +44,7 @@ public class AndroidLoginController {
         AppUser appUser = appUserManager.getByUsername(username);
         if(appUser != null){
             if(appUser.getPassword().equals(password)){
+                log.info("logged in user: {}, from android", appUser.toString());
                 return new ResponseEntity<>(appUser, HttpStatus.OK);
             }
             else
@@ -52,65 +53,6 @@ public class AndroidLoginController {
         else
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
-
-    @RequestMapping(value = "/apartmentLayout", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseBody
-    public ResponseEntity<ApartmentLayout> apartmentLayout(@RequestParam String apartmentId,
-                                                 RedirectAttributes ra) {
-
-        log.info("got request to find apartmentLayout, id = {}", apartmentId);
-        Long aptId = Long.valueOf(apartmentId);
-        Apartment apartment = apartmentManager.getApartment(aptId);
-        if(apartment != null){
-            ApartmentLayout apartmentLayout = apartmentManager.getApartmentRoomStates(apartment);
-            return new ResponseEntity<>(apartmentLayout, HttpStatus.OK);
-        }
-        else
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-
-    }
-
-    @RequestMapping(value = "/apartmentLayout/edit", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseBody
-    public ResponseEntity<ApartmentLayout> apartmentLayoutEdit(@RequestParam String apartmentId,
-                                                               @RequestParam String roomToChange,
-                                                               @RequestParam String state,
-                                                           RedirectAttributes ra) {
-
-        log.info("got request to find apartmentLayout, id = {}", apartmentId);
-
-
-        try {
-            Long aptId = Long.valueOf(apartmentId);
-            Boolean st = Boolean.valueOf(state);
-            Apartment apartment = apartmentManager.getApartment(aptId);
-            ApartmentLayout apartmentLayout = apartmentManager.getApartmentRoomStates(apartment);
-            switch (roomToChange) {
-                case "living_room":
-                    apartmentLayout.setLivingRoom(st);
-                    break;
-                case "kitchen":
-                    apartmentLayout.setKitchen(st);
-                    break;
-                case "bathroom":
-                    apartmentLayout.setBathroom(st);
-                    break;
-                case "bedroom":
-                    apartmentLayout.setBedroom(st);
-                    break;
-                case "hallway":
-                    apartmentLayout.setHallway(st);
-                    break;
-            }
-            apartmentManager.save(apartmentLayout);
-            return new ResponseEntity<>(apartmentLayout, HttpStatus.OK);
-
-        } catch (Exception e) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-
-    }
-
 
 
 }
