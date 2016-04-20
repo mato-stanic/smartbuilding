@@ -13,6 +13,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -142,8 +143,43 @@ public class AndroidApartmentLayoutController {
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
+    }
 
+    @RequestMapping(value = "/apartmentLayout/cronList", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<List<ApartmentCronJob>> changeApartmentLayoutCron(@RequestParam String apartmentId,
+                                            RedirectAttributes ra) {
+        try {
+            Apartment apartment = apartmentManager.getApartment(Long.valueOf(apartmentId));
+            List<ApartmentCronJob> cronJobs = apartmentManager.getApartmentCronJobs(apartment);
+            if(cronJobs.size() != 0){
+                return new ResponseEntity<>(cronJobs, HttpStatus.OK);
+            }
+            else
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 
+        } catch (Exception e) {
+            log.error("Error fetching cron jobs for apartment {}, android request", apartmentId);
+        }
+        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+    }
+
+    @RequestMapping(value = "/apartmentLayout/deleteCron", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity deleteApartmentCron(@RequestParam String cronJobId, RedirectAttributes ra) {
+        try {
+            ApartmentCronJob cronJob = apartmentManager.getAparatmentCronJob(Long.valueOf(cronJobId));
+            log.info("Request to delete cron job {}, with id: {}", cronJob, cronJobId);
+
+            if(cronJob != null){
+                apartmentManager.deleteCronJob(Long.valueOf(cronJobId));
+                return new ResponseEntity(HttpStatus.OK);
+            }
+            else
+                return new ResponseEntity(HttpStatus.NOT_FOUND);
+
+        } catch (Exception e) {
+            log.error("Error fetching cron jobs for apartment {}, android request", cronJobId);
+        }
+        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
 
 
