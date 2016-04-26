@@ -27,6 +27,8 @@ public interface ApartmentManager {
 
     ApartmentCronJob getAparatmentCronJob(Long apartmentCronJobId);
 
+    List<ApartmentCronJob> getAllCronJobs();
+
     void deleteCronJob(Long apartmentCronJobId);
 
     void delete(Long operatorId);
