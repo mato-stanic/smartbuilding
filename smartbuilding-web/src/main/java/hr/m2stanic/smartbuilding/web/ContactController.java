@@ -70,7 +70,8 @@ public class ContactController {
     }
 
     @RequestMapping(value = "/kontakt", method = RequestMethod.POST)
-    public String sendMessage(Model model, @ModelAttribute("questionForm") @Valid QuestionForm questionForm, BindingResult result, HttpServletRequest request, HttpServletResponse response, RedirectAttributes ra) {
+    public String sendMessage(Model model, @ModelAttribute("questionForm") @Valid QuestionForm questionForm,
+                              BindingResult result, HttpServletRequest request, HttpServletResponse response, RedirectAttributes ra) {
 
 
         try {
@@ -135,10 +136,6 @@ public class ContactController {
         private String captchaAnswer;
     }
 
-    @ModelAttribute("activeMainNavItem")
-    public MainNav activeMainNavItem(HttpSession session) {
-        return MainNav.CONTACT;
-    }
 
 
 

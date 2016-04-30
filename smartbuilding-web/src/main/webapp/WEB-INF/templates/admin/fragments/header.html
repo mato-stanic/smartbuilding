@@ -18,25 +18,6 @@
         <div class="container-fluid">
 
             <div class="navbar-collapse collapse">
-                <ul class="nav navbar-nav">
-
-                    <li th:class="${mainNavSelection == 'operators'} ? 'active' : ''">
-                        <a th:href="@{/admin/operator/list}">Operatori</a>
-                    </li>
-                    <li th:class="${mainNavSelection == 'mobile'} ? 'active' : ''">
-                        <a th:href="@{/admin/tariff/list/mobile}" th:text="#{admin.mobileTelephone}">Mobilna telefonija</a>
-                    </li>
-                    <li th:class="${mainNavSelection == 'fixed'} ? 'active' : ''">
-                        <a th:href="@{/admin/tariff/list/fixed}" th:text="#{calculator.fixedTelephone}">Fiksni telefon</a>
-                    </li>
-                    <li th:class="${mainNavSelection == 'internet'} ? 'active' : ''">
-                        <a th:href="@{/admin/tariff/list/internet}" th:text="#{admin.internet}">Internet</a>
-                    </li>
-                    <li th:class="${mainNavSelection == 'tv'} ? 'active' : ''">
-                        <a th:href="@{/admin/tariff/list/tv}">TV</a>
-                    </li>
-                </ul>
-
                 <ul class="nav navbar-nav navbar-right">
 
                     <li class="dropdown">

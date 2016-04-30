@@ -136,50 +136,6 @@
         </div><!-- /.modal-dialog -->
     </div><!-- /.modal -->
 
-    <div class="modal fade" id="deactivateModal">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title">Modal title</h4>
-                </div>
-                <div class="modal-body">
-                    <form id="deactivateForm" class="form-horizontal" onsubmit="return false;">
-
-                        <div class="form-group">
-                            <label class="col-sm-5 control-label">Vrijeme deaktivacije</label>
-                            <div class="col-sm-7">
-                                <div class="bs-component">
-                                    <div class='input-group date' id="deactivateTime" >
-                                        <input type='text' class="form-control" name="toDateTime" />
-                                        <span class="input-group-addon">
-                                            <span class="glyphicon glyphicon-calendar"></span>
-                                        </span>
-                                    </div>
-                                </div>
-                                <script th:inline="javascript">
-                                    $(function () {
-                                        var today = new Date();
-                                        today.setHours(0,0,0,0);
-                                        $('#deactivateTime').datetimepicker({format:'DD.MM.YYYY HH:mm', sideBySide:true, defaultDate:today});
-                                    });
-                                </script>
-                            </div>
-                        </div>
-
-                        <input type="hidden" name="id" value="0"/>
-                    </form>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="cancel-btn btn btn-default" data-dismiss="modal">Odustani</button>
-                    <button type="button" class="cancel-btn btn btn-primary deactivate-tariff hide" th:onclick="'deactivateTariff(__${operator?.id}__);'">Arhiviraj tarifu</button>
-                    <button type="button" class="cancel-btn btn btn-primary deactivate-packet hide" th:onclick="'deactivatePacket(__${operator?.id}__);'">Arhiviraj paket</button>
-                </div>
-            </div><!-- /.modal-content -->
-        </div><!-- /.modal-dialog -->
-    </div><!-- /.modal -->
-
-
     <div class="modal fade" id="accSettingsModal">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -234,13 +190,6 @@
     </div><!-- /.modal -->
 
 
-    <div th:if="${tariffDTO}">
-        <div  th:replace="admin/tariff/add-price-modal"></div>
-        <div th:replace="admin/tariff/add-free-stuff-modal"></div>
-    </div>
-
-
-
 </div>
 <!-- End: Main -->
 
@@ -253,8 +202,7 @@
 
 <!-- Theme Javascript -->
 <script th:src="@{/res/theme/assets/js/utility/utility.js}"></script>
-<!--<script th:src="@{/res/theme/assets/js/demo/demo.js}"></script>-->
-<script th:src="@{/res/js/ekip.js}"></script>
+<script th:src="@{/res/js/smartBuilding.js}"></script>
 <script th:src="@{/res/theme/assets/js/main.js}"></script>
 <script th:src="@{/res/js/bootstrapValidator.min.js}"></script>
 

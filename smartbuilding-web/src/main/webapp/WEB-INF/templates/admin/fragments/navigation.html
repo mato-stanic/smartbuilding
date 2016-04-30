@@ -99,9 +99,15 @@
 
 
         <li>
-            <a th:href="@{/res/ekip-manual.pdf}" target="_blank">
+            <a th:href="@{/res/tenant-manual.pdf}" target="_blank"
+               th:if="${loggedInUser.role.scope == T(hr.m2stanic.smartbuilding.core.security.RoleScope).TENANT}">
                 <span class="glyphicons glyphicons-book_open"></span>
-                <span class="sidebar-title">Upute za korišćenje</span>
+                <span class="sidebar-title">Upute za korištenje</span>
+            </a>
+            <a th:href="@{/res/admin-manual.pdf}" target="_blank"
+               th:if="${loggedInUser.role.scope == T(hr.m2stanic.smartbuilding.core.security.RoleScope).ADMIN}">
+                <span class="glyphicons glyphicons-book_open"></span>
+                <span class="sidebar-title">Upute za korištenje</span>
             </a>
         </li>
 

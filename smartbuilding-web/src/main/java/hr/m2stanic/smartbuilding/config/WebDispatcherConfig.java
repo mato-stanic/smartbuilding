@@ -124,16 +124,6 @@ public class WebDispatcherConfig extends WebMvcConfigurerAdapter {
 
 
     @Bean
-    public MessageSource messageSource() {
-        ReloadableResourceBundleMessageSource messageSource = new ReloadableResourceBundleMessageSource();
-        messageSource.setBasenames("/WEB-INF/localization/messages");
-        messageSource.setDefaultEncoding("UTF-8");
-        messageSource.setCacheSeconds(10);
-        return messageSource;
-    }
-
-
-    @Bean
     public TemplateResolver templateResolver() {
         ServletContextTemplateResolver resolver = new ServletContextTemplateResolver();
         resolver.setPrefix("/WEB-INF/templates/");
@@ -150,7 +140,6 @@ public class WebDispatcherConfig extends WebMvcConfigurerAdapter {
 
         SpringTemplateEngine templateEngine = new SpringTemplateEngine();
         templateEngine.setTemplateResolver(templateResolver());
-        templateEngine.setMessageSource(messageSource());
         return templateEngine;
     }
 

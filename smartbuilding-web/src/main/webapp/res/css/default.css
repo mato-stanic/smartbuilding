@@ -11,11 +11,11 @@ body {
 
 
 
-.panel-ekip {
+.panel-sb {
 	border-color: #153e78;
 }
 
-.panel-ekip>.panel-heading {
+.panel-sb>.panel-heading {
 	color: #fff;
 	background-color: #153e78;
 	border-color: #153e78;
@@ -109,7 +109,7 @@ a.main-link:hover {
 }
 
 .calc-hd {
-	padding: 28px 19px 0px 40px;
+	padding: 19px 19px 0px 19px;
 	/*height: 180px;*/
 	margin: 15px 0 15px;
 	border-radius: 9px;
@@ -135,60 +135,7 @@ a.main-link:hover {
 	/*width: 300px;*/
 }
 
-.calc-nav {
-	/*float: right;*/
 
-}
-.calc-nav li {
-	/*float: left;*/
-	display: inline-block;
-	padding-bottom: 20px;
-}
-
-.calc-nav li a {
-	display: block;
-	padding: 97px 0 0;
-	text-align: center;
-	font-size: 18px;
-	line-height: 16px;
-	text-transform: uppercase;
-	color:#4b5f7f;
-	width:110px;
-	display: block;
-	font-weight: bold;
-}
-
-.calc-nav li a span {
-	text-transform: none;
-	display: block;
-	font-size: 13px;
-	font-weight: normal;
-}
-
-.calc-nav li.fiksna a {
-	background: url(../images/btn-fiksna.png) no-repeat top center;
-}
-
-.calc-nav li.mobilna a {
-	background: url(../images/btn-mobilna.png) no-repeat top center;
-}
-
-.calc-nav li.internet a {
-	background: url(../images/btn-internet.png) no-repeat top center;
-}
-
-.calc-nav li.avm a {
-	background: url(../images/btn-avm.png) no-repeat top center;
-}
-
-.calc-nav li.pkg a {
-	background: url(../images/btn-paketi.png) no-repeat top center;
-}
-
-.calc-nav li a:hover, .calc-nav li a.active {
-	color:#fff;
-	background-position: center -163px;
-}
 
 .widget {
 	border:1px solid #ccc;

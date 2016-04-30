@@ -171,25 +171,26 @@
 
     </div>
 
-    <aside class="tray tray-right tray290" data-tray-height="match" style="height: 2180px;">
-        <h4> Zaposlenici </h4>
+    <aside class="tray tray-right tray290" data-tray-height="match" style="height: 2180px;"
+           th:if="${loggedInUser.role.scope == T(hr.m2stanic.smartbuilding.core.security.RoleScope).ADMIN}">
+        <h4> Korisnici aplikacije </h4>
 
         <div class="tray-affix affix-top" data-spy="affix" data-offset-top="200">
 
             <div id="nav-spy">
                 <ul class="nav tray-nav" data-smoothscroll="-90">
 
-                    <li class="active" th:each="zn : ${userList}" th:if="${zn.id == userDTO.id}">
-                        <a th:href="@{/admin/user/edit?id={znId}(znId=${zn.id})}">
+                    <li class="active" th:each="ul : ${userList}" th:if="${ul.id == userDTO.id}">
+                        <a th:href="@{/admin/user/edit?id={ulId}(ulId=${ul.id})}">
                             <span class="fa fa-edit fa-lg"></span>
-                            <span th:text="${zn.fullName}"></span>
+                            <span th:text="${ul.fullName}"></span>
                         </a>
                     </li>
 
-                    <li th:each="zn : ${userList}" th:unless="${zn.id == userDTO.id}">
-                        <a th:href="@{/admin/user/edit?id={znId}(znId=${zn.id})}">
+                    <li th:each="ul : ${userList}" th:unless="${ul.id == userDTO.id}">
+                        <a th:href="@{/admin/user/edit?id={ulId}(ulId=${ul.id})}">
                             <span class="fa fa-edit fa-lg"></span>
-                            <span th:text="${zn.fullName}"></span>
+                            <span th:text="${ul.fullName}"></span>
                         </a>
                     </li>
 

@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+
+<head lang="en">
+    <meta charset="UTF-8"/>
+    <title>Smart building</title>
+</head>
+<body>
+
+<div th:fragment="content" class="widget panel panel-default">
+
+    <div class="panel-heading">
+        <h3 class="panel-title"> Početna stranica </h3>
+    </div>
+    <div class="panel-body">
+        <h2>Što je to pametna zgrada?</h2>
+        <p>Pamenta zgrada (engl. Smart building) je prostorija za život koja ima neki automatizirani i centralizirani sustav za upravljanje grijanjem,
+            ventilacijom, rasvjetom i ostalim sustavima u zgradi. Cilj ovakvog upravljanja je povećati ugodnost boravka stanara u pojedini prostorijama,
+            kao i povećati efikasnost i iskoristivost energije u samoj zgradi. Samim time to znači smanjenje troškova života.</p>
+        <p>Upravljanje pametnim zgradama, odnosno automatizacija zgrada, je primjer distribuiranih računalnih sustava.
+            Tu se misli na mrežu elektroničkih uređaja koji su raspoređeni po zgradi,  a imaju mogućnost međusobne komunikacije.
+            Tu možemo uračunati sve sustave koji su dizajnirani kako bi nadgledali i kontrolirali mehaničke, sigurnosne, svjetlosne (svjetla u slučaju nužde) i vlage zraka.</p>
+        <p>
+            <img th:src="@{/res/images/smartbuilding_graph.jpg}" />
+        </p>
+
+    </div>
+
+
+
+    <script type="text/javascript" th:inline="javascript">
+        /*<![CDATA[*/
+
+
+        /*]]>*/
+    </script>
+
+
+</div>
+
+</body>
+</html>

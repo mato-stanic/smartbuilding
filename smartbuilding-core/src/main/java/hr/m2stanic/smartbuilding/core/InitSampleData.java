@@ -67,7 +67,7 @@ public class InitSampleData {
 
         Tenants s1a = (Tenants) apartmentManager.getApartment("Stan 1a");
         Tenants s1b = (Tenants) apartmentManager.getApartment("Stan 1b");
-        Tenants s2a = (Tenants) apartmentManager.getApartment("Stan 2a");
+//        Tenants s2a = (Tenants) apartmentManager.getApartment("Stan 2a");
 
         if(s1a ==  null)
             s1a = (Tenants) apartmentManager.save(new Tenants(null, "Stan 1a"));
@@ -75,8 +75,8 @@ public class InitSampleData {
         if(s1b ==  null)
             s1b = (Tenants) apartmentManager.save(new Tenants(null, "Stan 1b"));
 
-        if(s2a ==  null)
-            s2a = (Tenants) apartmentManager.save(new Tenants(null, "Stan 1c"));
+//        if(s2a ==  null)
+//            s2a = (Tenants) apartmentManager.save(new Tenants(null, "Stan 2a"));
 
     }
 

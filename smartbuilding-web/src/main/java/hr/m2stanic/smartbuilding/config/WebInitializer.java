@@ -1,6 +1,6 @@
 package hr.m2stanic.smartbuilding.config;
 
-import hr.m2stanic.smartbuilding.web.EkipCaptcha;
+import hr.m2stanic.smartbuilding.web.SmartBuildingCaptcha;
 import hr.m2stanic.smartbuilding.web.NoCacheFilter;
 import org.springframework.web.WebApplicationInitializer;
 import org.springframework.web.context.ContextLoaderListener;
@@ -50,7 +50,7 @@ public class WebInitializer implements WebApplicationInitializer {
 
 
         // Register and map the captcha servlet
-        ServletRegistration.Dynamic captcha = container.addServlet("captcha", new EkipCaptcha());
+        ServletRegistration.Dynamic captcha = container.addServlet("captcha", new SmartBuildingCaptcha());
         dispatcher.setLoadOnStartup(100);
         captcha.setInitParameter("width", "250");
         captcha.setInitParameter("height", "75");
