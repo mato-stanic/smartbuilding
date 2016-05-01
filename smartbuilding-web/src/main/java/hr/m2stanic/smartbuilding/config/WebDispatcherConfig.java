@@ -154,13 +154,6 @@ public class WebDispatcherConfig extends WebMvcConfigurerAdapter {
 
 
     @Bean
-    public LocaleResolver localeResolver() {
-        FixedLocaleResolver localeResolver = new FixedLocaleResolver();
-        localeResolver.setDefaultLocale(new Locale("me"));
-        return localeResolver;
-    }
-
-    @Bean
     public MultipartResolver multipartResolver() {
         CommonsMultipartResolver multipartResolver = new CommonsMultipartResolver();
         multipartResolver.setMaxUploadSize(4194304); //4 MB

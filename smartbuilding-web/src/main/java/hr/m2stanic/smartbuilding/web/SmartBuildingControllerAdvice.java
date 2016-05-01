@@ -83,7 +83,6 @@ public class SmartBuildingControllerAdvice {
 
     @InitBinder
     public void initBinder(WebDataBinder binder) {
-        //StringTrimmerEditor poremeti prijavode sadrzaja, jer prazan string tretira kao null, a to znaci da uopce nema prijevoda
         binder.registerCustomEditor(String.class, new StringTrimmerEditor(true));
     }
 

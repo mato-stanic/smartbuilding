@@ -21,17 +21,28 @@ public class CalculationController {
 
 
     @RequestMapping("/")
-    public String processStep1(Model model, HttpServletRequest request , RedirectAttributes ra,
+    public String indexPage(Model model, HttpServletRequest request , RedirectAttributes ra,
                                @RequestParam(required = false) MenuOption menuOption ) {
-        log.info("blaa log");
         if(menuOption == null || menuOption.equals(MenuOption.HOME))
-            return "public/home";
+            return "redirect:/home";
         else if(menuOption.equals(MenuOption.HOW))
-            return "public/how";
+            return "redirect:/how";
         else if(menuOption.equals(MenuOption.CONTACT))
             return "redirect:/kontakt";
 
         return "public/home";
+    }
+
+    @RequestMapping("/home")
+    public String indexHomePage(Model model, HttpServletRequest request , RedirectAttributes ra,
+                               @RequestParam(required = false) MenuOption menuOption ) {
+        return "public/home";
+    }
+
+    @RequestMapping("/how")
+    public String indexHowPage(Model model, HttpServletRequest request , RedirectAttributes ra,
+                                @RequestParam(required = false) MenuOption menuOption ) {
+        return "public/how";
     }
 
 

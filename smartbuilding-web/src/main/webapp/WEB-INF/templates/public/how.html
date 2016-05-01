@@ -15,18 +15,42 @@
 
 
     <div class="panel-body">
+        <div class="widget panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">Korisnik</h3>
+            </div>
+            <div class="panel-body">
+                <p>Korisnik ima mogućnost izbora hoće li koristiti aplikaciju za android mobilne uređaje ili će koristiti web aplikaciju koja mu je dostupa<br/>
+                </p>
+                <p>
+                    Ukoliko se koristi android aplikacija dostupne su sljedeće funkcionalnosti: Trenutno upravljanje rasvjetom,
+                    Dodavanje novih automatiziranih zadataka, Pregled i brisanje postojećih automatiziranih zadataka
+                </p>
+                <p>
+                    Korištenje web aplikacije omogućuje još neke dodatne funkcionalnosti, kao što su: Slanje poruka administratoru sustava,
+                    Dodavanje novih korisnika aplikacije, Mijenjanje korisničkih podataka.
+                </p>
+            </div>
+        </div>
+        <div class="widget panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">Raspberry Pi</h3>
+            </div>
+            <div class="panel-body">
+                <p>Raspberry Pi je spojen s maketom, te je uz pomoć GPIO pinova na raspberry omogućeno kontroliranje rasvjete makete.</p>
+                <p>Aplikacija koja je pokrenuta na raspberry pi je povezana s bazom koja se nalazi na serveru. Iz nje dohvaća podatke koje svjetlo treba biti
+                upaljeno, a koje ugašeno.</p>
+            </div>
+        </div>
+
+            <div>
+
+                <img class="img-responsive img-rounded" th:src="@{/res/images/smartbuilding_diagram.png}" />
+
+            </div>
 
 
     </div>
-
-
-    <script type="text/javascript" th:inline="javascript">
-        /*<![CDATA[*/
-
-
-        /*]]>*/
-    </script>
-
 
 </div>
 

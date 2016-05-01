@@ -108,7 +108,7 @@ a.main-link:hover {
 	margin-left: -15px;
 }
 
-.calc-hd {
+.sb-hd {
 	padding: 19px 19px 0px 19px;
 	/*height: 180px;*/
 	margin: 15px 0 15px;
@@ -123,14 +123,14 @@ a.main-link:hover {
 	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#153e78', endColorstr='#0f305d',GradientType=0 ); /* IE6-9 */
 }
 
-.calc-hd h1 {
+.sb-hd h1 {
 	color: #fff;
 	margin: 10px 0 15px;
 	font-size: 30px;
 	font-weight: bold;
 }
 
-.calc-hd p {
+.sb-hd p {
 	color: #fff;
 	/*width: 300px;*/
 }
@@ -302,60 +302,6 @@ label.in-the-middle.disable {
 	background: -ms-linear-gradient(top,  #11437f 0%,#103774 100%); /* IE10+ */
 	background: linear-gradient(to bottom,  #11437f 0%,#103774 100%); /* W3C */
 	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#11437f', endColorstr='#103774',GradientType=0 ); /* IE6-9 */
-}
-
-
-
-.results .calc-detail td {
-	border-top: none !important;
-	font-size: 12px;
-	font-weight: bold;
-	line-height: 16px !important;
-	padding:  0px !important;
-}
-
-
-
-.results .calc-detail .panel-default{
-	margin-bottom: 10px !important;
-}
-
-.results .calc-detail .panel-heading {
-	border-top-left-radius: 4px !important;
-	border-top-right-radius: 4px !important;
-}
-
-.results .calc-detail .panel-default>.panel-heading {
-	border-color: transparent;
-	padding: 2px 5px !important; background-color: #f5f5f5 !important;
-	font-weight: bold;
-}
-
-
-.results .calc-detail .panel-default>.panel-body {
-	font-size: 11px;
-}
-
-.results .calc-detail .panel-default.consumption-dest-group>.panel-body,
-.results .calc-detail .panel-default.consumption-dest>.panel-body {
-	margin-bottom: 0px !important;padding: 0px !important;
-	margin-bottom: 0px !important;padding: 0px !important;
-}
-
-.results .calc-detail .panel-default>.panel-body .result-overview {
-	padding: 2px 5px !important; background-color: #f5f5f5; font-size: 11px;
-}
-
-.results .calc-detail .panel-default  table {
-	margin-bottom: 0px !important;
-
-}
-.results .calc-detail .panel-default table td {
-	font-weight: inherit;
-}
-
-.results .calc-detail .panel .dest-group-children {
-	padding: 10px 30px !important;
 }
 
 

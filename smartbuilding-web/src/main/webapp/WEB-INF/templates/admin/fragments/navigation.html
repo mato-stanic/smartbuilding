@@ -20,7 +20,7 @@
         <li th:classappend="${mainNavSel == T(hr.m2stanic.smartbuilding.web.admin.MainNavigationItem).DASHBOARD} ? 'active' : ''">
             <a th:href="@{/admin/}"
                th:if="${loggedInUser.role.scope == T(hr.m2stanic.smartbuilding.core.security.RoleScope).ADMIN}">
-                <span class="glyphicon glyphicon-home"></span>
+                <span class="glyphicons glyphicon-home"></span>
                 <span class="sidebar-title">Pregled aktivnosti</span>
                 <!--<span class="sidebar-title" th:if="${loggedInUser.role.scope == T(hr.m2stanic.smartbuilding.core.security.RoleScope).TENANT}">Upravljanje stanom</span>-->
             </a>
