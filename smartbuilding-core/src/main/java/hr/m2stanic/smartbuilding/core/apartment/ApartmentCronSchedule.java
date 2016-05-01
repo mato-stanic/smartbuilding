@@ -23,8 +23,8 @@ public class ApartmentCronSchedule implements CronProcessor{
     private DefaultApartmentManager apartmentManager;
 
 
-    //  0 0/1 * * * ?
-    @Scheduled(cron = "* */1 * * * *")
+    //* */1 * * * * -> old one working
+    @Scheduled(cron = "0 0/1 * * * ?")
     public void checkApartmentCrons() {
 
 
