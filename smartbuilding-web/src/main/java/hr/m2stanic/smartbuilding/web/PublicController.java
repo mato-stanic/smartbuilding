@@ -14,7 +14,7 @@ import javax.servlet.http.HttpSession;
 @Controller
 @RequestMapping({"/"})
 @SessionAttributes({"consumption", "result"})
-public class CalculationController {
+public class PublicController {
 
 
     public static final String TERMS_AGREED_KEY = "TERMS_AGREED_KEY";
