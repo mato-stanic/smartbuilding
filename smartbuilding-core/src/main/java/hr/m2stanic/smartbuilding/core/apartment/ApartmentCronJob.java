@@ -2,8 +2,6 @@ package hr.m2stanic.smartbuilding.core.apartment;
 
 
 import lombok.*;
-import org.hibernate.annotations.Fetch;
-import org.hibernate.annotations.FetchMode;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -27,6 +25,7 @@ public class ApartmentCronJob {
 
     @OneToOne
     private Apartment apartment;
+
 
     @Column(name = "time")
     private String time;
