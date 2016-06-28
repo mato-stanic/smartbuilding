@@ -41,4 +41,10 @@ public class ApartmentLayout {
 
     @Column(name = "bedroom")
     private boolean bedroom;
+
+    @Column(name = "motion_detection")
+    private boolean motionDetection;
+
+    @Column(name = "motion_detection_enabled")
+    private boolean motionDetectionEnabled;
 }

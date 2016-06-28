@@ -89,6 +89,22 @@
                 </div>
             </div>
 
+            <div class="form-horizontal" style="padding-top:10px;" th:if="${apartmentLayout.motionDetectionEnabled}">
+
+                <div class="form-group">
+                    <label class="col-lg-1 control-label">Detektiranje pokreta</label>
+                    <div class="col-lg-2">
+                        <div class="bs-component">
+                            <div class="switch switch-info switch-inline">
+                                <input id="motion_detection" type="checkbox"
+                                       th:checked="${apartmentLayout.motionDetection}"/>
+                                <label for="motion_detection"></label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
 
             <script th:inline="javascript">
                 //<![CDATA[

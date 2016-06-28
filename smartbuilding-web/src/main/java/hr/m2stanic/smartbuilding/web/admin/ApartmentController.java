@@ -73,6 +73,8 @@ public class ApartmentController {
                 case "hallway":
                     apartmentLayout.setHallway(state);
                     break;
+                case "motion_detection":
+                    apartmentLayout.setMotionDetection(state);
             }
             apartmentManager.save(apartmentLayout);
             return "SUCCESS";

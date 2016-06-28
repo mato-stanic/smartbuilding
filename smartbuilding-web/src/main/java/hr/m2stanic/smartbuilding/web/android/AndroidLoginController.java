@@ -9,6 +9,7 @@ import hr.m2stanic.smartbuilding.core.appuser.AppUserManager;
 import hr.m2stanic.smartbuilding.web.thymeleaf.Layout;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.util.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -41,7 +42,7 @@ public class AndroidLoginController {
                                          RedirectAttributes ra) {
 
         log.info("got request to login, username = {}, password = {}", username, password);
-        AppUser appUser = appUserManager.getByUsername(username);
+        AppUser appUser = appUserManager.getByUsername(username.trim());
         if(appUser != null){
             if(appUser.getPassword().equals(password)){
                 log.info("logged in user: {}, from android", appUser.toString());
@@ -51,7 +52,7 @@ public class AndroidLoginController {
                 return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
         }
         else
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
     }
 
 

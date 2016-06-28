@@ -82,6 +82,9 @@ public class AndroidApartmentLayoutController {
                 case "hallway":
                     apartmentLayout.setHallway(st);
                     break;
+                case "motionDetection":
+                    apartmentLayout.setMotionDetection(st);
+                    break;
             }
             apartmentManager.save(apartmentLayout);
             return new ResponseEntity<>(apartmentLayout, HttpStatus.OK);
