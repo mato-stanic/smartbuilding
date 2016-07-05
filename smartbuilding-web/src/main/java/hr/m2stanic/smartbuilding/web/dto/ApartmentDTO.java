@@ -16,7 +16,7 @@ public class ApartmentDTO {
     private Long id;
 
     @NotNull
-    @Size(min = 2, max = 50, message = "Naziv operatera mora sadržavati minimalno 2 a maksimalno 50 znakova!")
+    @Size(min = 2, max = 50, message = "Naziv stana mora sadržavati minimalno 2 a maksimalno 50 znakova!")
     private String name = "";
 
     @Override

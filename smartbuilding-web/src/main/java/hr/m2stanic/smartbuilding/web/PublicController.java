@@ -13,11 +13,8 @@ import javax.servlet.http.HttpSession;
 @Slf4j
 @Controller
 @RequestMapping({"/"})
-@SessionAttributes({"consumption", "result"})
 public class PublicController {
 
-
-    public static final String TERMS_AGREED_KEY = "TERMS_AGREED_KEY";
 
 
     @RequestMapping("/")
@@ -45,17 +42,9 @@ public class PublicController {
         return "public/how";
     }
 
-
-
-
-
-
-
     @ModelAttribute("mainNavSel")
     public MainNavigationItem getMainNavigationSelection() {
         return MainNavigationItem.INDEX;
     }
-
-
 
 }

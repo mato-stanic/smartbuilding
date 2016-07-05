@@ -30,7 +30,6 @@ import java.util.List;
 @SessionAttributes("userDTO")
 public class AppUserController {
 
-
     @Autowired
     private AppUserManager appUserManager;
 
@@ -46,7 +45,6 @@ public class AppUserController {
 
     @RequestMapping("/list")
     public String listUsers(Model model, Long apartmentId) {
-
         List<AppUser> appUsers = getUsers(apartmentId);
         if (apartmentId != null) model.addAttribute("apartment", apartmentManager.getApartment(apartmentId));
         model.addAttribute("userList", appUsers);
@@ -63,7 +61,6 @@ public class AppUserController {
     public String showUserForm(Model model, @RequestParam(required = false) Long id, @RequestParam(required = false) Long apartmentId) {
 
         UserDTO userDTO = getUser(id, apartmentId);
-
         fillEditUserModel(model, apartmentId, userDTO);
         return "admin/user/user-form";
     }
@@ -74,7 +71,6 @@ public class AppUserController {
         model.addAttribute("userDTO", userDTO);
         List<AppUser> appUsers = getUsers(apartmentId);
         model.addAttribute("userList", appUsers);
-
         Apartment apartment = apartmentId != null ? apartmentManager.getApartment(apartmentId) : null;
         if (apartment != null) model.addAttribute("company", apartment);
 

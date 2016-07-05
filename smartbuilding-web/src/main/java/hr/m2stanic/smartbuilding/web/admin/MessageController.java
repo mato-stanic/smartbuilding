@@ -39,7 +39,6 @@ public class MessageController {
     @Autowired
     private ApartmentManager apartmentManager;
 
-
     @RequestMapping("/list")
     public String showMessages(Model model, @PageableDefault(size = 20) Pageable pageable) {
 
@@ -83,13 +82,6 @@ public class MessageController {
     @RequestMapping("/send")
     @ResponseBody
     public String sendMessage(@RequestParam String title, @RequestParam String body, @RequestParam Long recipientId) {
-
-//        try {
-//            title = new String(title.getBytes("ISO-8859-1"));
-//            body = new String(body.getBytes("ISO-8859-1"));
-//        } catch (UnsupportedEncodingException e) {
-//            e.printStackTrace();
-//        }
 
         AppUser loggedInUser = appUserManager.getLoggedInUser();
         try {

@@ -107,12 +107,10 @@ public class SmartBuildingControllerAdvice {
     public String getBaseUrl() {
         String baseUrl;
 
-
         baseUrl = env.getProperty("application.base.url");
         if (!baseUrl.endsWith("/"))
             baseUrl += "/";
 
-//        System.out.println("base url: " + baseUrl);
         return baseUrl;
     }
 

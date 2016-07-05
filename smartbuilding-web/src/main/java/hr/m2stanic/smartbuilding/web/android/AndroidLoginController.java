@@ -31,10 +31,6 @@ public class AndroidLoginController {
     @Autowired
     private AppUserManager appUserManager;
 
-    @Autowired
-    private ApartmentManager apartmentManager;
-
-
     @RequestMapping(value = "/login", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public ResponseEntity<AppUser> login(@RequestParam String username,

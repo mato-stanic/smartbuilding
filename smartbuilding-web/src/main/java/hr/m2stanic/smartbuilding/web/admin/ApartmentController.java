@@ -36,8 +36,6 @@ public class ApartmentController {
     @Autowired
     private UserActionManager userActionManager;
 
-
-
     @RequestMapping("/apartmentLayout/simple")
     public String getSimple(Model model,
                             @RequestParam Long apartmentId,

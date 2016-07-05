@@ -54,14 +54,6 @@ public class UserActionController {
 
     }
 
-
-    private Apartment resolveApartment(Long apartmentId, AppUser loggedInUser) {
-        Apartment apartment = null;
-        if (loggedInUser.getApartment() instanceof Tenants) apartment = loggedInUser.getApartment();
-        else if (apartmentId != null) apartment = apartmentManager.getApartment(apartmentId);
-        return apartment;
-    }
-
     @ModelAttribute("mainNavSel")
     public MainNavigationItem getMainNavigationSelection() {
         return MainNavigationItem.DASHBOARD;

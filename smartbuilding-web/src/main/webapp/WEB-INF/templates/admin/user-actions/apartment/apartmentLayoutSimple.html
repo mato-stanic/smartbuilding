@@ -117,7 +117,6 @@
                         var checkBoxId = $('#' + this.id);
                         var checkState = checkBoxId.is(":checked");
                         var url = "admin/user/apartmentLayout/simpleEdit";
-                        var apartmentId = $('#apartmentId').val();
                         $.ajax(url, {
                             data: {
                                 roomToChange: this.id,

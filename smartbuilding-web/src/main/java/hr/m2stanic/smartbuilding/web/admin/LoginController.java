@@ -23,7 +23,6 @@ public class LoginController {
         return appUserManager.getLoggedInUser() != null ? "redirect:/admin/" : "admin/login";
     }
 
-
     @RequestMapping("/logout")
     public String logout(RedirectAttributes ra) {
         SecurityUtils.getSubject().logout();

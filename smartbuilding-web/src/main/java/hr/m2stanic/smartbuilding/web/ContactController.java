@@ -37,9 +37,7 @@ import java.util.Locale;
 @Slf4j
 @SessionAttributes("questionForm")
 @PropertySource(value = {"classpath:/smartbuilding.common.properties"})
-//@PropertySource(value = {"classpath:/smartbuilding.common.properties", "classpath:/smartbuilding.properties"})
 public class ContactController {
-
 
     @Autowired
     JavaMailSender mailSender;
@@ -55,7 +53,6 @@ public class ContactController {
 
     @Autowired
     private SpringTemplateEngine templateEngine;
-
 
     @Autowired
     private ApplicationContext applicationContext;
@@ -73,7 +70,6 @@ public class ContactController {
     public String sendMessage(Model model, @ModelAttribute("questionForm") @Valid QuestionForm questionForm,
                               BindingResult result, HttpServletRequest request, HttpServletResponse response, RedirectAttributes ra) {
 
-
         try {
             Captcha captcha = (Captcha) request.getSession().getAttribute(Captcha.NAME);
             if (captcha == null || questionForm.captchaAnswer == null || !captcha.isCorrect(questionForm.captchaAnswer)) {
@@ -84,7 +80,6 @@ public class ContactController {
                 model.addAttribute("questionForm", questionForm);
                 return "user/contact";
             }
-
 
             final MimeMessage mimeMessage = this.mailSender.createMimeMessage();
             final MimeMessageHelper message =

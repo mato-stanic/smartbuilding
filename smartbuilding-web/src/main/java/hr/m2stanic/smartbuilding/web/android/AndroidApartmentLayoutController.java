@@ -28,9 +28,6 @@ import java.util.List;
 public class AndroidApartmentLayoutController {
 
     @Autowired
-    private AppUserManager appUserManager;
-
-    @Autowired
     private ApartmentManager apartmentManager;
 
 
