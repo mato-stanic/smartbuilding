@@ -40,7 +40,7 @@
     <logger name="org.hibernate" level="info"/>
     <!--<logger name="org.hibernate.SQL" level="debug"/>-->
     <!--<logger name="org.hibernate.type" level="trace"/>-->
-    <logger name="com.inova" level="debug"/>
+    <logger name="hr.m2stanic" level="debug"/>
 
     <root level="info">
         <if condition='isDefined("stdoutLogging")'>
