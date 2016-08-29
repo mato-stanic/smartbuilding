@@ -184,6 +184,7 @@ public class ApartmentController {
                 case "hallway":
                     cronJob.setRoom("Hodnik");
                     break;
+
             }
 
             String action = cronJob.getAction();
