@@ -220,6 +220,7 @@ public class ApartmentController {
                     case "sunday":
                         correctedDays.add("Nedjelja");
                         break;
+                    //hue hue test push
                 }
             }
             cronJob.setDays(correctedDays);
