@@ -1,4 +1,4 @@
-run this shit before deploy jer iz nekog razloga ne prikazuje hrv znakove u suprotnom :D
+run this before deploy jer iz nekog razloga ne prikazuje hrv znakove u suprotnom :D
 
 echo $LC_CTYPE
   325  echo $LANG
